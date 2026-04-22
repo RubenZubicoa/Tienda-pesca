@@ -16,8 +16,10 @@ describe('App', () => {
 
   it('should render title', async () => {
     const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, tienda-pesca');
+    expect(compiled.querySelector('.brand__name')?.textContent).toContain('THE LAKE');
+    expect(compiled.querySelector('.hero__kicker')?.textContent).toContain('EQUÍPATE');
   });
 });
