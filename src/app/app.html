@@ -86,30 +86,18 @@
         <section class="section" id="destacados" aria-labelledby="destacados-title">
           <h2 class="section__title" id="destacados-title">PRODUCTOS DESTACADOS</h2>
           <div class="product-grid product-grid--3">
-            <article class="product-card" aria-label="Producto destacado">
-              <div class="product-card__media product-card__media--rod" aria-hidden="true"></div>
-              <div class="product-card__meta">
-                <p class="product-card__name">Cucharilla Spin Pro 12g</p>
-                <p class="product-card__price">29,00 €</p>
-              </div>
-              <button class="btn btn--ghost" type="button">AÑADIR AL CARRITO</button>
-            </article>
-            <article class="product-card" aria-label="Producto destacado">
-              <div class="product-card__media product-card__media--fish" aria-hidden="true"></div>
-              <div class="product-card__meta">
-                <p class="product-card__name">Caña de Carbono XT-5</p>
-                <p class="product-card__price">29,00 €</p>
-              </div>
-              <button class="btn btn--ghost" type="button">AÑADIR AL CARRITO</button>
-            </article>
-            <article class="product-card" aria-label="Producto destacado">
-              <div class="product-card__media product-card__media--reel" aria-hidden="true"></div>
-              <div class="product-card__meta">
-                <p class="product-card__name">Caña de Carbono XT-5</p>
-                <p class="product-card__price">29,00 €</p>
-              </div>
-              <button class="btn btn--ghost" type="button">AÑADIR AL CARRITO</button>
-            </article>
+            @for (p of mainFeatured; track p.name) {
+              <article class="product-card" [attr.aria-label]="p.name">
+                <div class="product-card__media">
+                  <img class="product-card__img" [src]="p.imageUrl" [alt]="p.name" loading="lazy" />
+                </div>
+                <div class="product-card__meta">
+                  <p class="product-card__name">{{ p.name }}</p>
+                  <p class="product-card__price">{{ p.price }}</p>
+                </div>
+                <button class="btn btn--ghost" type="button">AÑADIR AL CARRITO</button>
+              </article>
+            }
           </div>
         </section>
       </section>
@@ -120,7 +108,9 @@
           <div class="product-grid product-grid--2">
             @for (p of featuredProducts; track p.name + p.price + $index) {
               <article class="product-card product-card--compact" aria-label="Producto">
-                <div class="product-card__media product-card__media--mini" aria-hidden="true"></div>
+                <div class="product-card__media product-card__media--mini">
+                  <img class="product-card__img" [src]="p.imageUrl" [alt]="p.name" loading="lazy" />
+                </div>
                 <div class="product-card__meta">
                   <p class="product-card__name">{{ p.name }}</p>
                   <p class="product-card__price">{{ p.price }}</p>
@@ -151,7 +141,9 @@
             @for (p of seasonOffers; track p.name + p.price + $index) {
               <article class="product-card product-card--compact" aria-label="Oferta">
                 <span class="badge" aria-hidden="true">{{ p.badge }}</span>
-                <div class="product-card__media product-card__media--mini" aria-hidden="true"></div>
+                <div class="product-card__media product-card__media--mini">
+                  <img class="product-card__img" [src]="p.imageUrl" [alt]="p.name" loading="lazy" />
+                </div>
                 <div class="product-card__meta">
                   <p class="product-card__name">{{ p.name }}</p>
                   <p class="product-card__price">{{ p.price }}</p>
