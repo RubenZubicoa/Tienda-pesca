@@ -33,7 +33,9 @@
 
   <main class="content">
     <section class="hero" aria-label="Portada">
-      <div class="hero__overlay"></div>
+      <div class="hero__overlay">
+        <img class="hero__img" src="fondo.jpg" alt="The Lake" />
+      </div>
       <div class="hero__inner">
         <p class="hero__kicker">EQUÍPATE CON LOS MEJORES</p>
         <p class="hero__subtitle">TU TIENDA DE ARTÍCULOS DE PESCA PREMIUM</p>
@@ -102,28 +104,13 @@
       </section>
 
       <aside class="side-col">
-        <section class="panel" aria-labelledby="side-destacados-title">
-          <h2 class="panel__title" id="side-destacados-title">PRODUCTOS DESTACADOS</h2>
-          <div class="product-grid product-grid--2">
-            @for (p of featuredProducts; track p.name + p.price + $index) {
-              <article class="product-card product-card--compact" aria-label="Producto">
-                <div class="product-card__media product-card__media--mini">
-                  <img class="product-card__img" [src]="p.imageUrl" [alt]="p.name" loading="lazy" />
-                </div>
-                <div class="product-card__meta">
-                  <p class="product-card__name">{{ p.name }}</p>
-                  <p class="product-card__price">{{ p.price }}</p>
-                </div>
-                <button class="btn btn--ghost btn--sm" type="button">AÑADIR AL CARRITO</button>
-              </article>
-            }
-          </div>
-        </section>
 
         <section class="panel" id="sobre-nosotros" aria-labelledby="reserve-title">
           <h2 class="panel__title panel__title--small" id="reserve-title">THE LAKE - PRIVATE RESERVE</h2>
           <div class="reserve">
-            <div class="reserve__img" aria-hidden="true"></div>
+            <div class="reserve__img" aria-hidden="true">
+              <img class="product-card__img" src="lago.jpg" alt="The Lake" />
+            </div>
             <div class="reserve__text">
               <p>
                 Acceso exclusivo a aguas de calidad con condiciones ideales en pesca. Reserva tu

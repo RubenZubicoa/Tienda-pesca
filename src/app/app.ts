@@ -26,94 +26,89 @@ export class App {
       name: 'Cucharilla Spin Pro 12g',
       price: '12,00 €',
       badge: undefined,
-      imageUrl: 'https://source.unsplash.com/600x420/?fishing,lure'
+      imageUrl: 'cucharilla.jpg'
     },
     {
       name: 'Cucharilla Spin Pro 12g',
       price: '12,00 €',
       badge: undefined,
-      imageUrl: 'https://source.unsplash.com/600x420/?fishing,bait'
+      imageUrl: 'cucharilla.jpg'
     },
     {
       name: 'Premium Carbono XT-5',
       price: '30,00 €',
       badge: undefined,
-      imageUrl: 'https://source.unsplash.com/600x420/?fishing,reel'
+      imageUrl: 'carrete.jpg'
     },
     {
       name: 'Caña de Carbono XT-5',
       price: '36,90 €',
       badge: undefined,
-      imageUrl: 'https://source.unsplash.com/600x420/?fishing,rod'
+      imageUrl: 'caña.jpg'
     },
     {
       name: 'Cucharilla Spin Pro 12g',
-      price: '30,00 €',
+      price: '12,00 €',
       badge: undefined,
-      imageUrl: 'https://source.unsplash.com/600x420/?fishing,spinner'
+      imageUrl: 'cucharilla.jpg'
     },
     {
       name: 'Cucharilla Spin Pro 12g',
-      price: '30,00 €',
+      price: '12,00 €',
       badge: undefined,
-      imageUrl: 'https://source.unsplash.com/600x420/?fishing,tackle'
-    },
-    {
-      name: 'Señuelo Spio Pro 12g',
-      price: '36,90 €',
-      badge: undefined,
-      imageUrl: 'https://source.unsplash.com/600x420/?fishing,lures'
+      imageUrl: 'cucharilla.jpg'
     },
     {
       name: 'Caña de Carbono XT-5',
       price: '28,90 €',
       badge: undefined,
-      imageUrl: 'https://source.unsplash.com/600x420/?fishing,rod,carbon'
+      imageUrl: 'caña.jpg'
     }
   ] as const;
 
   protected readonly seasonOffers = [
     {
       name: 'Cucharilla Spin Pro 12g',
-      price: '29,00 €',
+      price: '12,00 €',
       badge: 'OFERTA',
-      imageUrl: 'https://source.unsplash.com/600x420/?fishing,hook'
+      imageUrl: 'cucharilla.jpg'
     },
     {
       name: 'Cucharilla Spin Pro 12g',
-      price: '25,00 €',
+      price: '12,00 €',
       badge: 'OFERTA',
-      imageUrl: 'https://source.unsplash.com/600x420/?fishing,line'
+      imageUrl: 'cucharilla.jpg'
     },
     {
       name: 'Caña de Carbono ZT-5',
       price: '39,00 €',
       badge: 'OFERTA',
-      imageUrl: 'https://source.unsplash.com/600x420/?fishing,rod,casting'
+      imageUrl: 'caña.jpg'
     },
     {
       name: 'Caña de Carbono XT-5',
       price: '29,00 €',
       badge: 'OFERTA',
-      imageUrl: 'https://source.unsplash.com/600x420/?fishing,reel,spinning'
+      imageUrl: 'caña.jpg'
     }
   ] as const;
 
   protected readonly mainFeatured = [
     {
       name: 'Cucharilla Spin Pro 12g',
-      price: '29,00 €',
-      imageUrl: 'https://source.unsplash.com/900x600/?fishing,lure,product'
+      price: '12,00 €',
+      badge: undefined,
+      imageUrl: 'cucharilla.jpg'
     },
     {
       name: 'Caña de Carbono XT-5',
       price: '29,00 €',
-      imageUrl: 'https://source.unsplash.com/900x600/?fishing,rod,product'
+      imageUrl: 'caña.jpg'
     },
     {
       name: 'Carrete Pro Carbon XT-5',
       price: '29,00 €',
-      imageUrl: 'https://source.unsplash.com/900x600/?fishing,reel,product'
+      imageUrl: 'carrete.jpg'
     }
   ] as const;
 }
