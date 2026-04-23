@@ -81,19 +81,19 @@
           </div>
         </section>
 
-        <section class="section" id="destacados" aria-labelledby="destacados-title">
-          <h2 class="section__title" id="destacados-title">PRODUCTOS DESTACADOS</h2>
+
+        <section class="panel" id="ofertas" aria-labelledby="ofertas-title">
+          <h2 class="panel__title" id="ofertas-title">PRODUCTOS DESTACADOS</h2>
           <div class="product-grid product-grid--3">
-            @for (p of mainFeatured; track p.name) {
-              <article class="product-card" [attr.aria-label]="p.name">
-                <div class="product-card__media">
+            @for (p of mainFeatured; track p.name + p.price + $index) {
+              <article class="product-card product-card--compact" aria-label="Oferta">
+                <!-- <span class="badge" aria-hidden="true">{{ p.badge }}</span> -->
                   <img class="product-card__img" [src]="p.imageUrl" [alt]="p.name" loading="lazy" />
-                </div>
                 <div class="product-card__meta">
                   <p class="product-card__name">{{ p.name }}</p>
                   <p class="product-card__price">{{ p.price }}</p>
                 </div>
-                <button class="btn btn--ghost" type="button">AÑADIR AL CARRITO</button>
+                <button class="btn btn--ghost btn--sm" type="button">AÑADIR AL CARRITO</button>
               </article>
             }
           </div>
@@ -124,9 +124,7 @@
             @for (p of seasonOffers; track p.name + p.price + $index) {
               <article class="product-card product-card--compact" aria-label="Oferta">
                 <span class="badge" aria-hidden="true">{{ p.badge }}</span>
-                <div class="product-card__media product-card__media--mini">
                   <img class="product-card__img" [src]="p.imageUrl" [alt]="p.name" loading="lazy" />
-                </div>
                 <div class="product-card__meta">
                   <p class="product-card__name">{{ p.name }}</p>
                   <p class="product-card__price">{{ p.price }}</p>
