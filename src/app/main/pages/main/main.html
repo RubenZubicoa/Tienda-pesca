@@ -1,0 +1,38 @@
+<main class="content">
+    <section class="hero" aria-label="Portada">
+      <div class="hero__inner">
+        <p class="hero__kicker">EQUÍPATE CON LOS MEJORES</p>
+        <p class="hero__subtitle">TU TIENDA DE ARTÍCULOS DE PESCA PREMIUM</p>
+        <a class="btn btn--primary" href="#destacados">VER PRODUCTOS DESTACADOS</a>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="main-col">
+      <app-main-categories></app-main-categories>
+      <app-product-list [products]="mainFeatured" [columns]="3"></app-product-list>
+      </section>
+
+      <aside class="side-col">
+
+        <section class="panel" id="sobre-nosotros" aria-labelledby="reserve-title">
+          <h2 class="panel__title panel__title--small" id="reserve-title">THE LAKE - PRIVATE RESERVE</h2>
+          <div class="reserve">
+            <div class="reserve__img" aria-hidden="true">
+              <img class="product-card__img" src="lago.jpg" alt="The Lake" />
+            </div>
+            <div class="reserve__text">
+              <p>
+                Acceso exclusivo a aguas de calidad con condiciones ideales en pesca. Reserva tu
+                equipo y vive una experiencia premium.
+              </p>
+              <a class="reserve__link" href="#" aria-label="Saber más">Reserva el equipo lake - Private reserve →</a>
+            </div>
+          </div>
+        </section>
+
+        <app-product-list [products]="seasonOffers" [columns]="2" title="OFERTAS DE LA TEMPORADA"></app-product-list>
+       
+      </aside>
+    </div>
+  </main>

@@ -1,0 +1,12 @@
+@let p = product();
+<article class="product-card product-card--compact" aria-label="Oferta">
+    @if (p.badge) {
+    <span class="badge" aria-hidden="true">{{ p.badge }}</span>
+    }
+    <img class="product-card__img" [src]="p.imageUrl" [alt]="p.name" loading="lazy" />
+    <div class="product-card__meta">
+      <p class="product-card__name">{{ p.name }}</p>
+      <p class="product-card__price">{{ p.price }}</p>
+    </div>
+    <button class="btn btn--ghost btn--sm" type="button">AÑADIR AL CARRITO</button>
+  </article>
