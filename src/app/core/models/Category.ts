@@ -15,6 +15,12 @@ export interface Category {
     parentId?: string;
 }
 
+export interface CategoryCreate {
+    name: string;
+    description?: string;
+    parentId?: string;
+}
+
 export interface CategoryUpdate {
     name?: string;
     description?: string;
