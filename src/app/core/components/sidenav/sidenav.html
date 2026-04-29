@@ -5,9 +5,41 @@
   </div>
 
   <div class="sidenav__group" aria-label="Secciones">
-    @for (item of items; track item.label) {
-      <a class="sidenav__link" [href]="item.href">{{ item.label }}</a>
-    }
+    <ul class="sidenav__list" aria-label="Opciones">
+      @for (item of items; track item.label) {
+        <li class="sidenav__item">
+          @if (item.children?.length) {
+            <button
+              class="sidenav__link sidenav__link--parent"
+              type="button"
+              (click)="toggle(item.label)"
+              [attr.aria-expanded]="isExpanded(item.label)"
+              [attr.aria-controls]="groupId(item.label)"
+            >
+              <span class="sidenav__linkText">{{ item.label }}</span>
+              <span class="sidenav__chevron" aria-hidden="true"></span>
+            </button>
+          } @else {
+            <a class="sidenav__link" [href]="item.href">{{ item.label }}</a>
+          }
+
+          @if (item.children?.length) {
+            <ul
+              class="sidenav__sublist"
+              aria-label="Subopciones"
+              [id]="groupId(item.label)"
+              [attr.data-collapsed]="!isExpanded(item.label)"
+            >
+              @for (child of item.children; track child.label) {
+                <li class="sidenav__subitem">
+                  <a class="sidenav__sublink" [href]="child.href">{{ child.label }}</a>
+                </li>
+              }
+            </ul>
+          }
+        </li>
+      }
+    </ul>
   </div>
 
   <div class="sidenav__footer" aria-label="Accesos">
