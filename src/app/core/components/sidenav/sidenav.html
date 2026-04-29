@@ -1,0 +1,17 @@
+<nav class="sidenav" aria-label="Menú lateral">
+  <div class="sidenav__header">
+    <p class="sidenav__kicker">NAVEGACIÓN</p>
+    <p class="sidenav__title">Panel</p>
+  </div>
+
+  <div class="sidenav__group" aria-label="Secciones">
+    @for (item of items; track item.label) {
+      <a class="sidenav__link" [href]="item.href">{{ item.label }}</a>
+    }
+  </div>
+
+  <div class="sidenav__footer" aria-label="Accesos">
+    <a class="sidenav__cta" href="#">Acción de prueba</a>
+  </div>
+</nav>
+
