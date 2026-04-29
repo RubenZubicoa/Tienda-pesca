@@ -16,31 +16,59 @@ export class Sidenav {
   protected expanded = new Set<string>();
 
   protected readonly items: readonly SidenavItem[] = [
-    { label: 'Dashboard', href: '#' },
+    { label: 'Cañas', href: '#' },
+    { label: 'Carretes', href: '#' },
+    { label: 'Líneas', href: '#' },
     {
-      label: 'Catálogo',
+      label: 'Hilos',
       href: '#',
       children: [
-        { label: 'Categorías', href: '#' },
-        { label: 'Productos', href: '#' },
-        { label: 'Marcas', href: '#' },
+        { label: 'Bajos de línea', href: '#' },
+        { label: 'Colas de rata', href: '#' },
+        { label: 'Anillas', href: '#' },
+        { label: 'Destorcedores', href: '#' },
+        { label: 'Clips', href: '#' },
       ],
     },
     {
-      label: 'Ventas',
+      label: 'Material de montaje',
       href: '#',
       children: [
-        { label: 'Pedidos', href: '#' },
-        { label: 'Clientes', href: '#' },
-        { label: 'Cupones', href: '#' },
+        { label: 'Sedas, hilos, polys, etc.', href: '#' },
+        { label: 'Tinseles y uv', href: '#' },
+        { label: 'Anzuelos', href: '#' },
+        { label: 'Ojos, cabezas y beads', href: '#' },
+        { label: 'Dubbings', href: '#' },
+        { label: 'Materiales para cuerpos', href: '#' },
+        { label: 'Gomas, cauchos y foams', href: '#' },
+        { label: 'Barnices, etc.', href: '#' },
       ],
     },
     {
-      label: 'Ajustes',
+      label: 'Plumas',
       href: '#',
       children: [
-        { label: 'Perfil', href: '#' },
-        { label: 'Configuración', href: '#' },
+        { label: 'Gallo', href: '#' },
+        { label: 'Leon', href: '#' },
+        { label: 'CDP', href: '#' },
+        { label: 'Varias', href: '#' },
+      ],
+    },
+
+    { label: 'Botas y waders', href: '#' },
+    { label: 'Ropa', href: '#' },
+    { label: 'Chalecos', href: '#' },
+    { label: 'Moscas', href: '#' },
+    {
+      label: 'Accesorios',
+      href: '#',
+      children: [
+        { label: 'Gafas', href: '#' },
+        { label: 'Líquidos y pastas', href: '#' },
+        { label: 'Sacaderas', href: '#' },
+        { label: 'Porta cañas', href: '#' },
+        { label: 'Carritos', href: '#' },
+        { label: 'Cajas de moscas', href: '#' },
       ],
     },
   ];
