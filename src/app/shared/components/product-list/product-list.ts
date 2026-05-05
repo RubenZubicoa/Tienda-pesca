@@ -10,6 +10,7 @@ import { Product } from '../../../core/models/Product';
 })
 export class ProductList {
   public title = input<string>('PRODUCTOS DESTACADOS')
+  public description = input<string>()
   public columns = input<number>(3)
   public products = input<Product[]>([])
 
