@@ -1,12 +1,6 @@
-import { Component, input } from '@angular/core';
-import { ProductCard } from '../product-card/product-card';
-
-export interface Product {
-  name: string,
-  price: string,
-  badge?: string,
-  imageUrl: string
-}
+import { Component, computed, input, Signal } from '@angular/core';
+import { ProductCard, ProductCardData } from '../product-card/product-card';
+import { Product } from '../../../core/models/Product';
 
 @Component({
   selector: 'app-product-list',
@@ -18,5 +12,15 @@ export class ProductList {
   public title = input<string>('PRODUCTOS DESTACADOS')
   public columns = input<number>(3)
   public products = input<Product[]>([])
+
+  protected productCardData: Signal<ProductCardData[]> = computed(() => this.products().map(product => {
+    const p: ProductCardData = {
+      id: product.uuid,
+      name: product.name,
+      price: product.price.toString(),
+      imageUrl: product.images[0]
+    }
+    return p;
+  }))
   
 }

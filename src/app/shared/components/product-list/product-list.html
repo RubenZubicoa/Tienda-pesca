@@ -1,7 +1,7 @@
 <section class="panel" id="ofertas" aria-labelledby="ofertas-title">
   <h2 class="panel__title" id="ofertas-title">{{ title() }}</h2>
   <div class="product-grid product-grid--{{ columns() }}">
-    @for (p of products(); track p.name + p.price + $index) {
+    @for (p of productCardData(); track p.id + $index) {
     <app-product-card [product]="p"></app-product-card>
     }
   </div>

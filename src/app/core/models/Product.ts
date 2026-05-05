@@ -22,7 +22,7 @@ export interface Product {
     description?: string;
     price: number;
     stock: number;
-    categoryId: Category['uuid'];
+    categoryId: Category['_id'];
     images: string[];
 }
 
@@ -32,7 +32,7 @@ export interface ProductCreate {
     description?: string;
     price: number;
     stock: number;
-    categoryId: Category['uuid'];
+    categoryId: Category['_id'];
     images: string[];
 }
 

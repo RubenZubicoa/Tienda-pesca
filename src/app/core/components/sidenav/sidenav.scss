@@ -59,6 +59,7 @@
   border: 1px solid transparent;
   background: rgba(12, 11, 9, 0.55);
   transition: 160ms ease;
+  cursor: pointer;
 }
 
 .sidenav__link--parent {
@@ -131,6 +132,7 @@
   border: 1px solid transparent;
   background: rgba(12, 11, 9, 0.38);
   transition: 160ms ease;
+  cursor: pointer;
 }
 
 .sidenav__sublink:hover {

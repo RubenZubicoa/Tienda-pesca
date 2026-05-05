@@ -2,7 +2,7 @@
 
   <div class="sidenav__group" aria-label="Secciones">
     <ul class="sidenav__list" aria-label="Opciones">
-      @for (item of items; track item.label) {
+      @for (item of items(); track item.label) {
         <li class="sidenav__item">
           @if (item.children?.length) {
             <button
@@ -12,11 +12,11 @@
               [attr.aria-expanded]="isExpanded(item.label)"
               [attr.aria-controls]="groupId(item.label)"
             >
-              <span class="sidenav__linkText">{{ item.label }}</span>
+              <span class="sidenav__linkText" (click)="navigateToCategory(item)">{{ item.label }}</span>
               <span class="sidenav__chevron" aria-hidden="true"></span>
             </button>
           } @else {
-            <a class="sidenav__link" [href]="item.href">{{ item.label }}</a>
+            <a class="sidenav__link" (click)="navigateToCategory(item)">{{ item.label }}</a>
           }
 
           @if (item.children?.length) {
@@ -28,7 +28,7 @@
             >
               @for (child of item.children; track child.label) {
                 <li class="sidenav__subitem">
-                  <a class="sidenav__sublink" [href]="child.href">{{ child.label }}</a>
+                  <a class="sidenav__sublink" (click)="navigateToCategory(child)">{{ child.label }}</a>
                 </li>
               }
             </ul>

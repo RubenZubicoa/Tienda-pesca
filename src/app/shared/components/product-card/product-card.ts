@@ -1,5 +1,12 @@
 import { Component, input } from '@angular/core';
-import { Product } from '../product-list/product-list';
+
+export interface ProductCardData {
+  id: string;
+  name: string,
+  price: string,
+  badge?: string,
+  imageUrl: string
+}
 
 @Component({
   selector: 'app-product-card',
@@ -8,5 +15,5 @@ import { Product } from '../product-list/product-list';
   styleUrl: './product-card.scss',
 })
 export class ProductCard {
-  public product = input.required<Product>()
+  public product = input.required<ProductCardData>()
 }

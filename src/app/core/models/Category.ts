@@ -1,36 +1,28 @@
 export type CategoryDB = {
     _id: string;
-    name: string;
+    label: string;
     description?: string;
-    parentId?: string;
+    children?: CategoryDB[];
     createdAt?: number;
     updatedAt?: number;
     isDeleted?: boolean;
 }
 
 export interface Category {
-    uuid: string;
-    name: string;
+    _id: string;
+    label: string;
     description?: string;
-    parentId?: string;
+    children?: Category[];
 }
 
 export interface CategoryCreate {
-    name: string;
+    label: string;
     description?: string;
-    parentId?: string;
+    children?: Category[];
 }
 
 export interface CategoryUpdate {
-    name?: string;
+    label?: string;
     description?: string;
-    parentId?: string;
-}
-
-export function mapCategoryDBToCategory(categoryDB: CategoryDB): Category {
-    return {
-        uuid: categoryDB._id,
-        name: categoryDB.name,
-        description: categoryDB.description,
-    }
+    children?: Category[];
 }
