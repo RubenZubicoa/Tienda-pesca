@@ -12,7 +12,7 @@
               [attr.aria-expanded]="isExpanded(item.label)"
               [attr.aria-controls]="groupId(item.label)"
             >
-              <span class="sidenav__linkText" (click)="navigateToCategory(item)">{{ item.label }}</span>
+              <span class="sidenav__linkText">{{ item.label }}</span>
               <span class="sidenav__chevron" aria-hidden="true"></span>
             </button>
           } @else {

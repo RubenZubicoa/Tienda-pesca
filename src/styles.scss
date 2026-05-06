@@ -88,9 +88,6 @@ input {
     linear-gradient(180deg, #060504 0%, var(--bg) 25%, #070606 100%);
 }
 
-
-
-
 .content {
   max-width: 1100px;
   margin: 0 auto;
@@ -433,9 +430,11 @@ input {
 
 .product-card__price {
   margin: 0;
-  font-size: 12px;
+  font-size: 16px;
   color: rgba(240, 209, 106, 0.92);
   font-weight: 700;
+  text-align: center;
+  padding: 5px;
 }
 
 .badge {
