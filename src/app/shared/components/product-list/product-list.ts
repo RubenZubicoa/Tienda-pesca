@@ -18,7 +18,7 @@ export class ProductList {
     const p: ProductCardData = {
       id: product.uuid,
       name: product.name,
-      price: product.price.toString(),
+      price: product.price,
       imageUrl: product.images[0]
     }
     return p;

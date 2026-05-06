@@ -1,0 +1,58 @@
+<section class="panel" aria-label="Carrito de compra">
+  <h2 class="panel__title">CARRITO</h2>
+
+  @if (cart.items().length === 0) {
+    <p class="panel__description">Tu carrito está vacío.</p>
+    <a class="btn btn--primary btn--sm" routerLink="/">SEGUIR COMPRANDO</a>
+  } @else {
+    <div class="cart">
+      <div class="cart__items" aria-label="Productos seleccionados">
+        @for (item of cart.items(); track item.id) {
+          <article class="cart-item" aria-label="Producto en carrito">
+            <img class="cart-item__img" [src]="item.imageUrl" [alt]="item.name" loading="lazy" />
+            <div class="cart-item__meta">
+              <p class="cart-item__name">{{ item.name }}</p>
+              <p class="cart-item__price">{{ fmtEUR(item.price) }}</p>
+              <button class="cart-item__remove" type="button" (click)="cart.remove(item.id)">Quitar</button>
+            </div>
+
+            <div class="cart-item__qty" aria-label="Cantidad">
+              <button class="icon-btn icon-btn--mini" type="button" (click)="cart.dec(item.id)" aria-label="Restar">−</button>
+              <input
+                class="cart-item__qtyInput"
+                type="number"
+                min="1"
+                [value]="item.qty"
+                (input)="cart.setQty(item.id, ($any($event.target).valueAsNumber))"
+                aria-label="Cantidad"
+              />
+              <button class="icon-btn icon-btn--mini" type="button" (click)="cart.inc(item.id)" aria-label="Sumar">+</button>
+            </div>
+
+            <div class="cart-item__lineTotal" aria-label="Total línea">
+              {{ fmtEUR(item.price * item.qty) }}
+            </div>
+          </article>
+        }
+      </div>
+
+      <aside class="cart__summary" aria-label="Resumen del pedido">
+        <div class="summary-card">
+          <p class="summary-card__row">
+            <span>Artículos</span>
+            <strong>{{ cart.count() }}</strong>
+          </p>
+          <p class="summary-card__row">
+            <span>Subtotal</span>
+            <strong>{{ fmtEUR(total()) }}</strong>
+          </p>
+          <p class="summary-card__hint">Impuestos y envío se calculan en el checkout.</p>
+
+          <a class="btn btn--primary" routerLink="/checkout">FINALIZAR COMPRA</a>
+          <button class="btn btn--ghost btn--sm" type="button" (click)="cart.clear()">VACIAR CARRITO</button>
+        </div>
+      </aside>
+    </div>
+  }
+</section>
+

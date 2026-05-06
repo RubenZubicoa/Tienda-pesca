@@ -7,6 +7,14 @@ export const routes: Routes = [
         loadComponent: () => import('./main/pages/main/main').then(m => m.Main)
     },
     {
+        path: 'cart',
+        loadComponent: () => import('./cart/pages/cart/cart').then(m => m.Cart),
+    },
+    {
+        path: 'checkout',
+        loadComponent: () => import('./checkout/pages/checkout/checkout').then(m => m.Checkout),
+    },
+    {
         path: 'categories/:uuid',
         loadComponent: () => import('./categories/pages/categories/categories').then(m => m.Categories),
         resolve: {
