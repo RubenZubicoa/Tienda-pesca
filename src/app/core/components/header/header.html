@@ -25,7 +25,7 @@
             />
           </svg>
           @if (cart.count() > 0) {
-            <span class="cart-dot" aria-hidden="true"></span>
+            <span class="cart-badge" aria-label="Productos en el carrito">{{ cart.count() }}</span>
           }
         </a>
       </div>

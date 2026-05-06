@@ -25,9 +25,9 @@ input {
 
 
 .icon-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
   display: grid;
   place-items: center;
   border: 1px solid rgba(209, 176, 74, 0.25);
@@ -37,8 +37,8 @@ input {
 }
 
 .icon-btn svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   fill: currentColor;
 }
 
@@ -51,15 +51,23 @@ input {
   position: relative;
 }
 
-.cart-dot {
+.cart-badge {
   position: absolute;
-  right: 8px;
-  top: 7px;
-  width: 8px;
-  height: 8px;
+  right: -6px;
+  top: -6px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 6px;
   border-radius: 99px;
-  background: var(--gold-2);
+  background: linear-gradient(180deg, var(--gold-2), var(--gold));
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.86);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 19px;
+  text-align: center;
+  letter-spacing: 0.02em;
+  pointer-events: none;
 }
 
 /* Home layout inspirado en el diseño aportado (tema negro + dorado). */
