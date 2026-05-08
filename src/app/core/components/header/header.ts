@@ -13,10 +13,10 @@ export class Header {
 
   protected readonly navItems = [
     { label: 'Inicio', href: '#' },
-    { label: 'Cañas', href: '#canas' },
-    { label: 'Carretes', href: '#carretes' },
-    { label: 'Señuelos', href: '#senuelos' },
-    { label: 'Ofertas', href: '#ofertas' },
-    { label: 'Sobre Nosotros', href: '#sobre-nosotros' }
+    { label: 'Quienes somos', href: '#canas' },
+    { label: 'Condiciones de venta', href: '#carretes' },
+    { label: 'Viajes', href: '#senuelos' },
+    { label: 'Boletines', href: '#ofertas' },
+    { label: 'Galeria de fotos', href: '#sobre-nosotros' }
   ] as const;
 }
