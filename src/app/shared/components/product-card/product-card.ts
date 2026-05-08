@@ -1,4 +1,5 @@
 import { Component, inject, input } from '@angular/core';
+import { Router } from '@angular/router';
 import { CartService } from '../../../core/services/cart';
 
 export interface ProductCardData {
@@ -19,8 +20,15 @@ export class ProductCard {
   public product = input.required<ProductCardData>()
 
   private readonly cart = inject(CartService);
+  private readonly router = inject(Router);
 
-  addToCart() {
+  goToDetail() {
+    const p = this.product();
+    this.router.navigate(['/products', p.id]);
+  }
+
+  addToCart(ev?: Event) {
+    ev?.stopPropagation();
     const p = this.product();
     this.cart.add({
       id: p.id,

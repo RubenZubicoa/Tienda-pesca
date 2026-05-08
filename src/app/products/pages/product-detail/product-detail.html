@@ -1,0 +1,53 @@
+<section class="panel" aria-label="Detalle de producto">
+  <a class="back" routerLink="/" aria-label="Volver">← Volver</a>
+
+  @if (loading()) {
+    <p class="muted">Cargando producto…</p>
+  } @else if (!product()) {
+    <p class="muted">No se ha podido cargar el producto.</p>
+    <a class="btn btn--ghost btn--sm" routerLink="/">SEGUIR COMPRANDO</a>
+  } @else {
+    @let p = product()!;
+    <div class="detail">
+      <div class="detail__media" aria-label="Imagen del producto">
+        <img class="detail__img" [src]="imageUrl()" [alt]="p.name" loading="lazy" />
+      </div>
+
+      <div class="detail__info" aria-label="Información del producto">
+        <h2 class="title">{{ p.name }}</h2>
+        <p class="desc">{{ p.description || 'Sin descripción.' }}</p>
+
+        <div class="controls" aria-label="Selección de opciones y cantidad">
+          <label class="field">
+            <span class="field__label">Opciones</span>
+            <select class="field__control" [value]="selectedOptionId()" (change)="selectedOptionId.set($any($event.target).value)">
+              @for (opt of options(); track opt.id) {
+                <option [value]="opt.id">{{ opt.label }}</option>
+              }
+            </select>
+          </label>
+
+          <div class="field">
+            <span class="field__label">Cantidad</span>
+            <div class="qty">
+              <button class="icon-btn" type="button" (click)="decQty()" aria-label="Restar">−</button>
+              <input
+                class="qty__input"
+                type="number"
+                min="1"
+                max="99"
+                [value]="qty()"
+                (input)="onQtyInput(($any($event.target).valueAsNumber))"
+                aria-label="Cantidad"
+              />
+              <button class="icon-btn" type="button" (click)="incQty()" aria-label="Sumar">+</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn--primary" type="button" (click)="addToCart()">AÑADIR AL CARRITO</button>
+      </div>
+    </div>
+  }
+</section>
+

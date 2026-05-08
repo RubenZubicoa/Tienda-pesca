@@ -15,6 +15,7 @@ export class ProductList {
   public products = input<Product[]>([])
 
   protected productCardData: Signal<ProductCardData[]> = computed(() => this.products().map(product => {
+    console.log(product);
     const p: ProductCardData = {
       id: product.uuid,
       name: product.name,

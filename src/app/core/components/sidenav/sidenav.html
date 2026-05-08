@@ -2,7 +2,7 @@
 
   <div class="sidenav__group" aria-label="Secciones">
     <ul class="sidenav__list" aria-label="Opciones">
-      @for (item of items(); track item.label) {
+      @for (item of items(); track item.uuid) {
         <li class="sidenav__item">
           @if (item.children?.length) {
             <button
@@ -28,7 +28,7 @@
             >
               @for (child of item.children; track child.label) {
                 <li class="sidenav__subitem">
-                  <a class="sidenav__sublink" (click)="navigateToCategory(child)">{{ child.label }}</a>
+                  <a class="sidenav__sublink" (click)="navigateToSubCategory(item, child)">{{ child.label }}</a>
                 </li>
               }
             </ul>

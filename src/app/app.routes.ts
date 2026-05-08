@@ -1,10 +1,15 @@
 import { Routes } from '@angular/router';
 import { categoriesResolver } from './categories/services/categories-resolver';
+import { subCategoriesResolver } from './categories/services/sub-categories-resolver';
 
 export const routes: Routes = [
     {
         path: '',
         loadComponent: () => import('./main/pages/main/main').then(m => m.Main)
+    },
+    {
+        path: 'products/:uuid',
+        loadComponent: () => import('./products/pages/product-detail/product-detail').then(m => m.ProductDetail),
     },
     {
         path: 'cart',
@@ -19,6 +24,13 @@ export const routes: Routes = [
         loadComponent: () => import('./categories/pages/categories/categories').then(m => m.Categories),
         resolve: {
             category: categoriesResolver
+        }
+    },
+    {
+        path: 'categories/:parentCategoryUuid/subcategories/:subCategoryUuid',
+        loadComponent: () => import('./categories/pages/categories/categories').then(m => m.Categories),
+        resolve: {
+            category: subCategoriesResolver
         }
     }
 ];

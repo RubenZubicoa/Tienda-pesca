@@ -4,12 +4,6 @@ import { Category } from '../../models/Category';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 
-type SidenavItem = Readonly<{
-  label: string;
-  href: string;
-  children?: readonly SidenavItem[];
-}>;
-
 @Component({
   selector: 'app-sidenav',
   imports: [],
@@ -26,7 +20,6 @@ export class Sidenav implements OnInit {
 
   ngOnInit(): void {
     this.categoryService.getCategories().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((categories) => {
-      console.log(categories);
       this.items.set(categories);
     });
   }
@@ -49,7 +42,11 @@ export class Sidenav implements OnInit {
   }
 
   navigateToCategory(category: Category) {
-    this.router.navigate(['/categories', category._id]);
+    this.router.navigate(['/categories', category.uuid]);
+  }
+
+  navigateToSubCategory(parentCategory: Category, subCategory: Category) {
+    this.router.navigate(['/categories', parentCategory.uuid, 'subcategories', subCategory.uuid]);
   }
 }
 

@@ -1,5 +1,13 @@
 @let p = product();
-<article class="product-card product-card--compact" aria-label="Oferta">
+<article
+  class="product-card product-card--compact"
+  aria-label="Oferta"
+  role="link"
+  tabindex="0"
+  (click)="goToDetail()"
+  (keydown.enter)="goToDetail()"
+  (keydown.space)="goToDetail()"
+>
     @if (p.badge) {
     <span class="badge" aria-hidden="true">{{ p.badge }}</span>
     }
@@ -8,5 +16,5 @@
       <p class="product-card__name">{{ p.name }}</p>
       <p class="product-card__price">{{ p.price }} €</p>
     </div>
-    <button class="btn btn--ghost btn--sm" type="button" (click)="addToCart()">AÑADIR AL CARRITO</button>
+    <button class="btn btn--ghost btn--sm" type="button" (click)="addToCart($event)">AÑADIR AL CARRITO</button>
   </article>

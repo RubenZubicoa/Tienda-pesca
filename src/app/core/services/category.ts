@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
-import { Category, CategoryCreate, CategoryUpdate } from '../models/Category';
+import { Category, CategoryCreate, CategoryDB, CategoryUpdate, mapCategoryDBToCategory } from '../models/Category';
 
 @Injectable({
   providedIn: 'root',
@@ -13,11 +13,15 @@ export class CategoryService {
   private readonly baseUrl = environment.apiUrl + '/categories';
 
   getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(this.baseUrl);
+    return this.http.get<CategoryDB[]>(this.baseUrl).pipe(
+      map(categories => categories.map(category => mapCategoryDBToCategory(category)))
+    );
   }
 
   getCategory(uuid: string): Observable<Category> {
-    return this.http.get<Category>(`${this.baseUrl}/${uuid}`);
+    return this.http.get<CategoryDB>(`${this.baseUrl}/${uuid}`).pipe(
+      map(category => mapCategoryDBToCategory(category))
+    );
   }
 
   createCategory(category: CategoryCreate): Observable<Category> {

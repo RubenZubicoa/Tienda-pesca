@@ -1,4 +1,4 @@
-import { Component, inject, input, OnChanges, signal, SimpleChanges } from '@angular/core';
+import { Component, inject, input, OnChanges, signal } from '@angular/core';
 import { ProductList } from '../../../shared/components/product-list/product-list';
 import { Product } from '../../../core/models/Product';
 import { Category } from '../../../core/models/Category';
@@ -15,9 +15,9 @@ export class Categories implements OnChanges {
   public products = signal<Product[]>([]);
 
   private readonly productService = inject(ProductService);
-  ngOnChanges(changes: SimpleChanges) {
-    this.productService.getProductsByCategory(this.category()._id).subscribe((products) => {
-      console.log(products);
+
+  ngOnChanges() {
+    this.productService.getProductsByCategory(this.category().uuid).subscribe((products) => {
       this.products.set(products);
     });
   }
