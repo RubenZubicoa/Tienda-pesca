@@ -78,3 +78,13 @@
     align-items: center;
     gap: 10px;
   }
+
+  .icon-btn--menu {
+    display: none;
+  }
+
+  @media (max-width: 980px) {
+    .icon-btn--menu {
+      display: grid;
+    }
+  }

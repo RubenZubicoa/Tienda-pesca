@@ -11,6 +11,16 @@
       </nav>
 
       <div class="topbar__actions" aria-label="Acciones">
+        <button
+          class="icon-btn icon-btn--menu"
+          type="button"
+          aria-label="Abrir menú de categorías"
+          (click)="menuToggle.emit()"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 6.5h16v2H4v-2Zm0 7h16v2H4v-2ZM4 10h16v2H4v-2Z" />
+          </svg>
+        </button>
         <button class="icon-btn" type="button" aria-label="Cuenta">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path

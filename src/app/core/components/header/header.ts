@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CartService } from '../../services/cart';
 
@@ -9,6 +9,7 @@ import { CartService } from '../../services/cart';
   styleUrl: './header.scss',
 })
 export class Header {
+  @Output() menuToggle = new EventEmitter<void>();
   protected readonly cart = inject(CartService);
 
   protected readonly navItems = [

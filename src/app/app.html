@@ -1,5 +1,22 @@
 <div class="page">
-  <app-header></app-header>
+  <app-header (menuToggle)="toggleSidenav()"></app-header>
+
+  <div
+    class="mobile-sidenav"
+    [attr.data-open]="isSidenavOpen"
+    aria-hidden="true"
+  >
+    <button
+      class="mobile-sidenav__backdrop"
+      type="button"
+      (click)="closeSidenav()"
+      aria-label="Cerrar menú"
+      tabindex="-1"
+    ></button>
+    <aside class="mobile-sidenav__panel" aria-label="Menú de categorías">
+      <app-sidenav (navigate)="closeSidenav()"></app-sidenav>
+    </aside>
+  </div>
 
   <div class="app-shell">
     <aside class="app-shell__sidenav" aria-label="Barra lateral">

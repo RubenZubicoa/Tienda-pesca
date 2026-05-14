@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
 import { CategoryService } from '../../services/category';
 import { Category } from '../../models/Category';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
   styleUrl: './sidenav.scss',
 })
 export class Sidenav implements OnInit {
+  @Output() navigate = new EventEmitter<void>();
+
   protected expanded = new Set<string>();
   private categoryService = inject(CategoryService);
   private destroyRef = inject(DestroyRef);
@@ -43,10 +45,12 @@ export class Sidenav implements OnInit {
 
   navigateToCategory(category: Category) {
     this.router.navigate(['/categories', category.uuid]);
+    this.navigate.emit();
   }
 
   navigateToSubCategory(parentCategory: Category, subCategory: Category) {
     this.router.navigate(['/categories', parentCategory.uuid, 'subcategories', subCategory.uuid]);
+    this.navigate.emit();
   }
 }
 

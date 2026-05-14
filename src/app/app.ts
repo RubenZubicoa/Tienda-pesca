@@ -11,8 +11,17 @@ import { Sidenav } from './core/components/sidenav/sidenav';
   imports: [Header, Footer, Sidenav, RouterOutlet]
 })
 export class App {
+  protected isSidenavOpen = false;
 
-  
+  protected openSidenav() {
+    this.isSidenavOpen = true;
+  }
 
+  protected closeSidenav() {
+    this.isSidenavOpen = false;
+  }
 
+  protected toggleSidenav() {
+    this.isSidenavOpen = !this.isSidenavOpen;
+  }
 }
