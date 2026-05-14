@@ -12,6 +12,8 @@
   --shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
   --radius: 18px;
   --radius-sm: 14px;
+  /* Espacio reservado bajo el contenido para el pie fijo (alto aprox. del footer) */
+  --footer-space: 118px;
 
   display: block;
   color: var(--text);
@@ -19,6 +21,7 @@
 
 .page {
   min-height: 100dvh;
+  padding-bottom: calc(var(--footer-space) + env(safe-area-inset-bottom, 0px));
   background: radial-gradient(70% 60% at 30% 10%, rgba(209, 176, 74, 0.14), transparent 60%),
     radial-gradient(50% 40% at 80% 20%, rgba(209, 176, 74, 0.12), transparent 55%),
     linear-gradient(180deg, #060504 0%, var(--bg) 25%, #070606 100%);
@@ -38,7 +41,7 @@
 .app-shell__sidenav {
   position: sticky;
   top: 92px; /* debajo del header sticky */
-  max-height: calc(100dvh - 110px);
+  max-height: calc(100dvh - 110px - var(--footer-space));
   overflow: auto;
   scrollbar-gutter: stable;
   scrollbar-width: thin;
@@ -609,6 +612,10 @@
 }
 
 @media (max-width: 720px) {
+  :host {
+    --footer-space: 240px;
+  }
+
   .nav {
     display: none;
   }
