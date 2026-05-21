@@ -1,14 +1,16 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { Register } from '../register/register';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, Register],
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
 })
 export class Login {
+  protected readonly showRegister = signal(false);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
 
@@ -46,5 +48,15 @@ export class Login {
       this.isSubmitting.set(false);
       this.router.navigateByUrl('/');
     }, 900);
+  }
+
+  protected openRegister() {
+    this.showRegister.set(true);
+    this.errorMessage.set('');
+    this.successMessage.set('');
+  }
+
+  protected closeRegister() {
+    this.showRegister.set(false);
   }
 }

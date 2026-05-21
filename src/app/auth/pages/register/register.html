@@ -1,0 +1,89 @@
+<header class="login-page__header">
+  <h2 class="panel__title">CREAR CUENTA</h2>
+  <p class="panel__description login-page__intro">
+    Regístrate para gestionar tus pedidos y reservas en The Lake.
+  </p>
+</header>
+
+<div class="login">
+  <form class="login__form" [formGroup]="form" (ngSubmit)="submit()" aria-label="Formulario de registro">
+    @if (errorMessage()) {
+      <p class="login__alert" role="alert">{{ errorMessage() }}</p>
+    }
+    @if (successMessage()) {
+      <p class="login__success" role="status">{{ successMessage() }}</p>
+    }
+
+    <div class="field">
+      <label class="field__label" for="register-name">Nombre y apellidos</label>
+      <input
+        id="register-name"
+        class="field__input"
+        type="text"
+        autocomplete="name"
+        formControlName="fullName"
+      />
+      @if (form.controls.fullName.touched && form.controls.fullName.invalid) {
+        <span class="field__error">Introduce tu nombre (mínimo 3 caracteres).</span>
+      }
+    </div>
+
+    <div class="field">
+      <label class="field__label" for="register-email">Correo electrónico</label>
+      <input
+        id="register-email"
+        class="field__input"
+        type="email"
+        autocomplete="email"
+        formControlName="email"
+      />
+      @if (form.controls.email.touched && form.controls.email.invalid) {
+        <span class="field__error">Introduce un correo válido.</span>
+      }
+    </div>
+
+    <div class="fieldRow">
+      <div class="field">
+        <label class="field__label" for="register-password">Contraseña</label>
+        <input
+          id="register-password"
+          class="field__input"
+          type="password"
+          autocomplete="new-password"
+          formControlName="password"
+        />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <span class="field__error">Mínimo 6 caracteres.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="register-confirm">Confirmar contraseña</label>
+        <input
+          id="register-confirm"
+          class="field__input"
+          type="password"
+          autocomplete="new-password"
+          formControlName="confirmPassword"
+        />
+        @if (passwordsMismatch()) {
+          <span class="field__error">Las contraseñas no coinciden.</span>
+        }
+      </div>
+    </div>
+
+    <div class="login__actions">
+      <a class="btn btn--ghost btn--sm" routerLink="/">VOLVER A LA TIENDA</a>
+      <button class="btn btn--primary" type="submit" [disabled]="form.invalid || isSubmitting()">
+        CREAR CUENTA
+      </button>
+    </div>
+  </form>
+
+  <div class="login__register">
+    <p class="login__register-text">¿Ya tienes cuenta?</p>
+    <button class="btn btn--ghost login__register-btn" type="button" (click)="goToLogin.emit()">
+      INICIAR SESIÓN
+    </button>
+  </div>
+</div>

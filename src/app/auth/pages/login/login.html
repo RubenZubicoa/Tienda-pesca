@@ -1,4 +1,7 @@
-<section class="panel login-page" aria-label="Iniciar sesión">
+<section class="panel login-page" aria-label="Acceso a la cuenta">
+  @if (showRegister()) {
+    <app-register (goToLogin)="closeRegister()" />
+  } @else {
     <header class="login-page__header">
       <h2 class="panel__title">INICIAR SESIÓN</h2>
       <p class="panel__description login-page__intro">
@@ -7,53 +10,56 @@
     </header>
 
     <div class="login">
-        <form class="login__form" [formGroup]="form" (ngSubmit)="submit()" aria-label="Formulario de acceso">
-          @if (errorMessage()) {
-            <p class="login__alert" role="alert">{{ errorMessage() }}</p>
+      <form class="login__form" [formGroup]="form" (ngSubmit)="submit()" aria-label="Formulario de acceso">
+        @if (errorMessage()) {
+          <p class="login__alert" role="alert">{{ errorMessage() }}</p>
+        }
+        @if (successMessage()) {
+          <p class="login__success" role="status">{{ successMessage() }}</p>
+        }
+
+        <div class="field">
+          <label class="field__label" for="login-email">Correo electrónico</label>
+          <input
+            id="login-email"
+            class="field__input"
+            type="email"
+            autocomplete="email"
+            formControlName="email"
+          />
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <span class="field__error">Introduce un correo válido.</span>
           }
-          @if (successMessage()) {
-            <p class="login__success" role="status">{{ successMessage() }}</p>
-          }
-
-          <div class="field">
-            <label class="field__label" for="login-email">Correo electrónico</label>
-            <input
-              id="login-email"
-              class="field__input"
-              type="email"
-              autocomplete="email"
-              formControlName="email"
-            />
-            @if (form.controls.email.touched && form.controls.email.invalid) {
-              <span class="field__error">Introduce un correo válido.</span>
-            }
-          </div>
-
-          <div class="field">
-            <label class="field__label" for="login-password">Contraseña</label>
-            <input
-              id="login-password"
-              class="field__input"
-              type="password"
-              autocomplete="current-password"
-              formControlName="password"
-            />
-            @if (form.controls.password.touched && form.controls.password.invalid) {
-              <span class="field__error">La contraseña debe tener al menos 6 caracteres.</span>
-            }
-          </div>
-
-          <div class="login__actions">
-            <a class="btn btn--ghost btn--sm" routerLink="/">VOLVER A LA TIENDA</a>
-            <button class="btn btn--primary" type="submit" [disabled]="form.invalid || isSubmitting()">
-              INICIAR SESIÓN
-            </button>
-          </div>
-        </form>
-
-        <div class="login__register">
-          <p class="login__register-text">¿Aún no tienes cuenta?</p>
-          <button class="btn btn--ghost login__register-btn" type="button">REGISTRARSE</button>
         </div>
+
+        <div class="field">
+          <label class="field__label" for="login-password">Contraseña</label>
+          <input
+            id="login-password"
+            class="field__input"
+            type="password"
+            autocomplete="current-password"
+            formControlName="password"
+          />
+          @if (form.controls.password.touched && form.controls.password.invalid) {
+            <span class="field__error">La contraseña debe tener al menos 6 caracteres.</span>
+          }
+        </div>
+
+        <div class="login__actions">
+          <a class="btn btn--ghost btn--sm" routerLink="/">VOLVER A LA TIENDA</a>
+          <button class="btn btn--primary" type="submit" [disabled]="form.invalid || isSubmitting()">
+            INICIAR SESIÓN
+          </button>
+        </div>
+      </form>
+
+      <div class="login__register">
+        <p class="login__register-text">¿Aún no tienes cuenta?</p>
+        <button class="btn btn--ghost login__register-btn" type="button" (click)="openRegister()">
+          REGISTRARSE
+        </button>
+      </div>
     </div>
-  </section>
+  }
+</section>

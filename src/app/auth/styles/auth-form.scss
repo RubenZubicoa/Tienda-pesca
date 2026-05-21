@@ -1,0 +1,165 @@
+.login-page {
+  width: 100%;
+}
+
+.login-page__header {
+  margin-bottom: 18px;
+}
+
+.login-page__intro {
+  max-width: 52ch;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.login {
+  width: 100%;
+  display: grid;
+  gap: 18px;
+  align-items: start;
+}
+
+.login__main {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+@media (min-width: 720px) {
+  .login {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  }
+}
+
+.login__form {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(209, 176, 74, 0.18);
+  background: rgba(12, 11, 9, 0.65);
+  padding: clamp(16px, 2.5vw, 24px);
+  display: grid;
+  gap: 14px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.field__label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.72);
+  letter-spacing: 0.04em;
+}
+
+.field__input {
+  width: 100%;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(209, 176, 74, 0.25);
+  background: rgba(12, 11, 9, 0.8);
+  padding: 0 12px;
+  color: rgba(255, 255, 255, 0.9);
+  outline: none;
+}
+
+.field__input:focus {
+  border-color: rgba(209, 176, 74, 0.65);
+  box-shadow: 0 0 0 4px rgba(209, 176, 74, 0.12);
+}
+
+.field__error {
+  font-size: 11px;
+  color: rgba(255, 140, 120, 0.95);
+}
+
+.login__alert {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(220, 90, 70, 0.45);
+  background: rgba(80, 24, 18, 0.45);
+  color: rgba(255, 210, 200, 0.95);
+  font-size: 12px;
+}
+
+.login__success {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(209, 176, 74, 0.45);
+  background: rgba(40, 34, 18, 0.65);
+  color: rgba(240, 209, 106, 0.95);
+  font-size: 12px;
+}
+
+.login__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.login__register {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: clamp(14px, 2.5vw, 18px);
+  border-radius: 14px;
+  border: 1px solid rgba(209, 176, 74, 0.18);
+  background: rgba(12, 11, 9, 0.45);
+}
+
+.login__register-text {
+  margin: 0;
+  flex: 1 1 180px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.login__register-btn {
+  flex: 0 1 auto;
+  min-width: min(100%, 200px);
+}
+
+@media (min-width: 720px) {
+  .login__actions .btn--primary {
+    min-width: 180px;
+  }
+}
+
+@media (max-width: 719px) {
+  .login__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .login__actions .btn {
+    justify-content: center;
+  }
+
+  .login__register {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .login__register-btn {
+    width: 100%;
+  }
+
+  .fieldRow {
+    grid-template-columns: 1fr;
+  }
+}
