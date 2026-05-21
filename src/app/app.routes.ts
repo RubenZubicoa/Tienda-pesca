@@ -20,6 +20,10 @@ export const routes: Routes = [
         loadComponent: () => import('./checkout/pages/checkout/checkout').then(m => m.Checkout),
     },
     {
+        path: 'login',
+        loadComponent: () => import('./auth/pages/login/login').then(m => m.Login),
+    },
+    {
         path: 'categories/:uuid',
         loadComponent: () => import('./categories/pages/categories/categories').then(m => m.Categories),
         resolve: {
