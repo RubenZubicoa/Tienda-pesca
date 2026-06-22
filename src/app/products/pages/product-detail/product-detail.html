@@ -1,53 +1,120 @@
-<section class="panel" aria-label="Detalle de producto">
-  <a class="back" routerLink="/" aria-label="Volver">← Volver</a>
-
+<section class="panel product-detail" aria-label="Detalle de producto">
   @if (loading()) {
-    <p class="muted">Cargando producto…</p>
+  <p class="product-detail__muted">Cargando producto…</p>
   } @else if (!product()) {
-    <p class="muted">No se ha podido cargar el producto.</p>
-    <a class="btn btn--ghost btn--sm" routerLink="/">SEGUIR COMPRANDO</a>
+  <p class="product-detail__muted">No se ha podido cargar el producto.</p>
+  <a class="btn btn--ghost btn--sm" routerLink="/">SEGUIR COMPRANDO</a>
   } @else {
-    @let p = product()!;
-    <div class="detail">
-      <div class="detail__media" aria-label="Imagen del producto">
-        <img class="detail__img" [src]="imageUrl()" [alt]="p.name" loading="lazy" />
-      </div>
+  @let p = product()!;
 
-      <div class="detail__info" aria-label="Información del producto">
-        <h2 class="title">{{ p.name }}</h2>
-        <p class="desc">{{ p.description || 'Sin descripción.' }}</p>
+  <nav class="breadcrumbs" aria-label="Migas de pan">
+    <a class="breadcrumbs__link" routerLink="/">Inicio</a>
+    <span class="breadcrumbs__sep" aria-hidden="true">/</span>
+    <span class="breadcrumbs__current">{{ p.name }}</span>
+  </nav>
 
-        <div class="controls" aria-label="Selección de opciones y cantidad">
-          <label class="field">
-            <span class="field__label">Opciones</span>
-            <select class="field__control" [value]="selectedOptionId()" (change)="selectedOptionId.set($any($event.target).value)">
-              @for (opt of options(); track opt.id) {
-                <option [value]="opt.id">{{ opt.label }}</option>
-              }
-            </select>
-          </label>
+  <div class="detail">
+    <div class="detail__gallery" aria-label="Galería y descripción">
+      <figure class="detail__main">
+        <img class="detail__main-img" [src]="selectedImageUrl()" [alt]="p.name" loading="eager" />
+      </figure>
 
-          <div class="field">
-            <span class="field__label">Cantidad</span>
-            <div class="qty">
-              <button class="icon-btn" type="button" (click)="decQty()" aria-label="Restar">−</button>
-              <input
-                class="qty__input"
-                type="number"
-                min="1"
-                max="99"
-                [value]="qty()"
-                (input)="onQtyInput(($any($event.target).valueAsNumber))"
-                aria-label="Cantidad"
-              />
-              <button class="icon-btn" type="button" (click)="incQty()" aria-label="Sumar">+</button>
-            </div>
-          </div>
+      @if (galleryImages().length > 1) {
+      <div class="detail__thumbs-wrap">
+        <div class="detail__thumbs" #thumbsTrack aria-label="Miniaturas del producto">
+          @for (img of galleryImages(); track img; let i = $index) {
+          <button type="button" class="detail__thumb" [class.detail__thumb--active]="selectedImageIndex() === i"
+            (click)="selectImage(i)" [attr.aria-label]="'Ver imagen ' + (i + 1)"
+            [attr.aria-current]="selectedImageIndex() === i ? 'true' : null">
+            <img [src]="img" [alt]="p.name + ' miniatura ' + (i + 1)" loading="lazy" />
+          </button>
+          }
         </div>
+        <button class="detail__thumbs-next" type="button" aria-label="Ver más miniaturas"
+          (click)="scrollThumbs(thumbsTrack)">
+          ›
+        </button>
+      </div>
+      }
 
-        <button class="btn btn--primary" type="button" (click)="addToCart()">AÑADIR AL CARRITO</button>
+      <div class="detail__description" aria-label="Descripción del producto">
+        @for (block of descriptionBlocks(); track $index) {
+        @if (block.type === 'p') {
+        <p class="detail__text">{{ block.text }}</p>
+        } @else {
+        <div class="detail__list-block">
+          @if (block.title) {
+          <p class="detail__text detail__text--strong">{{ block.title }}</p>
+          }
+          <ul class="detail__list">
+            @for (item of block.items; track item) {
+            <li>{{ item }}</li>
+            }
+          </ul>
+        </div>
+        }
+        }
       </div>
     </div>
+
+    <aside class="detail__purchase" aria-label="Comprar producto">
+      <h1 class="detail__title">{{ p.name }}</h1>
+      <p class="detail__price">{{ fmtEUR(p.price) }}</p>
+
+      @let productOptions = options();
+      @if (productOptions) {
+      <label class="field">
+        <span class="field__label">{{ productOptions.label }} <span class="field__required"
+            aria-hidden="true">*</span></span>
+        <select class="field__control" [value]="selectedOptionId()" (change)="onColorChange($any($event.target).value)">
+          <option value="">Seleccionar</option>
+          @for (opt of productOptions.options; track opt.id) {
+          <option [value]="opt.id">{{ opt.label }}</option>
+          }
+        </select>
+        @if (colorError()) {
+        <span class="field__error">{{ colorError() }}</span>
+        }
+      </label>
+      }
+
+      <div class="field">
+        <span class="field__label">Cantidad <span class="field__required" aria-hidden="true">*</span></span>
+        <div class="qty">
+          <button class="qty__btn" type="button" (click)="decQty()" aria-label="Restar cantidad">−</button>
+          <input class="qty__input" type="number" min="1" max="99" [value]="qty()"
+            (input)="onQtyInput($any($event.target).valueAsNumber)" aria-label="Cantidad" />
+          <button class="qty__btn" type="button" (click)="incQty()" aria-label="Sumar cantidad">+</button>
+        </div>
+      </div>
+
+      <button class="btn btn--primary detail__cart-btn" type="button" (click)="addToCart()">
+        AÑADIR AL CARRITO
+      </button>
+
+      <details class="detail__accordion" open>
+        <summary class="detail__accordion-summary">Política de devolución y reembolso</summary>
+        <p class="detail__accordion-body">
+          Garantizamos tu satisfacción. Si no estás contento con tu compra, contáctanos en un plazo de
+          14 días y te ayudaremos con el cambio o la devolución según nuestras condiciones de venta.
+        </p>
+      </details>
+
+      <div class="detail__share" aria-label="Compartir producto">
+        <a class="detail__share-btn" href="#" aria-label="Compartir en Facebook" (click)="$event.preventDefault()">
+          <span aria-hidden="true">f</span>
+        </a>
+        <a class="detail__share-btn" href="#" aria-label="Compartir en Pinterest" (click)="$event.preventDefault()">
+          <span aria-hidden="true">P</span>
+        </a>
+        <a class="detail__share-btn" href="#" aria-label="Compartir en WhatsApp" (click)="$event.preventDefault()">
+          <span aria-hidden="true">W</span>
+        </a>
+        <a class="detail__share-btn" href="#" aria-label="Compartir en X" (click)="$event.preventDefault()">
+          <span aria-hidden="true">X</span>
+        </a>
+      </div>
+    </aside>
+  </div>
   }
 </section>
-

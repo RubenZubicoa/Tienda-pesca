@@ -1,6 +1,15 @@
 import { Brand, BrandDB } from "./Brand";
 import { Category, CategoryDB } from "./Category";
 
+
+type ProductOption = {
+    label: string;
+    options: {
+        id: string;
+        label: string;
+    }[];
+};
+
 export type ProductDB = {
     _id: string;
     brandId: BrandDB['_id'];
@@ -10,6 +19,7 @@ export type ProductDB = {
     stock: number;
     categoryId: CategoryDB['_id'];
     images: string[];
+    options?: ProductOption;
     createdAt?: number;
     updatedAt?: number;
     isDeleted?: boolean;
@@ -24,6 +34,7 @@ export interface Product {
     stock: number;
     categoryId: Category['uuid'];
     images: string[];
+    options?: ProductOption;
 }
 
 export interface ProductCreate {
@@ -34,6 +45,7 @@ export interface ProductCreate {
     stock: number;
     categoryId: Category['uuid'];
     images: string[];
+    options?: ProductOption[];
 }
 
 export interface ProductUpdate {
@@ -44,6 +56,7 @@ export interface ProductUpdate {
     stock?: number;
     categoryId?: string;
     images?: string[];
+    options?: ProductOption;
 }
 
 export function mapProductDBToProduct(productDB: ProductDB): Product {
@@ -56,5 +69,6 @@ export function mapProductDBToProduct(productDB: ProductDB): Product {
         stock: productDB.stock,
         categoryId: productDB.categoryId,
         images: productDB.images,
+        options: productDB.options,
     }
 }
