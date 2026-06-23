@@ -1,5 +1,6 @@
 import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { CurrentUserService } from '../../../auth/services/current-user-service';
 import { CartService } from '../../services/cart';
 
 @Component({
@@ -11,6 +12,7 @@ import { CartService } from '../../services/cart';
 export class Header {
   @Output() menuToggle = new EventEmitter<void>();
   protected readonly cart = inject(CartService);
+  protected readonly currentUser = inject(CurrentUserService);
 
   protected readonly navItems = [
     { label: 'Inicio', href: '#' },

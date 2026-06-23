@@ -11,6 +11,11 @@
       </nav>
 
       <div class="topbar__actions" aria-label="Acciones">
+        @if (currentUser.user(); as user) {
+          <span class="topbar__user" aria-label="Usuario conectado">
+            {{ user.name }} {{ user.lastName }}
+          </span>
+        }
         <button
           class="icon-btn icon-btn--menu"
           type="button"
