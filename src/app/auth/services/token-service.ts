@@ -10,6 +10,10 @@ export class TokenService {
 
   public readonly isAuthenticated = computed(() => this._token() !== null);
 
+  constructor() {
+    this._token.set(this.getToken());
+  }
+
   public get token() {
     return this._token.asReadonly();
   }
