@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment.development';
 import { LoginResponse } from '../models/login-response';
 import { CurrentUserService } from './current-user-service';
 import { TokenService } from './token-service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,7 @@ export class Login {
   private readonly http = inject(HttpClient);
   private readonly tokenService = inject(TokenService);
   private readonly currentUserService = inject(CurrentUserService);
+  private readonly router = inject(Router);
 
   private readonly baseUrl = environment.apiUrl + '/login';
 
@@ -23,5 +25,11 @@ export class Login {
         this.currentUserService.setUser(response.user);
       })
     );
+  }
+
+  logout() {
+    this.tokenService.removeToken();
+    this.currentUserService.removeUser();
+    this.router.navigate(['/login']);
   }
 }

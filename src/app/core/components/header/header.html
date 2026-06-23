@@ -26,13 +26,23 @@
             <path d="M4 6.5h16v2H4v-2Zm0 7h16v2H4v-2ZM4 10h16v2H4v-2Z" />
           </svg>
         </button>
-        <a class="icon-btn" routerLink="/login" aria-label="Iniciar sesión">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 2.1c-4.03 0-7.35 2.33-7.35 5.25v.53h14.7v-.53c0-2.92-3.32-5.25-7.35-5.25Z"
-            />
-          </svg>
-        </a>
+        @if (tokenService.isAuthenticated()) {
+          <button class="icon-btn" type="button" aria-label="Cerrar sesión" (click)="logout()">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5-5-5zM4 5h8V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8v-2H4V5z"
+              />
+            </svg>
+          </button>
+        } @else {
+          <a class="icon-btn" routerLink="/login" aria-label="Iniciar sesión">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 2.1c-4.03 0-7.35 2.33-7.35 5.25v.53h14.7v-.53c0-2.92-3.32-5.25-7.35-5.25Z"
+              />
+            </svg>
+          </a>
+        }
         <a class="icon-btn icon-btn--cart" routerLink="/cart" aria-label="Carrito">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path
