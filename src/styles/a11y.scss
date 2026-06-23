@@ -1,0 +1,84 @@
+/* Tokens y utilidades de accesibilidad (WCAG 2.2 AA). */
+
+:root {
+  --a11y-focus-color: #f0d16a;
+  --a11y-focus-shadow: 0 0 0 4px rgba(240, 209, 106, 0.28);
+  --a11y-text-muted: #d4cfc4;
+  --a11y-text-secondary: #e2ddd3;
+  --a11y-text-subtle: #c9c4b8;
+  --a11y-error: #ffc9bf;
+  --a11y-link: #f5dc82;
+  --a11y-min-target: 44px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+[role='button']:focus-visible,
+[role='link']:focus-visible {
+  outline: 3px solid var(--a11y-focus-color);
+  outline-offset: 2px;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--a11y-focus-color);
+  outline-offset: 0;
+  border-color: var(--a11y-focus-color);
+  box-shadow: var(--a11y-focus-shadow);
+}
+
+button:disabled,
+.btn:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.58;
+  cursor: not-allowed;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --a11y-focus-color: #ffe08a;
+    --a11y-text-muted: #f0ebe0;
+    --a11y-text-secondary: #ffffff;
+    --a11y-error: #ffd5cc;
+    --a11y-link: #ffe08a;
+  }
+
+  .btn,
+  .icon-btn,
+  .field__input,
+  .field__control,
+  .newsletter__input {
+    border-width: 2px;
+  }
+}

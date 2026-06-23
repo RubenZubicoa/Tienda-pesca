@@ -1,3 +1,4 @@
+@use '../../../../styles/a11y';
 @use '../../../auth/styles/auth-form';
 
 .account-page {
@@ -31,8 +32,8 @@
 
 .account__muted {
   margin: 0 0 12px;
-  color: rgba(255, 255, 255, 0.66);
-  font-size: 13px;
+  color: var(--a11y-text-muted);
+  font-size: 14px;
 }
 
 .account__orders,
@@ -116,8 +117,8 @@
 
 .order-card__id {
   margin: 0;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.55);
+  font-size: 12px;
+  color: var(--a11y-text-subtle);
   letter-spacing: 0.04em;
 }
 
@@ -154,8 +155,8 @@
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  color: var(--a11y-text-muted);
 }
 
 .order-card__footer {
