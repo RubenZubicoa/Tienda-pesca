@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://tienda-pesca-back.vercel.app',
+  apiUrl: 'http://localhost:3000',
 } as const;
 

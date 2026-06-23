@@ -1,7 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Register } from '../register/register';
+import { Login as LoginService } from '../../services/login';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-login',
@@ -13,41 +15,35 @@ export class Login {
   protected readonly showRegister = signal(false);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
+  private readonly loginService = inject(LoginService);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected readonly errorMessage = signal('');
   protected readonly successMessage = signal('');
   protected readonly isSubmitting = signal(false);
 
   protected readonly form = this.fb.nonNullable.group({
-    email: [null, [Validators.required, Validators.email]],
-    password: [null, [Validators.required, Validators.minLength(6)]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
   protected submit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.errorMessage.set('Por favor, completa todos los campos.');
       return;
     }
 
     const { email, password } = this.form.getRawValue();
-    this.errorMessage.set('');
-    this.successMessage.set('');
-    this.isSubmitting.set(true);
 
-    // Simulación local hasta conectar la API.
-    const ok = false
-
-    if (!ok) {
-      this.errorMessage.set('Correo o contraseña incorrectos. Usa los datos de prueba indicados abajo.');
-      this.isSubmitting.set(false);
-      return;
-    }
-
-    this.successMessage.set('Sesión iniciada correctamente (modo demo). Redirigiendo…');
-    setTimeout(() => {
-      this.isSubmitting.set(false);
-      this.router.navigateByUrl('/');
-    }, 900);
+    this.loginService.login(email, password).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        this.errorMessage.set(error.error.message);
+      }
+    });
   }
 
   protected openRegister() {
