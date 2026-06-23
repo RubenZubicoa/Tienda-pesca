@@ -1,0 +1,123 @@
+<section class="panel account-page" aria-label="Mi cuenta">
+  <header class="account-page__header">
+    <h2 class="panel__title">MI CUENTA</h2>
+    <p class="panel__description account-page__intro">
+      Consulta tu historial de pedidos y actualiza tus datos personales.
+    </p>
+  </header>
+
+  <div class="account">
+    <section class="account__orders" aria-label="Historial de pedidos">
+      <h3 class="account__section-title">HISTORIAL DE PEDIDOS</h3>
+
+      @if (ordersLoading()) {
+        <p class="account__muted">Cargando pedidos…</p>
+      } @else if (orders().length === 0) {
+        <p class="account__muted">Aún no tienes pedidos realizados.</p>
+        <a class="btn btn--primary btn--sm" routerLink="/">IR A LA TIENDA</a>
+      } @else {
+        <div class="order-list">
+          @for (order of orders(); track order.uuid) {
+            <article class="order-card" [attr.aria-label]="'Pedido ' + order.uuid">
+              <header class="order-card__header">
+                <div class="order-card__meta">
+                  <p class="order-card__date">{{ fmtDate(order.createdAt) }}</p>
+                  <p class="order-card__id">Pedido #{{ order.uuid }}</p>
+                </div>
+                <span class="order-card__status" [attr.data-status]="order.status">
+                  {{ statusLabel(order.status) }}
+                </span>
+              </header>
+
+              <ul class="order-card__items">
+                @for (item of order.items; track item.productName) {
+                  <li class="order-card__item">
+                    <span>{{ item.productName }}</span>
+                    <span>{{ item.qty }} × {{ fmtEUR(item.price) }}</span>
+                  </li>
+                }
+              </ul>
+
+              <footer class="order-card__footer">
+                <span>Total</span>
+                <strong>{{ fmtEUR(order.total) }}</strong>
+              </footer>
+            </article>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="account__profile" aria-label="Datos personales">
+      <h3 class="account__section-title">DATOS PERSONALES</h3>
+
+      <form class="account__form" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+        @if (profileError()) {
+          <p class="account__alert" role="alert">{{ profileError() }}</p>
+        }
+        @if (profileMessage()) {
+          <p class="account__success" role="status">{{ profileMessage() }}</p>
+        }
+
+        <div class="fieldRow">
+          <div class="field">
+            <label class="field__label" for="account-name">Nombre</label>
+            <input id="account-name" class="field__input" type="text" autocomplete="given-name" formControlName="name" />
+            @if (profileForm.controls.name.touched && profileForm.controls.name.invalid) {
+              <span class="field__error">Introduce tu nombre.</span>
+            }
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="account-lastname">Apellidos</label>
+            <input
+              id="account-lastname"
+              class="field__input"
+              type="text"
+              autocomplete="family-name"
+              formControlName="lastName"
+            />
+            @if (profileForm.controls.lastName.touched && profileForm.controls.lastName.invalid) {
+              <span class="field__error">Introduce tus apellidos.</span>
+            }
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="account-phone">Teléfono</label>
+          <input
+            id="account-phone"
+            class="field__input"
+            type="tel"
+            autocomplete="tel"
+            inputmode="tel"
+            formControlName="phone"
+          />
+          @if (profileForm.controls.phone.touched && profileForm.controls.phone.invalid) {
+            <span class="field__error">Introduce un teléfono válido.</span>
+          }
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="account-email">Correo electrónico</label>
+          <input id="account-email" class="field__input field__input--disabled" type="email" formControlName="email" />
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="account-address">Dirección</label>
+          <input id="account-address" class="field__input" type="text" autocomplete="street-address" formControlName="address" />
+          @if (profileForm.controls.address.touched && profileForm.controls.address.invalid) {
+            <span class="field__error">Introduce una dirección válida.</span>
+          }
+        </div>
+
+        <div class="account__actions">
+          <a class="btn btn--ghost btn--sm" routerLink="/">VOLVER A LA TIENDA</a>
+          <button class="btn btn--primary" type="submit" [disabled]="profileForm.invalid || isSaving()">
+            GUARDAR CAMBIOS
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+</section>

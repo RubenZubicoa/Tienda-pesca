@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './auth/guards/auth.guard';
 import { categoriesResolver } from './categories/services/categories-resolver';
 import { subCategoriesResolver } from './categories/services/sub-categories-resolver';
 
@@ -22,6 +23,11 @@ export const routes: Routes = [
     {
         path: 'login',
         loadComponent: () => import('./auth/pages/login/login').then(m => m.Login),
+    },
+    {
+        path: 'account',
+        canActivate: [authGuard],
+        loadComponent: () => import('./account/pages/account/account').then(m => m.Account),
     },
     {
         path: 'categories/:uuid',

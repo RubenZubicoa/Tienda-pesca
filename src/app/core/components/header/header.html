@@ -12,9 +12,9 @@
 
       <div class="topbar__actions" aria-label="Acciones">
         @if (currentUser.user(); as user) {
-          <span class="topbar__user" aria-label="Usuario conectado">
+          <a class="topbar__user" routerLink="/account" aria-label="Ir a mi cuenta">
             {{ user.name }} {{ user.lastName }}
-          </span>
+          </a>
         }
         <button
           class="icon-btn icon-btn--menu"
