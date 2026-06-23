@@ -4,7 +4,6 @@ import { computed, inject, Injectable, signal } from '@angular/core';
   providedIn: 'root',
 })
 export class TokenService {
-  private readonly storage = inject(Storage);
   private readonly storageKey = 'token';
 
   private readonly _token = signal<string | null>(null);
@@ -17,15 +16,15 @@ export class TokenService {
 
   public saveToken(token: string) {
     this._token.set(token);
-    this.storage.setItem(this.storageKey, token);
+    localStorage.setItem(this.storageKey, token);
   }
 
   public removeToken() {
     this._token.set(null);
-    this.storage.removeItem(this.storageKey);
+    localStorage.removeItem(this.storageKey);
   }
 
   public getToken() {
-    return this.storage.getItem(this.storageKey);
+    return localStorage.getItem(this.storageKey);
   }
 }

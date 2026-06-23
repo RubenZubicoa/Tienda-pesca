@@ -37,8 +37,8 @@ export class Login {
     const { email, password } = this.form.getRawValue();
 
     this.loginService.login(email, password).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (response) => {
-        console.log(response);
+      next: () => {
+        this.router.navigateByUrl('/');
       },
       error: (error) => {
         this.errorMessage.set(error.error.message);
