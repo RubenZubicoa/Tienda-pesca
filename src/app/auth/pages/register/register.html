@@ -14,17 +14,48 @@
       <p class="login__success" role="status">{{ successMessage() }}</p>
     }
 
+    <div class="fieldRow">
+      <div class="field">
+        <label class="field__label" for="register-name">Nombre</label>
+        <input
+          id="register-name"
+          class="field__input"
+          type="text"
+          autocomplete="given-name"
+          formControlName="name"
+        />
+        @if (form.controls.name.touched && form.controls.name.invalid) {
+          <span class="field__error">Introduce tu nombre.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="register-lastname">Apellidos</label>
+        <input
+          id="register-lastname"
+          class="field__input"
+          type="text"
+          autocomplete="family-name"
+          formControlName="lastName"
+        />
+        @if (form.controls.lastName.touched && form.controls.lastName.invalid) {
+          <span class="field__error">Introduce tus apellidos.</span>
+        }
+      </div>
+    </div>
+
     <div class="field">
-      <label class="field__label" for="register-name">Nombre y apellidos</label>
+      <label class="field__label" for="register-phone">Teléfono</label>
       <input
-        id="register-name"
+        id="register-phone"
         class="field__input"
-        type="text"
-        autocomplete="name"
-        formControlName="fullName"
+        type="tel"
+        autocomplete="tel"
+        inputmode="tel"
+        formControlName="phone"
       />
-      @if (form.controls.fullName.touched && form.controls.fullName.invalid) {
-        <span class="field__error">Introduce tu nombre (mínimo 3 caracteres).</span>
+      @if (form.controls.phone.touched && form.controls.phone.invalid) {
+        <span class="field__error">Introduce un teléfono válido.</span>
       }
     </div>
 

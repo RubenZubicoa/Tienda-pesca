@@ -25,7 +25,9 @@ export class Register {
 
   protected readonly form = this.fb.nonNullable.group(
     {
-      fullName: ['', [Validators.required, Validators.minLength(3)]],
+      name: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      phone: ['', [Validators.required, Validators.pattern(/^[0-9+\s()-]{9,15}$/)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
