@@ -1,6 +1,9 @@
-import { Component, inject, output, signal } from '@angular/core';
+import { Component, DestroyRef, inject, output, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { User } from '../../../core/services/user';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AddUser } from '../../../core/models/User';
 
 function passwordsMatch(group: AbstractControl): ValidationErrors | null {
   const password = group.get('password')?.value;
@@ -18,6 +21,8 @@ export class Register {
   readonly goToLogin = output<void>();
 
   private readonly fb = inject(FormBuilder);
+  private readonly userService = inject(User);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected readonly errorMessage = signal('');
   protected readonly successMessage = signal('');
@@ -45,9 +50,27 @@ export class Register {
     this.successMessage.set('');
     this.isSubmitting.set(true);
 
-    // Simulación local hasta conectar la API.
-    this.successMessage.set('Cuenta creada correctamente (modo demo).');
-    this.isSubmitting.set(false);
+    const user: AddUser = {
+      name: this.form.value.name ?? '',
+      lastName: this.form.value.lastName ?? '',
+      phone: this.form.value.phone ?? '',
+      email: this.form.value.email ?? '',
+      address: '',
+      role: 'user',
+      password: this.form.value.password ?? '',
+
+    }
+
+    this.userService.createUser(user).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => {
+        this.successMessage.set('Cuenta creada correctamente.');
+        this.isSubmitting.set(false);
+        this.goToLogin.emit();
+      },
+      error: (error) => {
+        this.errorMessage.set(error.error.message);
+      }
+    });
   }
 
   protected passwordsMismatch(): boolean {

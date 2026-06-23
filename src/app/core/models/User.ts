@@ -20,10 +20,11 @@ export interface User {
     address: string;
     email: string;
     role: string;
+    password: string;
 }
 
-export type AddUser = Omit<User, '_id' | 'createdAt' | 'updatedAt' | 'isDeleted'>;
-export type UpdateUser = Omit<User, '_id' | 'password' | 'createdAt' | 'updatedAt' | 'isDeleted'>;
+export type AddUser = Omit<User, 'uuid' | 'createdAt' | 'updatedAt' | 'isDeleted'>;
+export type UpdateUser = Omit<User, 'uuid' | 'password' | 'createdAt' | 'updatedAt' | 'isDeleted'>;
 
 export function mapUserDBToUser(userDB: UserDB): User {
     return {
@@ -34,5 +35,6 @@ export function mapUserDBToUser(userDB: UserDB): User {
         address: userDB.address,
         email: userDB.email,
         role: userDB.role,
+        password: userDB.password,
     }
 }
