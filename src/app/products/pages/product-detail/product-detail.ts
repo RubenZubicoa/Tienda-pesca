@@ -109,7 +109,7 @@ export class ProductDetail {
     const p = this.product();
     if (!p) return;
 
-    if (!this.selectedOptionId()) {
+    if (this.options() && !this.selectedOptionId()) {
       this.colorError.set('Selecciona un color antes de añadir al carrito.');
       return;
     }

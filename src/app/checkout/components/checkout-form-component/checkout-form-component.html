@@ -1,0 +1,13 @@
+@if (loading()) {
+  <p class="checkout-stripe__status" role="status">Preparando formulario de pago…</p>
+} @else if (errorMessage() && !elementsOptions()) {
+  <p class="checkout-stripe__error" role="alert">{{ errorMessage() }}</p>
+} @else if (elementsOptions(); as options) {
+  <ngx-stripe-elements [stripe]="stripe" [elementsOptions]="options">
+    <ngx-stripe-payment [options]="paymentElementOptions" />
+  </ngx-stripe-elements>
+
+  @if (errorMessage()) {
+    <p class="checkout-stripe__error" role="alert">{{ errorMessage() }}</p>
+  }
+}
