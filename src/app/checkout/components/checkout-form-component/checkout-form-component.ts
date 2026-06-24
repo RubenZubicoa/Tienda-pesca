@@ -99,7 +99,9 @@ export class CheckoutFormComponent {
       .createPaymentIntent(amountInCents)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: ({ clientSecret }) => {
+        next: (response) => {
+          const clientSecret = response.client_secret;
+          console.log(response);
           if (!clientSecret?.includes('_secret_')) {
             this.errorMessage.set(
               'El servidor devolvió un clientSecret inválido. Revisa la integración de Stripe en el backend.',

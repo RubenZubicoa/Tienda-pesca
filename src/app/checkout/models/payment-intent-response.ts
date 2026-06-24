@@ -1,3 +1,3 @@
 export interface PaymentIntentResponse {
-  clientSecret: string;
+  client_secret: string;
 }
