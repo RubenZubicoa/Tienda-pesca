@@ -59,6 +59,10 @@ export interface ProductUpdate {
     options?: ProductOption;
 }
 
+export type ProductWithQuantity = Product & {
+    quantity: number;
+}
+
 export function mapProductDBToProduct(productDB: ProductDB): Product {
     return {
         uuid: productDB._id,
