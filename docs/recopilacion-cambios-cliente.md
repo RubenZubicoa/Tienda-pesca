@@ -1,9 +1,9 @@
 # Recopilación de trabajo — Tienda Pesca (The Lake)
 
 **Proyecto:** Frontend e-commerce Angular  
-**Periodo registrado en repositorio:** 22 de abril de 2026 – 23 de junio de 2026  
-**Días con actividad:** 12  
-**Total de commits:** 43  
+**Periodo registrado en repositorio:** 22 de abril de 2026 – 25 de junio de 2026  
+**Días con actividad:** 14  
+**Total de commits:** 49  
 **Autor:** Zubicoa Garijo  
 
 Este documento resume el trabajo realizado, agrupado **por día laboral** (un hito representativo por jornada), para justificar las horas dedicadas al cliente.
@@ -19,11 +19,13 @@ Este documento resume el trabajo realizado, agrupado **por día laboral** (un hi
 | **Navegación** | Header, sidenav con categorías expandibles, footer fijo |
 | **Catálogo** | Página de categorías, listado y tarjetas de producto |
 | **Producto** | Vista de detalle (galería, opciones, cantidad, descripción) |
-| **Carrito y checkout** | Sección de carrito, flujo de compra |
+| **Carrito y checkout** | Sección de carrito, flujo de compra, confirmación de pedido |
+| **Pasarela de pago** | Integración Stripe (Payment Element, PaymentIntent, servicio compartido) |
 | **API** | Conexión con backend, variables de entorno, interceptores |
 | **Autenticación** | Login, registro, token JWT, usuario en sesión, logout |
 | **Área de cliente** | Pantalla de cuenta: historial de pedidos y datos personales |
 | **Accesibilidad** | Contraste, foco visible, tamaños táctiles, `prefers-reduced-motion` |
+| **Documentación** | Recopilación de cambios para justificación de horas al cliente |
 
 ---
 
@@ -163,10 +165,10 @@ Este documento resume el trabajo realizado, agrupado **por día laboral** (un hi
 ---
 
 ### 23 de junio de 2026
-**Commit representativo:** `3f0e4f3` — *feat: mejorar estilos de la app*  
-**Commits del día:** 11
+**Commit representativo:** `c164786` — *feat: agregar docs*  
+**Commits del día:** 12
 
-Jornada de integración de autenticación, área de cliente y accesibilidad:
+Jornada de integración de autenticación, área de cliente, accesibilidad y documentación:
 
 | Commit | Descripción |
 |--------|-------------|
@@ -181,8 +183,44 @@ Jornada de integración de autenticación, área de cliente y accesibilidad:
 | `3ad63d9` | Pantalla **Mi cuenta** (`/account`): historial de pedidos y edición de datos personales |
 | `2d5e524` | Actualización de la URL de la API en entornos |
 | `3f0e4f3` | Mejoras de **accesibilidad** (WCAG): contraste, foco visible, tamaños táctiles 44px, `prefers-reduced-motion` |
+| `c164786` | Documento de recopilación de cambios para el cliente |
 
-**Entregable del día:** Flujo completo de autenticación, área privada del usuario y cumplimiento de estándares de accesibilidad en estilos.
+**Entregable del día:** Flujo completo de autenticación, área privada del usuario, accesibilidad y documentación de horas.
+
+---
+
+### 24 de junio de 2026
+**Commit representativo:** `b4b4d05` — *feat: implementar la pasarela de pago*  
+**Commits del día:** 4
+
+| Commit | Descripción |
+|--------|-------------|
+| `6659eba` | Configuración de **ngx-stripe** en Angular (clave publicable en entorno) |
+| `6ef7a85` | Configuración de Stripe en el backend (PaymentIntent) |
+| `b4b4d05` | Pasarela de pago integrada en el checkout: Payment Element, `PaymentService`, `StipeService` |
+| `a1673a9` | Actualización de la URL de la API |
+
+- Integración del **Stripe Payment Element** en la página de checkout.
+- Servicio `PaymentService` para solicitar el `clientSecret` al backend (`POST /payments/create-payment-intent`).
+- Servicio compartido `StipeService` para cargar el intent de pago y confirmar el cobro con `confirmPayment`.
+- Refactor del checkout: formulario de envío + bloque de pago Stripe en un único flujo.
+- Ampliación del modelo `Order` para alinearlo con pedidos reales.
+
+**Entregable del día:** Checkout con pasarela de pago Stripe operativa (frontend + backend).
+
+---
+
+### 25 de junio de 2026
+**Commit representativo:** `5609944` — *feat: mostrar mensaje de confirmacion*  
+**Commits del día:** 1
+
+- Mensaje de **confirmación de pago** tras un cobro exitoso en Stripe.
+- Validación del resultado (`paymentIntent.status === 'succeeded'`) antes de vaciar el carrito.
+- Mensajes de error visibles si el pago falla.
+- Estado de carga en el botón (*«PROCESANDO PAGO…»*) durante la confirmación.
+- Pantalla de éxito con enlace para volver a la tienda (sin redirección automática).
+
+**Entregable del día:** Feedback claro al usuario al completar o fallar el pago.
 
 ---
 
@@ -195,7 +233,9 @@ May 2026   ███░░░  05–06  Categorías, carrito, conexión API
            ██░░░░  08–14  Detalle producto, header, footer fijo
            █░░░░░  21     Login y registro (UI)
 Jun 2026   █░░░░░  22     Rediseño ficha de producto
-           ██████  23     Auth API, cuenta, accesibilidad
+           ██████  23     Auth API, cuenta, accesibilidad, docs
+           ████░░  24     Pasarela de pago Stripe
+           █░░░░░  25     Confirmación de pago en checkout
 ```
 
 ---
@@ -207,11 +247,13 @@ Al cierre de esta recopilación, la tienda incluye:
 1. **Página principal** con hero, categorías destacadas y productos.
 2. **Navegación** por categorías y subcategorías (sidenav + rutas).
 3. **Detalle de producto** con galería, opciones y carrito.
-4. **Carrito** y flujo de **checkout**.
-5. **Login / registro** integrados con API.
-6. **Sesión persistente** (token + usuario en localStorage).
-7. **Área de cuenta** con historial de pedidos (datos de prueba) y edición de perfil.
-8. **Estilos accesibles** según buenas prácticas WCAG 2.2 AA.
+4. **Carrito** y flujo de **checkout** con datos de envío.
+5. **Pago con Stripe** (Payment Element, PaymentIntent vía API).
+6. **Confirmación visual** del pedido tras pago exitoso.
+7. **Login / registro** integrados con API.
+8. **Sesión persistente** (token + usuario en localStorage).
+9. **Área de cuenta** con historial de pedidos y edición de perfil.
+10. **Estilos accesibles** según buenas prácticas WCAG 2.2 AA.
 
 ---
 
@@ -219,9 +261,10 @@ Al cierre de esta recopilación, la tienda incluye:
 
 - Cada fila de la sección «Detalle por día» corresponde a **una jornada de trabajo documentada en Git**.
 - Los días con más commits (p. ej. 29-abr, 23-jun) concentran entregas de mayor alcance técnico (arquitectura, auth completa).
-- El trabajo no incluye únicamente cambios visuales: abarca modelos, servicios, rutas, guards, interceptores y formularios reactivos.
+- La integración de **Stripe** (24-jun) implica trabajo en frontend y coordinación con el backend para PaymentIntent y `clientSecret`.
+- El trabajo no incluye únicamente cambios visuales: abarca modelos, servicios, rutas, guards, interceptores, formularios reactivos y pasarela de pago.
 - Para auditar cualquier día: `git log --after="YYYY-MM-DD" --before="YYYY-MM-DD 23:59:59" --oneline`
 
 ---
 
-*Documento generado a partir del historial del repositorio Git. Última actualización: 23 de junio de 2026.*
+*Documento generado a partir del historial del repositorio Git. Última actualización: 25 de junio de 2026.*
