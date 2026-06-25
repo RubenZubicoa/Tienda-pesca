@@ -1,6 +1,6 @@
 import { Component, computed, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { CartService } from '../../../core/services/cart';
 import {
   injectStripe,
@@ -11,7 +11,6 @@ import {
 import { StripeElementsOptions, StripePaymentElementOptions } from '@stripe/stripe-js';
 import { StipeService } from '../../../shared/services/stipe-service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Order } from '../../../core/models/Order';
 
 @Component({
   selector: 'app-checkout',
@@ -24,7 +23,6 @@ export class Checkout implements OnInit {
   paymentElement!: StripePaymentElementComponent;
 
   protected readonly cart = inject(CartService);
-  private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
   private readonly stipeService = inject(StipeService);
   private readonly destroyRef = inject(DestroyRef);
@@ -34,6 +32,10 @@ export class Checkout implements OnInit {
   protected readonly subtotal = computed(() => this.cart.subtotal());
   protected readonly total = computed(() => this.subtotal() + this.shipping());
   protected readonly totalInCents = computed(() => Math.round(this.total() * 100));
+
+  protected readonly paymentSuccess = signal(false);
+  protected readonly paymentError = signal('');
+  protected readonly isPaying = signal(false);
 
   protected readonly form = this.fb.group({
     fullName: ['', [Validators.required, Validators.minLength(3)]],
@@ -65,20 +67,37 @@ export class Checkout implements OnInit {
   }
 
   protected submit() {
-    if (this.form.invalid) return;
-    this.stipeService.pay(this.paymentElement.elements).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
-      console.log(result)
-    });
+    if (this.form.invalid || this.isPaying() || !this.paymentElement?.elements) return;
 
+    this.paymentError.set('');
+    this.isPaying.set(true);
+
+    this.stipeService
+      .pay(this.paymentElement.elements)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (result) => {
+          this.isPaying.set(false);
+
+          if (result.error) {
+            this.paymentError.set(result.error.message ?? 'Error al procesar el pago.');
+            return;
+          }
+
+          if (result.paymentIntent?.status === 'succeeded') {
+            this.paymentSuccess.set(true);
+            this.cart.clear();
+          }
+        },
+        error: () => {
+          this.isPaying.set(false);
+          this.paymentError.set('No se pudo confirmar el pago. Inténtalo de nuevo.');
+        },
+      });
   }
 
   protected fmtEUR(value: number) {
     return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(value);
-  }
-
-  private confirmOrder() {
-    this.cart.clear();
-    this.router.navigateByUrl('/');
   }
 }
 

@@ -30,10 +30,10 @@
               </header>
 
               <ul class="order-card__items">
-                @for (item of order.items; track item.productName) {
+                @for (item of order.products; track item.uuid) {
                   <li class="order-card__item">
-                    <span>{{ item.productName }}</span>
-                    <span>{{ item.qty }} × {{ fmtEUR(item.price) }}</span>
+                    <span>{{ item.name }}</span>
+                    <span>{{ item.quantity }} × {{ fmtEUR(item.price) }}</span>
                   </li>
                 }
               </ul>
