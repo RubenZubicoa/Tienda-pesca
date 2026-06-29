@@ -155,6 +155,12 @@
     white-space: nowrap;
   }
 
+  .mini__option {
+    margin: 0;
+    font-size: 11px;
+    color: var(--a11y-text-muted, #d4cfc4);
+  }
+
   .mini__hint {
     margin: 0;
     font-size: 12px;

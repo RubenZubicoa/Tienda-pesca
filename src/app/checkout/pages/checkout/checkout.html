@@ -103,6 +103,9 @@
             <img class="mini__img" [src]="item.imageUrl" [alt]="item.name" loading="lazy" />
             <div class="mini__meta">
               <p class="mini__name">{{ item.name }}</p>
+              @if (item.selectedOption; as option) {
+                <p class="mini__option">{{ option.groupLabel }}: {{ option.label }}</p>
+              }
               <p class="mini__hint">{{ item.qty }} × {{ fmtEUR(item.price) }}</p>
             </div>
           </div>
