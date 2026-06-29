@@ -89,8 +89,10 @@ export class Checkout implements OnInit {
       phone: formData.phone ?? '',
       email: formData.email ?? '',
       products: this.cart.items().map(item => ({
-        uuid: item.id,
-        productName: item.name,
+        uuid: item.productId,
+        productName: item.selectedOption
+          ? `${item.name} (${item.selectedOption.groupLabel}: ${item.selectedOption.label})`
+          : item.name,
         qty: item.qty,
         price: item.price,
       })),

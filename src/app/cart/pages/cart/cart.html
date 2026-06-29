@@ -12,6 +12,9 @@
             <img class="cart-item__img" [src]="item.imageUrl" [alt]="item.name" loading="lazy" />
             <div class="cart-item__meta">
               <p class="cart-item__name">{{ item.name }}</p>
+              @if (item.selectedOption; as option) {
+                <p class="cart-item__option">{{ option.groupLabel }}: {{ option.label }}</p>
+              }
               <p class="cart-item__price">{{ fmtEUR(item.price) }}</p>
               <button class="cart-item__remove" type="button" (click)="cart.remove(item.id)">Quitar</button>
             </div>

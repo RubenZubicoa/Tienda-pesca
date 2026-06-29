@@ -1,11 +1,19 @@
 import { computed, effect, Injectable, signal } from '@angular/core';
 
+export type CartItemOption = {
+  groupLabel: string;
+  id: string;
+  label: string;
+};
+
 export type CartItem = {
   id: string;
+  productId: string;
   name: string;
   price: number;
   imageUrl: string;
   qty: number;
+  selectedOption?: CartItemOption;
 };
 
 const STORAGE_KEY = 'tienda-pesca.cart.v1';
@@ -79,14 +87,38 @@ export class CartService {
       if (!Array.isArray(parsed)) return [];
       return parsed
         .filter((x) => x && typeof x === 'object')
-        .map((x: any) => ({
-          id: String(x.id ?? ''),
-          name: String(x.name ?? ''),
-          price: Number(x.price ?? 0),
-          imageUrl: String(x.imageUrl ?? ''),
-          qty: Number(x.qty ?? 0),
-        }))
-        .filter((i) => i.id && i.name && Number.isFinite(i.price) && Number.isFinite(i.qty) && i.qty > 0);
+        .map((x: any) => {
+          const id = String(x.id ?? '');
+          const productId = String(x.productId ?? id.split('::')[0] ?? '');
+          const selectedOption =
+            x.selectedOption && typeof x.selectedOption === 'object'
+              ? {
+                  groupLabel: String(x.selectedOption.groupLabel ?? ''),
+                  id: String(x.selectedOption.id ?? ''),
+                  label: String(x.selectedOption.label ?? ''),
+                }
+              : undefined;
+
+          return {
+            id,
+            productId,
+            name: String(x.name ?? ''),
+            price: Number(x.price ?? 0),
+            imageUrl: String(x.imageUrl ?? ''),
+            qty: Number(x.qty ?? 0),
+            selectedOption:
+              selectedOption?.id && selectedOption.label ? selectedOption : undefined,
+          };
+        })
+        .filter(
+          (i) =>
+            i.id &&
+            i.productId &&
+            i.name &&
+            Number.isFinite(i.price) &&
+            Number.isFinite(i.qty) &&
+            i.qty > 0,
+        );
     } catch {
       return [];
     }

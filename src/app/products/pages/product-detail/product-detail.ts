@@ -116,12 +116,26 @@ export class ProductDetail {
 
     this.colorError.set('');
 
+    const productOptions = this.options();
+    const optionId = this.selectedOptionId();
+    const selectedOption =
+      productOptions && optionId
+        ? {
+            groupLabel: productOptions.label,
+            id: optionId,
+            label:
+              productOptions.options.find((opt) => opt.id === optionId)?.id ?? optionId,
+          }
+        : undefined;
+
     this.cart.add(
       {
-        id: p.uuid,
+        id: selectedOption ? `${p.uuid}::${optionId}` : p.uuid,
+        productId: p.uuid,
         name: p.name,
         price: p.price,
         imageUrl: this.selectedImageUrl(),
+        selectedOption,
       },
       this.qty(),
     );

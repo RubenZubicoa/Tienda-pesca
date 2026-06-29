@@ -69,7 +69,7 @@
         <select class="field__control" [value]="selectedOptionId()" (change)="onColorChange($any($event.target).value)">
           <option value="">Seleccionar</option>
           @for (opt of productOptions.options; track opt.id) {
-          <option [value]="opt.id">{{ opt.label }}</option>
+          <option [value]="opt.label">{{ opt.label }}</option>
           }
         </select>
         @if (colorError()) {

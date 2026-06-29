@@ -46,6 +46,12 @@
   white-space: nowrap;
 }
 
+.cart-item__option {
+  margin: 0;
+  font-size: 12px;
+  color: var(--a11y-text-muted, #d4cfc4);
+}
+
 .cart-item__price {
   margin: 0;
   font-size: 12px;
