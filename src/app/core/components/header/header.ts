@@ -19,12 +19,12 @@ export class Header {
   protected readonly loginService = inject(Login);
   
   protected readonly navItems = [
-    { label: 'Inicio', href: '#' },
+    { label: 'Inicio', route: '/' },
     { label: 'Quienes somos', href: '#canas' },
-    { label: 'Condiciones de venta', href: '#carretes' },
+    { label: 'Condiciones de venta', route: '/condiciones-de-venta' },
     { label: 'Viajes', href: '#senuelos' },
     { label: 'Boletines', href: '#ofertas' },
-    { label: 'Galeria de fotos', href: '#sobre-nosotros' }
+    { label: 'Galeria de fotos', href: '#sobre-nosotros' },
   ] as const;
 
   protected logout() {

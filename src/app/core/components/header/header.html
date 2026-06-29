@@ -6,7 +6,11 @@
 
       <nav class="nav" aria-label="Principal">
         @for (item of navItems; track item.label) {
-          <a class="nav__link" [href]="item.href">{{ item.label }}</a>
+          @if ('route' in item && item.route) {
+            <a class="nav__link" [routerLink]="item.route">{{ item.label }}</a>
+          } @else {
+            <a class="nav__link" [href]="item.href">{{ item.label }}</a>
+          }
         }
       </nav>
 
