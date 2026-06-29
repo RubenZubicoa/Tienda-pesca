@@ -34,6 +34,7 @@ export class Register {
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       phone: ['', [Validators.required, Validators.pattern(/^[0-9+\s()-]{9,15}$/)]],
       email: ['', [Validators.required, Validators.email]],
+      address: ['', [Validators.required, Validators.minLength(5)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
     },

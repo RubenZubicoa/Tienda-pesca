@@ -24,7 +24,7 @@ export interface User {
 }
 
 export type AddUser = Omit<User, 'uuid' | 'createdAt' | 'updatedAt' | 'isDeleted'>;
-export type UpdateUser = Omit<User, 'uuid' | 'password' | 'createdAt' | 'updatedAt' | 'isDeleted'>;
+export type UpdateUser = Omit<User, 'uuid' | 'password' | 'createdAt' | 'updatedAt' | 'isDeleted' | 'role'>;
 
 export function mapUserDBToUser(userDB: UserDB): User {
     return {

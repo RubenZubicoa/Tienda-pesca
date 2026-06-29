@@ -5,6 +5,8 @@ import { RouterLink } from '@angular/router';
 import { CurrentUserService } from '../../../auth/services/current-user-service';
 import { Order, OrderStatus } from '../../../core/models/Order';
 import { OrderService } from '../../../core/services/order-service';
+import { User } from '../../../core/services/user';
+import { UpdateUser } from '../../../core/models/User';
 
 @Component({
   selector: 'app-account',
@@ -15,6 +17,7 @@ import { OrderService } from '../../../core/services/order-service';
 export class Account {
   private readonly fb = inject(FormBuilder);
   private readonly currentUser = inject(CurrentUserService);
+  private readonly userService = inject(User);
   private readonly orderService = inject(OrderService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -28,7 +31,7 @@ export class Account {
     name: ['', [Validators.required, Validators.minLength(2)]],
     lastName: ['', [Validators.required, Validators.minLength(2)]],
     phone: ['', [Validators.required, Validators.pattern(/^[0-9+\s()-]{9,15}$/)]],
-    email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.email]],
     address: ['', [Validators.required, Validators.minLength(5)]],
   });
 
@@ -97,17 +100,25 @@ export class Account {
     this.profileMessage.set('');
     this.isSaving.set(true);
 
-    const { name, lastName, phone, address } = this.profileForm.getRawValue();
+    const { name, lastName, phone, address, email } = this.profileForm.getRawValue();
 
-    this.currentUser.setUser({
-      ...user,
+    const newUser: UpdateUser = {
       name,
       lastName,
       phone,
       address,
-    });
+      email,
+    };
 
-    this.profileMessage.set('Datos actualizados correctamente.');
-    this.isSaving.set(false);
+    this.userService.updateUser(user.uuid, newUser).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => {
+        this.profileMessage.set('Datos actualizados correctamente.');
+        this.isSaving.set(false);
+      },
+      error: () => {
+        this.profileError.set('Error al actualizar los datos.');
+        this.isSaving.set(false);
+      },
+    });
   }
 }

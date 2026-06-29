@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { checkToken } from '../interceptors/token.interceptor';
-import { AddOrder, Order } from '../models/Order';
+import { AddOrder, mapOrderDBToOrder, Order, OrderDB } from '../models/Order';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +18,6 @@ export class OrderService {
   }
 
   getOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.baseUrl}/`, { context: this.context });
+    return this.http.get<OrderDB[]>(`${this.baseUrl}/`, { context: this.context }).pipe(map(orders => orders.map(order => mapOrderDBToOrder(order))));
   }
 }
