@@ -26,15 +26,4 @@ export class ProductCard {
     const p = this.product();
     this.router.navigate(['/products', p.id]);
   }
-
-  addToCart(ev?: Event) {
-    ev?.stopPropagation();
-    const p = this.product();
-    this.cart.add({
-      id: p.id,
-      name: p.name,
-      price: p.price,
-      imageUrl: p.imageUrl,
-    });
-  }
 }
