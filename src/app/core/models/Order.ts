@@ -10,11 +10,13 @@ export interface OrderItem {
 
 export type OrderDB = {
   _id: string;
-  username: string;
+  dni: string;
+  name: string;
+  lastName: string;
   address: string;
   phone: string;
   email: string;
-  products: ProductWithQuantity[];
+  products: {uuid: string; productName: string; qty: number; price: number}[];
   status: OrderStatus;
   createdAt: string;
   total: number;
@@ -24,11 +26,13 @@ export type OrderDB = {
 
 export interface Order {
   uuid: string;
-  username: string;
+  dni: string;
+  name: string;
+  lastName: string;
   address: string;
   phone: string;
   email: string;
-  products: ProductWithQuantity[];
+  products: {uuid: string; productName: string; qty: number; price: number}[];
   status: OrderStatus;
   createdAt: string;
   total: number;
@@ -40,7 +44,9 @@ export type UpdateOrder = Omit<Order, 'uuid' | 'createdAt' | 'updatedAt'>;
 export function mapOrderDBToOrder(orderDB: OrderDB): Order {
   return {
     uuid: orderDB._id,
-    username: orderDB.username,
+    dni: orderDB.dni,
+    name: orderDB.name,
+    lastName: orderDB.lastName,
     address: orderDB.address,
     phone: orderDB.phone,
     email: orderDB.email,

@@ -18,8 +18,23 @@
       <h3 class="checkout__subtitle">Datos de envío</h3>
 
       <div class="field">
-        <label class="field__label">Nombre y apellidos</label>
-        <input class="field__input" type="text" formControlName="fullName" />
+        <label class="field__label">DNI</label>
+        <input class="field__input" type="text" formControlName="dni" />
+      </div>
+
+      <div class="field">
+        <label class="field__label">Nombre</label>
+        <input class="field__input" type="text" formControlName="name" />
+      </div>
+
+      <div class="field">
+        <label class="field__label">Apellidos</label>
+        <input class="field__input" type="text" formControlName="lastName" />
+      </div>
+
+      <div class="field">
+        <label class="field__label">Teléfono</label>
+        <input class="field__input" type="text" formControlName="phone" />
       </div>
 
       <div class="field">
@@ -57,7 +72,7 @@
 
       <div class="checkout__actions">
         <a class="btn btn--ghost btn--sm" routerLink="/cart">VOLVER AL CARRITO</a>
-        <button class="btn btn--primary" type="submit" [disabled]="form.invalid || isPaying()">
+        <button class="btn btn--primary" type="submit">
           {{ isPaying() ? 'PROCESANDO PAGO…' : 'CONFIRMAR PEDIDO' }}
         </button>
       </div>

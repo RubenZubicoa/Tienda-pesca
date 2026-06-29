@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CurrentUserService } from '../../../auth/services/current-user-service';
 import { Order, OrderStatus } from '../../../core/models/Order';
-import { OrderService } from '../../services/order';
+import { OrderService } from '../../../core/services/order-service';
 
 @Component({
   selector: 'app-account',
