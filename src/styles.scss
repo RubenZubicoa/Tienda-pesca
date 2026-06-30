@@ -13,6 +13,12 @@ body {
   height: 100%;
 }
 
+@media (min-width: 981px) {
+  body {
+    overflow: hidden;
+  }
+}
+
 body {
   margin: 0;
   background: #0b0a08;

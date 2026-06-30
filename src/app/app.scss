@@ -14,6 +14,8 @@
   --shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
   --radius: 18px;
   --radius-sm: 14px;
+  --sidenav-width: 260px;
+  --topbar-height: 86px;
   /* Espacio reservado bajo el contenido para el pie fijo (alto aprox. del footer) */
   --footer-space: 118px;
 
@@ -23,31 +25,90 @@
 
 .page {
   min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
   padding-bottom: calc(var(--footer-space) + env(safe-area-inset-bottom, 0px));
   background: radial-gradient(70% 60% at 30% 10%, rgba(209, 176, 74, 0.14), transparent 60%),
     radial-gradient(50% 40% at 80% 20%, rgba(209, 176, 74, 0.12), transparent 55%),
     linear-gradient(180deg, #060504 0%, var(--bg) 25%, #070606 100%);
 }
 
+@media (min-width: 981px) {
+  :host {
+    display: block;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .page {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    padding-bottom: 0;
+  }
+
+  .page > app-header {
+    flex-shrink: 0;
+  }
+
+  .app-shell {
+    flex: 1 1 auto;
+    display: flex;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .app-shell__sidenav {
+    position: static;
+    flex: 0 0 var(--sidenav-width);
+    width: var(--sidenav-width);
+    height: 100%;
+    max-height: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+  }
+
+  .app-shell__main {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    margin-left: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 .app-shell {
+  flex: 1 1 auto;
   width: 100%;
   max-width: none;
   margin: 0;
-  padding: 18px 18px 40px;
-  display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
-  gap: 18px;
-  align-items: start;
+  padding: 0;
+  min-height: 0;
 }
 
 .app-shell__sidenav {
-  position: sticky;
-  top: 92px; /* debajo del header sticky */
-  max-height: calc(100dvh - 110px - var(--footer-space));
-  overflow: auto;
+  position: fixed;
+  top: var(--topbar-height);
+  left: 0;
+  width: var(--sidenav-width);
+  height: calc(100dvh - var(--topbar-height));
+  z-index: 10;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-right: 1px solid rgba(209, 176, 74, 0.15);
+  background: rgba(10, 9, 7, 0.92);
+  backdrop-filter: blur(10px);
   scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: rgba(240, 209, 106, 0.55) rgba(12, 11, 9, 0.55);
+
+  app-sidenav {
+    display: block;
+    min-height: 100%;
+  }
 }
 
 .app-shell__sidenav::-webkit-scrollbar {
@@ -76,6 +137,8 @@
 
 .app-shell__main {
   min-width: 0;
+  margin-left: var(--sidenav-width);
+  padding: 18px 18px 40px;
 }
 
 .app-shell__main .content {
@@ -588,6 +651,12 @@
   box-shadow: var(--a11y-focus-shadow);
 }
 
+@media (max-width: 1200px) {
+  :host {
+    --topbar-height: 132px;
+  }
+}
+
 @media (max-width: 980px) {
   .layout {
     grid-template-columns: 1fr;
@@ -597,12 +666,13 @@
     padding: 14px;
   }
 
-  .app-shell {
-    grid-template-columns: 1fr;
-  }
-
   .app-shell__sidenav {
     display: none;
+  }
+
+  .app-shell__main {
+    margin-left: 0;
+    padding: 18px;
   }
 }
 
@@ -635,12 +705,13 @@
     left: 0;
     height: 100dvh;
     width: min(360px, 86vw);
-    padding: 16px;
+    padding: 0;
     transform: translateX(-104%);
     transition: 220ms ease;
     pointer-events: none;
     overflow: auto;
-    background: transparent;
+    background: rgba(10, 9, 7, 0.96);
+    border-right: 1px solid rgba(209, 176, 74, 0.15);
   }
 
   .mobile-sidenav[data-open='true'] {

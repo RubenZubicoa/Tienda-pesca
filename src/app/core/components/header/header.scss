@@ -8,6 +8,17 @@
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(209, 176, 74, 0.15);
   }
+
+  @media (min-width: 981px) {
+    :host {
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .topbar {
+      position: relative;
+    }
+  }
   
   .topbar__inner {
     max-width: 1280px;
