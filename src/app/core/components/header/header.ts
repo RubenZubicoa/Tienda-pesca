@@ -22,6 +22,8 @@ export class Header {
     { label: 'Inicio', route: '/' },
     { label: 'Quienes somos', href: '#canas' },
     { label: 'Condiciones de venta', route: '/condiciones-de-venta' },
+    { label: 'La empresa y contacto', route: '/la-empresa-y-contacto' },
+    { label: 'Formas de pago y envíos', route: '/formas-de-pago-y-envios' },
     { label: 'Viajes', href: '#senuelos' },
     { label: 'Boletines', href: '#ofertas' },
     { label: 'Galeria de fotos', href: '#sobre-nosotros' },

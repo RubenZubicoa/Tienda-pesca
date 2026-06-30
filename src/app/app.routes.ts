@@ -34,6 +34,14 @@ export const routes: Routes = [
         loadComponent: () => import('./legal/pages/terms-of-sale/terms-of-sale').then(m => m.TermsOfSale),
     },
     {
+        path: 'la-empresa-y-contacto',
+        loadComponent: () => import('./legal/pages/company-contact/company-contact').then(m => m.CompanyContact),
+    },
+    {
+        path: 'formas-de-pago-y-envios',
+        loadComponent: () => import('./legal/pages/payment-shipping/payment-shipping').then(m => m.PaymentShipping),
+    },
+    {
         path: 'categories/:uuid',
         loadComponent: () => import('./categories/pages/categories/categories').then(m => m.Categories),
         resolve: {

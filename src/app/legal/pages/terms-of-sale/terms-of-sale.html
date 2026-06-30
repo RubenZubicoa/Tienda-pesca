@@ -1,71 +1,11 @@
 <section class="panel terms-page" aria-label="Condiciones de venta">
   <header class="terms-page__header">
-    <h1 class="panel__title">CONDICIONES DE VENTA Y TÉRMINOS DEL SERVICIO</h1>
+    <h1 class="panel__title">CONDICIONES DE VENTA</h1>
     <a class="btn btn--ghost btn--sm terms-page__back" routerLink="/">VOLVER A LA TIENDA</a>
   </header>
 
   <div class="terms">
-    <section class="terms__block" aria-labelledby="terms-company-title">
-      <h2 id="terms-company-title" class="terms__title">La empresa y contacto</h2>
-      <div class="terms__card terms__card--company">
-        <div class="terms__company-content">
-          <p class="terms__lead">
-            <strong>The Lake</strong> es una marca comercial registrada y la sociedad responsable del negocio:
-          </p>
-          <address class="terms__address">
-            <strong>Terra Infinitus Peralejos SL</strong><br />
-            Carretera del Albergue, 25<br />
-            19313 Peralejos de las Truchas<br />
-            Guadalajara, España<br />
-            Apartado de correos 16<br />
-            Molina de Aragón 19300<br />
-            Guadalajara, España
-          </address>
-          <dl class="terms__contact">
-            <div class="terms__contact-row">
-              <dt>NIF</dt>
-              <dd>B19747344</dd>
-            </div>
-            <div class="terms__contact-row">
-              <dt>Teléfono</dt>
-              <dd><a href="tel:+34669234618">+34 669 234 618</a></dd>
-            </div>
-            <div class="terms__contact-row">
-              <dt>Web</dt>
-              <dd>
-                <a href="https://www.thelakefish.com" target="_blank" rel="noopener noreferrer">www.thelakefish.com</a><br />
-                <a href="https://www.terrainfinitus.com" target="_blank" rel="noopener noreferrer">www.terrainfinitus.com</a>
-              </dd>
-            </div>
-            <div class="terms__contact-row">
-              <dt>Correo</dt>
-              <dd>
-                <a href="mailto:info@terrainfinitus.com">info@terrainfinitus.com</a><br />
-                <a href="mailto:tienda@thelakefish.com">tienda@thelakefish.com</a>
-              </dd>
-            </div>
-          </dl>
-        </div>
-
-        <div class="terms__company-logos" aria-label="Logos de la empresa">
-          <img
-            class="terms__company-logo terms__company-logo--terra"
-            src="logo-terra-infinitus.png"
-            alt="Terra Infinitus"
-            loading="lazy"
-          />
-          <img
-            class="terms__company-logo terms__company-logo--lake"
-            src="logo-the-lake.png"
-            alt="The Lake"
-            loading="lazy"
-          />
-        </div>
-      </div>
-    </section>
-
     <section class="terms__block" aria-labelledby="terms-sales-title">
-      <h2 id="terms-sales-title" class="terms__title">Condiciones de venta</h2>
       <div class="terms__card">
         <p class="terms__intro">
           Todas las ventas de los productos reseñados en esta u otras páginas se encontrarán supeditadas a
@@ -84,8 +24,8 @@
             y podrán realizarse compras desde cualquier parte del mundo.
           </li>
           <li>
-            Las diferentes opciones de pagos y envíos, así como sus valores y condiciones, se reflejan al
-            final de este escrito.
+            Las diferentes opciones de pagos y envíos, así como sus valores y condiciones, se reflejan en la
+            <a class="terms__inline-link" routerLink="/formas-de-pago-y-envios">sección de formas de pago y envíos</a>.
           </li>
           <li>
             Los valores de cada producto serán los que se indiquen en esta web en el momento de realizar el
@@ -128,107 +68,5 @@
         </ol>
       </div>
     </section>
-
-    <section class="terms__block" aria-labelledby="terms-shipping-title">
-      <h2 id="terms-shipping-title" class="terms__title">Envíos</h2>
-      <div class="terms__card">
-        <p class="terms__intro">
-          Podemos enviar paquetes a cualquier punto de España, del resto de Europa o del mundo. Tenemos las
-          siguientes fórmulas y valores de envío:
-        </p>
-
-        <div class="terms__tables">
-          <div class="terms__table-wrap">
-            <h3 class="terms__subtitle">Península</h3>
-            <table class="terms__table">
-              <thead>
-                <tr>
-                  <th scope="col">Servicio</th>
-                  <th scope="col">Precio</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Correos (tamaño paquete normal)</td>
-                  <td>10 €</td>
-                </tr>
-                <tr>
-                  <td>MRW (tamaño paquete normal)</td>
-                  <td>20 €</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="terms__table-wrap">
-            <h3 class="terms__subtitle">Resto de España</h3>
-            <table class="terms__table">
-              <thead>
-                <tr>
-                  <th scope="col">Servicio</th>
-                  <th scope="col">Precio</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Correos (tamaño paquete normal)</td>
-                  <td>10 €</td>
-                </tr>
-                <tr>
-                  <td>MRW (tamaño paquete normal)</td>
-                  <td>20 €</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="terms__table-wrap">
-            <h3 class="terms__subtitle">Resto del mundo</h3>
-            <table class="terms__table">
-              <thead>
-                <tr>
-                  <th scope="col">Servicio</th>
-                  <th scope="col">Precio</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Correos (tamaño paquete normal)</td>
-                  <td>50 €</td>
-                </tr>
-                <tr>
-                  <td>MRW (tamaño paquete normal)</td>
-                  <td>100 €</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="terms__block" aria-labelledby="terms-payment-title">
-      <h2 id="terms-payment-title" class="terms__title">Formas de pago disponibles</h2>
-      <div class="terms__card">
-        <p class="terms__intro">
-          Tenemos las siguientes formas de pago, por las cuales no cobraremos ningún tipo de suplemento:
-        </p>
-        <ol class="terms__list terms__list--payments">
-          <li>Tarjeta de crédito</li>
-          <li>Transferencia bancaria</li>
-          <li>Bizum</li>
-          <li>PayPal</li>
-        </ol>
-      </div>
-    </section>
   </div>
-
-  <figure class="terms-page__hero">
-    <img
-      class="terms-page__hero-img"
-      src="condiciones-pesca.png"
-      alt="Pescador con trucha en el río"
-      loading="lazy"
-    />
-  </figure>
 </section>
