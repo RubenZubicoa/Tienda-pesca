@@ -60,6 +60,98 @@
     margin-top: 4px;
   }
 
+  .payment-methods {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .payment-method {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+    align-items: start;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(209, 176, 74, 0.22);
+    background: rgba(12, 11, 9, 0.55);
+    cursor: pointer;
+    transition: 160ms ease;
+  }
+
+  .payment-method:hover {
+    border-color: rgba(209, 176, 74, 0.45);
+  }
+
+  .payment-method--active {
+    border-color: rgba(240, 209, 106, 0.75);
+    background: rgba(40, 34, 18, 0.55);
+    box-shadow: 0 0 0 1px rgba(240, 209, 106, 0.2);
+  }
+
+  .payment-method__input {
+    margin-top: 2px;
+    accent-color: #d1b04a;
+  }
+
+  .payment-method__content {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .payment-method__label {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .payment-method__hint {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.62);
+    line-height: 1.4;
+  }
+
+  .payment-panel {
+    border-radius: 12px;
+    border: 1px solid rgba(209, 176, 74, 0.18);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 12px;
+  }
+
+  .payment-panel--info {
+    display: grid;
+    gap: 8px;
+  }
+
+  .payment-panel__text {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.86);
+  }
+
+  .payment-panel__text--muted {
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 12px;
+  }
+
+  .payment-panel__loading {
+    margin: 0;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.66);
+  }
+
+  .payment-panel__link {
+    color: #f0d16a;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .payment-panel__link:hover {
+    color: #fff3b8;
+  }
+
   .checkout__error {
     margin: 0;
     padding: 10px 12px;
@@ -173,6 +265,10 @@
     }
 
     .fieldRow {
+      grid-template-columns: 1fr;
+    }
+
+    .payment-methods {
       grid-template-columns: 1fr;
     }
   }

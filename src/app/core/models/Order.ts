@@ -38,7 +38,9 @@ export interface Order {
   total: number;
 }
 
-export type AddOrder = Omit<Order, 'uuid' | 'createdAt' | 'updatedAt' | 'status'>;
+export type AddOrder = Omit<Order, 'uuid' | 'createdAt' | 'updatedAt' | 'status'> & {
+  paymentMethod?: string;
+};
 export type UpdateOrder = Omit<Order, 'uuid' | 'createdAt' | 'updatedAt'>;
 
 export function mapOrderDBToOrder(orderDB: OrderDB): Order {
