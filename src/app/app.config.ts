@@ -6,6 +6,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideNgxStripe } from 'ngx-stripe';
 import { environment } from '../environments/environment.development';
 import { tokenInterceptor } from './core/interceptors/token.interceptor';
+import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +14,6 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding()),
     provideNgxStripe(environment.stripePublishableKey),
-    provideHttpClient(withInterceptors([tokenInterceptor])),
+    provideHttpClient(withInterceptors([loadingInterceptor, tokenInterceptor])),
   ],
 };
