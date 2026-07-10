@@ -1,0 +1,7 @@
+@media (max-width: 720px) {
+  .product-grid--2,
+  .product-grid--3,
+  .product-grid--4 {
+    grid-template-columns: 1fr;
+  }
+}

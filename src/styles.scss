@@ -673,11 +673,9 @@ input {
     grid-template-columns: 1fr;
   }
 
-  .product-grid--3 {
-    grid-template-columns: 1fr;
-  }
-
-  .product-grid--2 {
+  .product-grid--2,
+  .product-grid--3,
+  .product-grid--4 {
     grid-template-columns: 1fr;
   }
 
