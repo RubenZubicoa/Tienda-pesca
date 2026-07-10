@@ -1,4 +1,13 @@
 @let c = category();
 
-<app-product-list [products]="products()" [columns]="4" [title]="c.label"
-    [description]="c.description"></app-product-list>
+<app-product-list
+  [products]="products()"
+  [columns]="4"
+  [title]="c.label"
+  [description]="c.description"
+  [paginated]="true"
+  [page]="page()"
+  [pageSize]="pageSize()"
+  [totalItems]="totalItems()"
+  (pageChange)="onPageChange($event)"
+></app-product-list>

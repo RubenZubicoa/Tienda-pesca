@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { mapProductDBToProduct, Product, ProductCreate, ProductDB, ProductUpdate } from '../models/Product';
+import { PaginationResponse } from '../models/Pagination';
 
 @Injectable({
   providedIn: 'root',
@@ -24,9 +25,15 @@ export class ProductService {
     );
   }
 
-  getProductsByCategory(categoryId: string): Observable<Product[]> {
-    return this.http.get<ProductDB[]>(`${this.baseUrl}/category/${categoryId}`).pipe(
-      map(products => products.map(product => mapProductDBToProduct(product)))
+  getProductsByCategory(categoryId: string, page: number, pageSize: number): Observable<PaginationResponse<Product>> {
+    return this.http.get<PaginationResponse<ProductDB>>(`${this.baseUrl}/category/${categoryId}?page=${page}&pageSize=${pageSize}`).pipe(
+      map(response => ({
+        data: response.data.map(product => mapProductDBToProduct(product)),
+        totalElements: response.totalElements,
+        totalPages: response.totalPages,
+        currentPage: response.currentPage,
+        pageSize: response.pageSize,
+      }))
     );
   }
 

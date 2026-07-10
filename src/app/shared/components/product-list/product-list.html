@@ -5,7 +5,78 @@
   }
   <div class="product-grid product-grid--{{ columns() }}">
     @for (p of productCardData(); track p.id + $index) {
-    <app-product-card [product]="p"></app-product-card>
+      <app-product-card [product]="p"></app-product-card>
     }
   </div>
+
+  @if (showPagination()) {
+    <nav class="pagination" aria-label="Paginación de productos">
+      <p class="pagination__summary">
+        Mostrando {{ showingFrom() }}–{{ showingTo() }} de {{ totalItems() }} productos
+      </p>
+
+      <div class="pagination__controls">
+        <label class="pagination__size">
+          <span class="pagination__size-label">Productos por página</span>
+          <select
+            class="pagination__size-select"
+            [value]="pageSize()"
+            (change)="onPageSizeChange($event)"
+            aria-label="Productos por página"
+          >
+            @for (size of pageSizeOptions(); track size) {
+              <option [value]="size">{{ size }}</option>
+            }
+          </select>
+        </label>
+
+        <div class="pagination__pages">
+          <button
+            class="pagination__btn pagination__btn--nav"
+            type="button"
+            aria-label="Página anterior"
+            [disabled]="page() <= 1"
+            (click)="goToPage(page() - 1)"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M14.5 6.5 9 12l5.5 5.5" />
+            </svg>
+          </button>
+
+          <ol class="pagination__list">
+            @for (item of paginationItems(); track $index) {
+              <li class="pagination__item">
+                @if (item === 'ellipsis') {
+                  <span class="pagination__ellipsis" aria-hidden="true">…</span>
+                } @else {
+                  <button
+                    class="pagination__btn pagination__btn--page"
+                    type="button"
+                    [class.pagination__btn--active]="item === page()"
+                    [attr.aria-current]="item === page() ? 'page' : null"
+                    [attr.aria-label]="'Ir a la página ' + item"
+                    (click)="goToPage(item)"
+                  >
+                    {{ item }}
+                  </button>
+                }
+              </li>
+            }
+          </ol>
+
+          <button
+            class="pagination__btn pagination__btn--nav"
+            type="button"
+            aria-label="Página siguiente"
+            [disabled]="page() >= totalPages()"
+            (click)="goToPage(page() + 1)"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9.5 6.5 15 12l-5.5 5.5" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+  }
 </section>
