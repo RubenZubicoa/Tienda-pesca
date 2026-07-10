@@ -16,20 +16,6 @@
       </p>
 
       <div class="pagination__controls">
-        <label class="pagination__size">
-          <span class="pagination__size-label">Productos por página</span>
-          <select
-            class="pagination__size-select"
-            [value]="pageSize()"
-            (change)="onPageSizeChange($event)"
-            aria-label="Productos por página"
-          >
-            @for (size of pageSizeOptions(); track size) {
-              <option [value]="size">{{ size }}</option>
-            }
-          </select>
-        </label>
-
         <div class="pagination__pages">
           <button
             class="pagination__btn pagination__btn--nav"
@@ -42,6 +28,14 @@
               <path d="M14.5 6.5 9 12l5.5 5.5" />
             </svg>
           </button>
+
+          <span
+            class="pagination__current"
+            aria-current="page"
+            [attr.aria-label]="'Página ' + page() + ' de ' + totalPages()"
+          >
+            {{ page() }}
+          </span>
 
           <ol class="pagination__list">
             @for (item of paginationItems(); track $index) {
@@ -76,6 +70,20 @@
             </svg>
           </button>
         </div>
+
+        <label class="pagination__size">
+          <span class="pagination__size-label">Productos por página</span>
+          <select
+            class="pagination__size-select"
+            [value]="pageSize()"
+            (change)="onPageSizeChange($event)"
+            aria-label="Productos por página"
+          >
+            @for (size of pageSizeOptions(); track size) {
+              <option [value]="size">{{ size }}</option>
+            }
+          </select>
+        </label>
       </div>
     </nav>
   }

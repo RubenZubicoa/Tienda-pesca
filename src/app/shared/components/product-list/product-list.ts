@@ -57,13 +57,30 @@ export class ProductList {
   protected paginationItems = computed((): (number | 'ellipsis')[] => {
     const total = this.totalPages();
     const current = this.page();
+    const siblingCount = 2;
+    const boundaryCount = 1;
 
-    if (total <= 7) {
+    if (total <= 11) {
       return Array.from({ length: total }, (_, index) => index + 1);
     }
 
-    const pages = new Set<number>([1, total, current, current - 1, current + 1]);
-    const sorted = [...pages].filter((page) => page >= 1 && page <= total).sort((a, b) => a - b);
+    const pages = new Set<number>();
+
+    for (let page = 1; page <= boundaryCount; page++) {
+      pages.add(page);
+    }
+
+    for (let page = total - boundaryCount + 1; page <= total; page++) {
+      pages.add(page);
+    }
+
+    for (let page = current - siblingCount; page <= current + siblingCount; page++) {
+      if (page >= 1 && page <= total) {
+        pages.add(page);
+      }
+    }
+
+    const sorted = [...pages].sort((a, b) => a - b);
     const items: (number | 'ellipsis')[] = [];
 
     for (let index = 0; index < sorted.length; index++) {
