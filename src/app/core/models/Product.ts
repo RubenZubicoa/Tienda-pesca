@@ -82,12 +82,16 @@ export function mapProductDBToProduct(productDB: ProductDB): Product {
         options: productDB.options,
         isFeatured: productDB.isFeatured,
         isInOffer: productDB.isInOffer,
-        offerPrice: productDB.offerPrice,
+        offerPrice: typeof productDB.offerPrice === 'number' ? productDB.offerPrice : undefined,
     }
 }
 
 export function isProductInOffer(product: Product): boolean {
-    return Boolean(product.isInOffer && product.offerPrice != null);
+    return (
+        product.isInOffer === true &&
+        typeof product.offerPrice === 'number' &&
+        Number.isFinite(product.offerPrice)
+    );
 }
 
 export function getProductDisplayPrice(product: Product): number {

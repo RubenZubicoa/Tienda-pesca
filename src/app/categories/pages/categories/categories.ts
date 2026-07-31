@@ -2,7 +2,7 @@ import { Component, computed, DestroyRef, inject, input, OnChanges, signal } fro
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReplaySubject, switchMap } from 'rxjs';
 import { ProductList } from '../../../shared/components/product-list/product-list';
-import { Product } from '../../../core/models/Product';
+import { isProductInOffer, Product } from '../../../core/models/Product';
 import { Category } from '../../../core/models/Category';
 import { Brand } from '../../../core/models/Brand';
 import { DEFAULT_MAX_PAGE_SIZE, PaginationRequest } from '../../../core/models/Pagination';
@@ -46,11 +46,11 @@ export class Categories implements OnChanges {
         return false;
       }
 
-      if (offer === 'yes' && !product.isInOffer) {
+      if (offer === 'yes' && !isProductInOffer(product)) {
         return false;
       }
 
-      if (offer === 'no' && product.isInOffer) {
+      if (offer === 'no' && isProductInOffer(product)) {
         return false;
       }
 

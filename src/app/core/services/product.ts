@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
-import { mapProductDBToProduct, Product, ProductCreate, ProductDB, ProductUpdate } from '../models/Product';
+import { mapProductDBToProduct, Product, ProductCreate, ProductDB, ProductUpdate, isProductInOffer } from '../models/Product';
 import { PaginationResponse } from '../models/Pagination';
 
 @Injectable({
@@ -27,7 +27,7 @@ export class ProductService {
 
   getOfferProducts(): Observable<Product[]> {
     return this.getProducts().pipe(
-      map(products => products.filter(product => product.isInOffer))
+      map(products => products.filter(product => isProductInOffer(product)))
     );
   }
 

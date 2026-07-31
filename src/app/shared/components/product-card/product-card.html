@@ -18,7 +18,9 @@
         @if (p.originalPrice != null) {
           <span class="product-card__price-original">{{ p.originalPrice }} €</span>
         }
-        <span>{{ p.price }} €</span>
+        @if (p.price != null) {
+          <span>{{ p.price }} €</span>
+        }
       </p>
     </div>
     <button class="btn btn--ghost btn--sm" type="button" (click)="goToDetail()">VER DETALLES</button>
