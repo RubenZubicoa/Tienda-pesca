@@ -19,6 +19,18 @@ export class ProductService {
     );
   }
 
+  getFeaturedProducts(): Observable<Product[]> {
+    return this.getProducts().pipe(
+      map(products => products.filter(product => product.isFeatured))
+    );
+  }
+
+  getOfferProducts(): Observable<Product[]> {
+    return this.getProducts().pipe(
+      map(products => products.filter(product => product.isInOffer))
+    );
+  }
+
   getProduct(uuid: string): Observable<Product> {
     return this.http.get<ProductDB>(`${this.baseUrl}/${uuid}`).pipe(
       map(product => mapProductDBToProduct(product))

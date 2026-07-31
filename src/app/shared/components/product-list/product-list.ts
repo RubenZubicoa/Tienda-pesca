@@ -1,6 +1,6 @@
 import { Component, computed, input, output, Signal } from '@angular/core';
 import { ProductCard, ProductCardData } from '../product-card/product-card';
-import { Product } from '../../../core/models/Product';
+import { getProductDisplayPrice, isProductInOffer, Product } from '../../../core/models/Product';
 import { DEFAULT_MAX_PAGE_SIZE, DEFAULT_PAGE_SIZE_OPTIONS, PaginationRequest } from '../../../core/models/Pagination';
 
 @Component({
@@ -23,12 +23,18 @@ export class ProductList {
   public pageChange = output<PaginationRequest>();
 
   protected productCardData: Signal<ProductCardData[]> = computed(() =>
-    this.products().map((product) => ({
-      id: product.uuid,
-      name: product.name,
-      price: product.price,
-      imageUrl: product.images[0],
-    })),
+    this.products().map((product) => {
+      const inOffer = isProductInOffer(product);
+
+      return {
+        id: product.uuid,
+        name: product.name,
+        price: getProductDisplayPrice(product),
+        originalPrice: inOffer ? product.price : undefined,
+        badge: inOffer ? 'Oferta' : undefined,
+        imageUrl: product.images[0],
+      };
+    }),
   );
 
   protected totalPages = computed(() => {

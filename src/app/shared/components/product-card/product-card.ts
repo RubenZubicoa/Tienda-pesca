@@ -6,6 +6,7 @@ export interface ProductCardData {
   id: string;
   name: string,
   price: number,
+  originalPrice?: number,
   badge?: string,
   imageUrl: string
 }

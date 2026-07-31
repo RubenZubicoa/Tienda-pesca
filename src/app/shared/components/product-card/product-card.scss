@@ -45,6 +45,19 @@
   overflow: hidden;
 }
 
+.product-card__price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.product-card__price-original {
+  text-decoration: line-through;
+  opacity: 0.55;
+  font-size: 0.9em;
+}
+
 .product-card .btn {
   width: 100%;
 }

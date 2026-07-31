@@ -10,7 +10,7 @@
     <div class="layout">
       <section class="main-col">
       <app-main-categories></app-main-categories>
-      <app-product-list [products]="mainFeatured" [columns]="3"></app-product-list>
+      <app-product-list [products]="mainFeatured()" [columns]="3"></app-product-list>
       </section>
 
       <aside class="side-col">
@@ -31,7 +31,7 @@
           </div>
         </section>
 
-        <app-product-list [products]="seasonOffers" [columns]="2" title="OFERTAS DE LA TEMPORADA"></app-product-list>
+        <app-product-list [products]="seasonOffers()" [columns]="2" title="OFERTAS DE LA TEMPORADA"></app-product-list>
        
       </aside>
     </div>

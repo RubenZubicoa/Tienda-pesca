@@ -20,6 +20,9 @@ export type ProductDB = {
     categoryId: CategoryDB['_id'];
     images: string[];
     options?: ProductOption;
+    isFeatured?:boolean;
+    isInOffer?: boolean;
+    offerPrice?: number;
     createdAt?: number;
     updatedAt?: number;
     isDeleted?: boolean;
@@ -35,6 +38,9 @@ export interface Product {
     categoryId: Category['uuid'];
     images: string[];
     options?: ProductOption;
+    isFeatured?: boolean;
+    isInOffer?: boolean;
+    offerPrice?: number;
 }
 
 export interface ProductCreate {
@@ -74,5 +80,16 @@ export function mapProductDBToProduct(productDB: ProductDB): Product {
         categoryId: productDB.categoryId,
         images: productDB.images,
         options: productDB.options,
+        isFeatured: productDB.isFeatured,
+        isInOffer: productDB.isInOffer,
+        offerPrice: productDB.offerPrice,
     }
+}
+
+export function isProductInOffer(product: Product): boolean {
+    return Boolean(product.isInOffer && product.offerPrice != null);
+}
+
+export function getProductDisplayPrice(product: Product): number {
+    return isProductInOffer(product) ? product.offerPrice! : product.price;
 }

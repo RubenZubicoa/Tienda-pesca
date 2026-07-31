@@ -59,7 +59,12 @@
 
     <aside class="detail__purchase" aria-label="Comprar producto">
       <h1 class="detail__title">{{ p.name }}</h1>
-      <p class="detail__price">{{ fmtEUR(p.price) }}</p>
+      <p class="detail__price">
+        @if (inOffer()) {
+          <span class="detail__price-original">{{ fmtEUR(p.price) }}</span>
+        }
+        <span>{{ fmtEUR(displayPrice()) }}</span>
+      </p>
 
       @let productOptions = options();
       @if (productOptions) {

@@ -195,6 +195,17 @@
   font-size: 1.05rem;
   color: rgba(240, 209, 106, 0.95);
   font-weight: 600;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.detail__price-original {
+  text-decoration: line-through;
+  opacity: 0.55;
+  font-size: 0.9em;
+  font-weight: 500;
 }
 
 .field {

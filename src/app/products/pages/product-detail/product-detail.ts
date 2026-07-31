@@ -1,10 +1,9 @@
 import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Product } from '../../../core/models/Product';
+import { getProductDisplayPrice, isProductInOffer, Product } from '../../../core/models/Product';
 import { ProductService } from '../../../core/services/product';
 import { CartService } from '../../../core/services/cart';
-
 
 type DescriptionBlock =
   | { type: 'p'; text: string }
@@ -38,6 +37,14 @@ export class ProductDetail {
   });
 
   protected readonly descriptionBlocks = computed(() => this.parseDescription(this.product()?.description));
+  protected readonly inOffer = computed(() => {
+    const p = this.product();
+    return p ? isProductInOffer(p) : false;
+  });
+  protected readonly displayPrice = computed(() => {
+    const p = this.product();
+    return p ? getProductDisplayPrice(p) : 0;
+  });
 
   constructor() {
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((pm) => {
@@ -133,7 +140,7 @@ export class ProductDetail {
         id: selectedOption ? `${p.uuid}::${optionId}` : p.uuid,
         productId: p.uuid,
         name: p.name,
-        price: p.price,
+        price: getProductDisplayPrice(p),
         imageUrl: this.selectedImageUrl(),
         selectedOption,
       },
