@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Brand, BrandCreate, BrandUpdate } from '../models/Brand';
+import { map, Observable } from 'rxjs';
+import { Brand, BrandCreate, BrandDB, BrandUpdate, mapBrandDBToBrand } from '../models/Brand';
 import { environment } from '../../../environments/environment.development';
 
 @Injectable({
@@ -13,11 +13,15 @@ export class BrandService {
   private readonly baseUrl = environment.apiUrl + '/brands';
 
   getBrands(): Observable<Brand[]> {
-    return this.http.get<Brand[]>(this.baseUrl);
+    return this.http.get<BrandDB[]>(this.baseUrl).pipe(
+      map((brands) => brands.map(mapBrandDBToBrand)),
+    );
   }
 
   getBrand(uuid: string): Observable<Brand> {
-    return this.http.get<Brand>(`${this.baseUrl}/${uuid}`);
+    return this.http.get<BrandDB>(`${this.baseUrl}/${uuid}`).pipe(
+      map(mapBrandDBToBrand),
+    );
   }
 
   createBrand(brand: BrandCreate): Observable<Brand> {
