@@ -23,6 +23,7 @@ export type ProductDB = {
     isFeatured?:boolean;
     isInOffer?: boolean;
     offerPrice?: number;
+    professionalPrice?: number;
     createdAt?: number;
     updatedAt?: number;
     isDeleted?: boolean;
@@ -41,6 +42,7 @@ export interface Product {
     isFeatured?: boolean;
     isInOffer?: boolean;
     offerPrice?: number;
+    professionalPrice?: number;
 }
 
 export interface ProductCreate {
@@ -83,6 +85,8 @@ export function mapProductDBToProduct(productDB: ProductDB): Product {
         isFeatured: productDB.isFeatured,
         isInOffer: productDB.isInOffer,
         offerPrice: typeof productDB.offerPrice === 'number' ? productDB.offerPrice : undefined,
+        professionalPrice:
+            typeof productDB.professionalPrice === 'number' ? productDB.professionalPrice : undefined,
     }
 }
 

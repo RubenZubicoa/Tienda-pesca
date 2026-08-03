@@ -1,7 +1,8 @@
-import { Component, computed, input, output, Signal } from '@angular/core';
+import { Component, computed, inject, input, output, Signal } from '@angular/core';
 import { ProductCard, ProductCardData } from '../product-card/product-card';
 import { getProductDisplayPrice, isProductInOffer, Product } from '../../../core/models/Product';
 import { DEFAULT_MAX_PAGE_SIZE, DEFAULT_PAGE_SIZE_OPTIONS, PaginationRequest } from '../../../core/models/Pagination';
+import { CurrentUserService } from '../../../auth/services/current-user-service';
 
 @Component({
   selector: 'app-product-list',
@@ -22,20 +23,27 @@ export class ProductList {
 
   public pageChange = output<PaginationRequest>();
 
-  protected productCardData: Signal<ProductCardData[]> = computed(() =>
-    this.products().map((product) => {
+  private readonly currentUser = inject(CurrentUserService);
+
+  protected productCardData: Signal<ProductCardData[]> = computed(() => {
+    const isProfessional = this.currentUser.user()?.isProfessional === true;
+
+    return this.products().map((product) => {
       const inOffer = isProductInOffer(product);
+      const hasProfessionalPrice = typeof product.professionalPrice === 'number';
 
       return {
         id: product.uuid,
         name: product.name,
         price: getProductDisplayPrice(product),
         originalPrice: inOffer ? product.price : undefined,
+        professionalPrice:
+          isProfessional && hasProfessionalPrice ? product.professionalPrice : undefined,
         badge: inOffer ? 'Oferta' : undefined,
         imageUrl: product.images[0],
       };
-    }),
-  );
+    });
+  });
 
   protected totalPages = computed(() => {
     const size = this.pageSize();

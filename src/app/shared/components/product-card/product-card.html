@@ -22,6 +22,12 @@
           <span>{{ p.price }} €</span>
         }
       </p>
+      @if (p.professionalPrice != null) {
+        <p class="product-card__price product-card__price--professional">
+          <span class="product-card__price-label">Profesional</span>
+          <span>{{ p.professionalPrice }} €</span>
+        </p>
+      }
     </div>
     <button class="btn btn--ghost btn--sm" type="button" (click)="goToDetail()">VER DETALLES</button>
   </article>

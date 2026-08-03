@@ -7,6 +7,7 @@ export type UserDB = {
     email: string;
     password: string;
     role: string;
+    isProfessional?: boolean;
     createdAt?: number;
     updatedAt?: number;
     isDeleted?: boolean;
@@ -21,6 +22,7 @@ export interface User {
     email: string;
     role: string;
     password: string;
+    isProfessional?: boolean;
 }
 
 export type AddUser = Omit<User, 'uuid' | 'createdAt' | 'updatedAt' | 'isDeleted'>;
@@ -36,5 +38,6 @@ export function mapUserDBToUser(userDB: UserDB): User {
         email: userDB.email,
         role: userDB.role,
         password: userDB.password,
+        isProfessional: userDB.isProfessional === true,
     }
 }

@@ -7,6 +7,7 @@ export interface ProductCardData {
   name: string,
   price: number,
   originalPrice?: number,
+  professionalPrice?: number,
   badge?: string,
   imageUrl: string
 }
