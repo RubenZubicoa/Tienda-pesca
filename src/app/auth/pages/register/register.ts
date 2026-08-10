@@ -32,9 +32,9 @@ export class Register {
     {
       name: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
+      dni: ['', [Validators.required, Validators.pattern(/^[0-9]{8}[A-Za-z]$|^[XYZ][0-9]{7}[A-Za-z]$/i)]],
       phone: ['', [Validators.required, Validators.pattern(/^[0-9+\s()-]{9,15}$/)]],
       email: ['', [Validators.required, Validators.email]],
-      address: ['', [Validators.required, Validators.minLength(5)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
     },
@@ -54,12 +54,12 @@ export class Register {
     const user: AddUser = {
       name: this.form.value.name ?? '',
       lastName: this.form.value.lastName ?? '',
+      dni: this.form.value.dni ?? '',
       phone: this.form.value.phone ?? '',
       email: this.form.value.email ?? '',
       address: '',
       role: 'user',
       password: this.form.value.password ?? '',
-
     }
 
     this.userService.createUser(user).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({

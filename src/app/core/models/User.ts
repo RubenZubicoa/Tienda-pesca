@@ -7,6 +7,7 @@ export type UserDB = {
     email: string;
     password: string;
     role: string;
+    dni?: string;
     isProfessional?: boolean;
     createdAt?: number;
     updatedAt?: number;
@@ -22,6 +23,7 @@ export interface User {
     email: string;
     role: string;
     password: string;
+    dni?: string;
     isProfessional?: boolean;
 }
 
@@ -38,6 +40,7 @@ export function mapUserDBToUser(userDB: UserDB): User {
         email: userDB.email,
         role: userDB.role,
         password: userDB.password,
+        dni: userDB.dni,
         isProfessional: userDB.isProfessional === true,
     }
 }

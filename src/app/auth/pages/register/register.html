@@ -44,19 +44,35 @@
       </div>
     </div>
 
-    <div class="field">
-      <label class="field__label" for="register-phone">Teléfono</label>
-      <input
-        id="register-phone"
-        class="field__input"
-        type="tel"
-        autocomplete="tel"
-        inputmode="tel"
-        formControlName="phone"
-      />
-      @if (form.controls.phone.touched && form.controls.phone.invalid) {
-        <span class="field__error">Introduce un teléfono válido.</span>
-      }
+    <div class="fieldRow">
+      <div class="field">
+        <label class="field__label" for="register-dni">DNI / NIE</label>
+        <input
+          id="register-dni"
+          class="field__input"
+          type="text"
+          autocomplete="off"
+          formControlName="dni"
+        />
+        @if (form.controls.dni.touched && form.controls.dni.invalid) {
+          <span class="field__error">Introduce un DNI o NIE válido.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="register-phone">Teléfono</label>
+        <input
+          id="register-phone"
+          class="field__input"
+          type="tel"
+          autocomplete="tel"
+          inputmode="tel"
+          formControlName="phone"
+        />
+        @if (form.controls.phone.touched && form.controls.phone.invalid) {
+          <span class="field__error">Introduce un teléfono válido.</span>
+        }
+      </div>
     </div>
 
     <div class="field">
