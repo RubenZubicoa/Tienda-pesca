@@ -24,7 +24,7 @@ export class Header {
     { label: 'Condiciones de venta', route: '/condiciones-de-venta' },
     { label: 'La empresa y contacto', route: '/la-empresa-y-contacto' },
     { label: 'Formas de pago y envíos', route: '/formas-de-pago-y-envios' },
-    { label: 'Viajes', href: '#senuelos' },
+    { label: 'Viajes', route: '/viajes' },
     { label: 'Boletines', href: '#ofertas' },
     { label: 'Galeria de fotos', href: '#sobre-nosotros' },
   ] as const;

@@ -1,0 +1,59 @@
+<section class="panel terms-page trips-page" aria-label="Viajes">
+  <header class="terms-page__header">
+    <h1 class="panel__title">VIAJES</h1>
+    <a class="btn btn--ghost btn--sm terms-page__back" routerLink="/">VOLVER A LA TIENDA</a>
+  </header>
+
+  <div class="trips">
+    <div class="trips__intro terms__card">
+      <p class="terms__lead">
+        Si hay algo maravilloso en el mundo de la pesca con mosca, es la aventura de viajar.
+        Personalmente hemos conocido muchos lugares recónditos del Planeta, lugares maravillosos por
+        sus entornos, los tipos de peces que pueden pescarse en esos lugares, la soledad, exclusividad y
+        calidad de la pesca, y ahora, queremos compartirlos contigo para que puedas realizar el tipo de
+        viaje de tus sueños.
+      </p>
+      <p class="terms__lead">
+        Tanto en agua dulce, como en agua salada, en cualquier rincón del mundo, cualquier tipo de
+        especie de pez, disponemos de los mejores lugares y alternativos, de la mano de los mejores
+        guías de pesca para ti.
+      </p>
+      <p class="terms__lead">
+        Nuestro servicio va más allá de la mera organización del viaje, pues te ofrecemos asesoramiento
+        en los equipos a utilizar, cursos preparatorios para las técnicas de pesca necesarias y
+        posibilidades infinitas para atender a cualquier tipo de necesidad que tengas, acompañamiento,
+        guías privados, etc.
+      </p>
+      <p class="terms__lead">
+        Te aseguramos que, desde la organización de una jornada de pesca en España de la mano de
+        guías especializados, hasta la coordinación de grupos para aventuras de pesca en el Amazonas,
+        Alaska, Patagonia, Caribe, etc. contamos con toda la experiencia y garantías necesarias para el
+        éxito en la realización de tu sueño.
+      </p>
+    </div>
+
+    <section class="trips__gallery" aria-label="Galería de viajes de pesca">
+      @for (photo of gallery; track photo.src) {
+        <figure class="trips__shot">
+          <img class="trips__shot-img" [src]="photo.src" [alt]="photo.alt" loading="lazy" />
+        </figure>
+      }
+    </section>
+
+    <section class="trips__destinations" aria-labelledby="trips-destinations-title">
+      <h2 class="terms__title" id="trips-destinations-title">DESTINOS</h2>
+      <div class="trips__groups">
+        @for (group of destinationGroups; track group.title) {
+          <article class="trips__group terms__card">
+            <h3 class="terms__subtitle">{{ group.title }}</h3>
+            <ul class="trips__places">
+              @for (place of group.places; track place) {
+                <li>{{ place }}</li>
+              }
+            </ul>
+          </article>
+        }
+      </div>
+    </section>
+  </div>
+</section>
