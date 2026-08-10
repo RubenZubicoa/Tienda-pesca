@@ -30,6 +30,10 @@ export const routes: Routes = [
         loadComponent: () => import('./account/pages/account/account').then(m => m.Account),
     },
     {
+        path: 'quienes-somos',
+        loadComponent: () => import('./legal/pages/about-us/about-us').then(m => m.AboutUs),
+    },
+    {
         path: 'condiciones-de-venta',
         loadComponent: () => import('./legal/pages/terms-of-sale/terms-of-sale').then(m => m.TermsOfSale),
     },
