@@ -1,12 +1,12 @@
 import { Component, DestroyRef, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { CategoryService } from '../../services/category';
 import { Category } from '../../models/Category';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidenav',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './sidenav.html',
   styleUrl: './sidenav.scss',
 })

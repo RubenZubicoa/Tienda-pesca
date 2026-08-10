@@ -1,4 +1,7 @@
 <nav class="sidenav" aria-label="Menú lateral">
+  <a class="sidenav__brand" routerLink="/" aria-label="Inicio" (click)="navigate.emit()">
+    <img class="sidenav__logo" src="logo-the-lake.jpeg" alt="The Lake" />
+  </a>
 
   <div class="sidenav__group" aria-label="Secciones">
     <ul class="sidenav__list" aria-label="Opciones">
@@ -38,4 +41,3 @@
     </ul>
   </div>
 </nav>
-

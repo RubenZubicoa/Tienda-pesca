@@ -19,7 +19,7 @@ describe('App', () => {
     fixture.detectChanges();
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.brand__logo')).toBeTruthy();
+    expect(compiled.querySelector('.sidenav__logo')).toBeTruthy();
     expect(compiled.querySelector('.hero__kicker')?.textContent).toContain('EQUÍPATE');
   });
 });
