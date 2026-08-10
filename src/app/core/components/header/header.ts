@@ -26,7 +26,7 @@ export class Header {
     { label: 'Formas de pago y envíos', route: '/formas-de-pago-y-envios' },
     { label: 'Viajes', route: '/viajes' },
     { label: 'Boletines', route: '/boletines' },
-    { label: 'Galeria de fotos', href: '#sobre-nosotros' },
+    { label: 'Galeria de fotos', route: '/galeria' },
   ] as const;
 
   protected logout() {

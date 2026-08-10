@@ -1,0 +1,66 @@
+<section class="panel terms-page gallery-page" aria-label="Galería de fotos y videos">
+  <header class="terms-page__header">
+    <h1 class="panel__title">GALERÍA DE FOTOS Y VIDEOS</h1>
+    <a class="btn btn--ghost btn--sm terms-page__back" routerLink="/">VOLVER A LA TIENDA</a>
+  </header>
+
+  <div class="gallery">
+    <div class="gallery__intro terms__card">
+      <p class="terms__lead">
+        No hay nada más entretenido y que nos guste más, que ver fotos y videos de pesca. Por ello,
+        hemos creado esta sección donde encontrarás un extenso contenido de archivos para visualizar
+        y trasladar tu mente a lugares y peces de ensueño.
+      </p>
+    </div>
+
+    <section class="gallery__section" aria-labelledby="gallery-photos-title">
+      <h2 class="terms__title" id="gallery-photos-title">GALERÍA DE FOTOS</h2>
+      <div class="gallery__photos">
+        @for (photo of photos; track photo.src) {
+          <button
+            class="gallery__photo"
+            type="button"
+            (click)="openPhoto(photo)"
+            [attr.aria-label]="'Ampliar foto: ' + photo.alt"
+          >
+            <img class="gallery__photo-img" [src]="photo.src" [alt]="photo.alt" loading="lazy" />
+          </button>
+        }
+      </div>
+    </section>
+
+    <section class="gallery__section" aria-labelledby="gallery-videos-title">
+      <h2 class="terms__title" id="gallery-videos-title">GALERÍA DE VIDEOS</h2>
+      <div class="gallery__videos">
+        @for (video of videos; track video.src) {
+          <article class="gallery__video terms__card">
+            <video class="gallery__player" controls preload="metadata" playsinline>
+              <source [src]="video.src" [type]="video.type" />
+              Tu navegador no admite la reproducción de este vídeo.
+            </video>
+          </article>
+        }
+      </div>
+    </section>
+  </div>
+</section>
+
+@if (activePhoto(); as photo) {
+  <div
+    class="gallery__lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Vista ampliada de la foto"
+    (click)="closePhoto()"
+  >
+    <button class="gallery__lightbox-close" type="button" aria-label="Cerrar" (click)="closePhoto()">
+      ×
+    </button>
+    <img
+      class="gallery__lightbox-img"
+      [src]="photo.src"
+      [alt]="photo.alt"
+      (click)="$event.stopPropagation()"
+    />
+  </div>
+}

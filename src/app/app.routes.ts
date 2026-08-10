@@ -42,6 +42,10 @@ export const routes: Routes = [
         loadComponent: () => import('./legal/pages/newsletters/newsletters').then(m => m.Newsletters),
     },
     {
+        path: 'galeria',
+        loadComponent: () => import('./legal/pages/gallery/gallery').then(m => m.Gallery),
+    },
+    {
         path: 'condiciones-de-venta',
         loadComponent: () => import('./legal/pages/terms-of-sale/terms-of-sale').then(m => m.TermsOfSale),
     },
