@@ -32,12 +32,55 @@
       </p>
     </div>
 
-    <section class="trips__gallery" aria-label="Galería de viajes de pesca">
-      @for (photo of gallery; track photo.src) {
-        <figure class="trips__shot">
-          <img class="trips__shot-img" [src]="photo.src" [alt]="photo.alt" loading="lazy" />
-        </figure>
-      }
+    <section
+      class="trips__carousel"
+      aria-roledescription="carrusel"
+      aria-label="Galería de viajes de pesca"
+      (mouseenter)="pause()"
+      (mouseleave)="resume()"
+      (focusin)="pause()"
+      (focusout)="resume()"
+    >
+      <div class="trips__viewport">
+        @for (photo of gallery; track photo.src; let i = $index) {
+          <figure
+            class="trips__slide"
+            [class.trips__slide--active]="i === activeIndex()"
+            [attr.aria-hidden]="i === activeIndex() ? null : true"
+          >
+            <img class="trips__slide-img" [src]="photo.src" [alt]="photo.alt" [loading]="i === 0 ? 'eager' : 'lazy'" />
+          </figure>
+        }
+      </div>
+
+      <button class="trips__nav trips__nav--prev" type="button" aria-label="Imagen anterior" (click)="prev()">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M14.5 6.5 9 12l5.5 5.5" />
+        </svg>
+      </button>
+      <button class="trips__nav trips__nav--next" type="button" aria-label="Imagen siguiente" (click)="next()">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9.5 6.5 15 12l-5.5 5.5" />
+        </svg>
+      </button>
+
+      <div class="trips__dots" role="tablist" aria-label="Seleccionar imagen">
+        @for (photo of gallery; track photo.src; let i = $index) {
+          <button
+            class="trips__dot"
+            type="button"
+            role="tab"
+            [class.trips__dot--active]="i === activeIndex()"
+            [attr.aria-selected]="i === activeIndex()"
+            [attr.aria-label]="'Ir a la imagen ' + (i + 1)"
+            (click)="goTo(i)"
+          ></button>
+        }
+      </div>
+
+      <p class="trips__status" aria-live="polite">
+        {{ activeIndex() + 1 }} / {{ gallery.length }}
+      </p>
     </section>
 
     <section class="trips__destinations" aria-labelledby="trips-destinations-title">
