@@ -527,6 +527,7 @@ input {
 }
 
 .reserve__img {
+  display: block;
   height: 86px;
   border-radius: 14px;
   border: 1px solid rgba(209, 176, 74, 0.18);
@@ -534,6 +535,11 @@ input {
   background:
     radial-gradient(70% 70% at 30% 30%, rgba(240, 209, 106, 0.16), transparent 60%),
     linear-gradient(120deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0));
+}
+
+.reserve__img:focus-visible {
+  outline: 3px solid var(--a11y-focus-color);
+  outline-offset: 2px;
 }
 
 .reserve__text p {

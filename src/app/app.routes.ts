@@ -46,6 +46,11 @@ export const routes: Routes = [
         loadComponent: () => import('./legal/pages/gallery/gallery').then(m => m.Gallery),
     },
     {
+        path: 'private-reserve',
+        loadComponent: () =>
+          import('./legal/pages/private-reserve/private-reserve').then(m => m.PrivateReserve),
+    },
+    {
         path: 'condiciones-de-venta',
         loadComponent: () => import('./legal/pages/terms-of-sale/terms-of-sale').then(m => m.TermsOfSale),
     },
