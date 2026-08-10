@@ -1,6 +1,5 @@
 <div class="page">
   <app-spinner></app-spinner>
-  <app-header (menuToggle)="toggleSidenav()"></app-header>
 
   <div
     class="mobile-sidenav"
@@ -24,10 +23,14 @@
       <app-sidenav></app-sidenav>
     </aside>
 
-    <div class="app-shell__main">
-      <main class="content">
-        <router-outlet></router-outlet>
-      </main>
+    <div class="app-shell__body">
+      <app-header (menuToggle)="toggleSidenav()"></app-header>
+
+      <div class="app-shell__main">
+        <main class="content">
+          <router-outlet></router-outlet>
+        </main>
+      </div>
     </div>
   </div>
 
