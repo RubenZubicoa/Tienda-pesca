@@ -38,6 +38,10 @@ export const routes: Routes = [
         loadComponent: () => import('./legal/pages/trips/trips').then(m => m.Trips),
     },
     {
+        path: 'boletines',
+        loadComponent: () => import('./legal/pages/newsletters/newsletters').then(m => m.Newsletters),
+    },
+    {
         path: 'condiciones-de-venta',
         loadComponent: () => import('./legal/pages/terms-of-sale/terms-of-sale').then(m => m.TermsOfSale),
     },

@@ -1,0 +1,55 @@
+<section class="panel terms-page newsletters-page" aria-label="Boletines">
+  <header class="terms-page__header">
+    <h1 class="panel__title">BOLETINES DE PESCA</h1>
+    <a class="btn btn--ghost btn--sm terms-page__back" routerLink="/">VOLVER A LA TIENDA</a>
+  </header>
+
+  <div class="newsletters">
+    <div class="newsletters__intro terms__card">
+      <p class="terms__lead">
+        Periódicamente, emitimos un boletín de información y entretenimiento sobre nuestro mundo de la
+        pesca.
+      </p>
+      <p class="terms__lead">
+        Estos boletines no son agresivos o comerciales y normalmente consisten en una fotografía potente
+        que recibirás y podrás disfrutar trasladando tu imaginación a algunos de los lugares que todos
+        soñamos con visitar algún día.
+      </p>
+      <p class="terms__lead">
+        Tus datos permanecerán absolutamente privados y no serán compartidos con terceros, y la
+        periodicidad será baja y jamás serán agresivos o comerciales.
+      </p>
+      <p class="terms__lead">
+        En cualquier momento podrás darte de baja y borraremos tu dirección de correo electrónico.
+      </p>
+      <p class="terms__lead">
+        Para recibir los boletines,
+        <a class="terms__inline-link" [href]="subscribeHref">pincha aquí</a>.
+      </p>
+      <p class="terms__lead">Gracias.</p>
+    </div>
+
+    <section class="newsletters__issues" aria-labelledby="newsletters-issues-title">
+      <h2 class="terms__title" id="newsletters-issues-title">BOLETINES DISPONIBLES</h2>
+      <ul class="newsletters__list">
+        @for (issue of issues; track issue.fileUrl) {
+          <li class="newsletters__item terms__card">
+            <div class="newsletters__item-text">
+              <h3 class="newsletters__item-title">{{ issue.title }}</h3>
+              <p class="newsletters__item-desc">{{ issue.description }}</p>
+            </div>
+            <a
+              class="btn btn--primary btn--sm"
+              [href]="issue.fileUrl"
+              [download]="issue.fileName"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              DESCARGAR PDF
+            </a>
+          </li>
+        }
+      </ul>
+    </section>
+  </div>
+</section>

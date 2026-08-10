@@ -1,0 +1,53 @@
+@use '../../styles/terms-page';
+
+.newsletters {
+  display: grid;
+  gap: 22px;
+}
+
+.newsletters__intro {
+  display: grid;
+  gap: 14px;
+}
+
+.newsletters__issues {
+  display: grid;
+  gap: 14px;
+}
+
+.newsletters__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.newsletters__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.newsletters__item-text {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  flex: 1 1 240px;
+}
+
+.newsletters__item-title {
+  margin: 0;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.newsletters__item-desc {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--a11y-text-muted, #d4cfc4);
+}
