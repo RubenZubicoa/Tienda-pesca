@@ -3,12 +3,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { ProductList } from '../../../shared/components/product-list/product-list';
 import { isProductInOffer, Product } from '../../../core/models/Product';
-import { MainCategories } from '../../../shared/components/main-categories/main-categories';
 import { ProductService } from '../../../core/services/product';
 
 @Component({
   selector: 'app-main',
-  imports: [ProductList, MainCategories, RouterLink],
+  imports: [ProductList, RouterLink],
   templateUrl: './main.html',
   styleUrl: './main.scss',
 })
