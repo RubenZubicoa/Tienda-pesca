@@ -202,7 +202,7 @@
 
 .hero__kicker {
   font-family: 'Bebas Neue', system-ui, sans-serif;
-  font-size: 42px;
+  font-size: clamp(48px, 6vw, 72px);
   letter-spacing: 0.05em;
   margin: 0;
   line-height: 1;
@@ -213,7 +213,7 @@
 .hero__subtitle {
   margin: 0;
   color: rgba(255, 255, 255, 0.72);
-  font-size: 13px;
+  font-size: clamp(16px, 2vw, 22px);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -763,7 +763,7 @@
   }
 
   .hero__kicker {
-    font-size: 34px;
+    font-size: 44px;
   }
 
   .hex-row {
