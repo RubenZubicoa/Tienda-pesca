@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Header } from './core/components/header/header';
-import { Footer } from './core/components/footer/footer';
 import { RouterOutlet } from '@angular/router';
 import { Sidenav } from './core/components/sidenav/sidenav';
 import { Spinner } from './shared/components/spinner/spinner';
@@ -9,7 +8,7 @@ import { Spinner } from './shared/components/spinner/spinner';
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
-  imports: [Header, Footer, Sidenav, RouterOutlet, Spinner]
+  imports: [Header, Sidenav, RouterOutlet, Spinner]
 })
 export class App {
   protected isSidenavOpen = false;
