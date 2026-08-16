@@ -34,6 +34,11 @@ export const routes: Routes = [
         loadComponent: () => import('./legal/pages/about-us/about-us').then(m => m.AboutUs),
     },
     {
+        path: 'viajes/destino/:slug',
+        loadComponent: () =>
+          import('./legal/pages/trip-destination/trip-destination').then(m => m.TripDestinationPage),
+    },
+    {
         path: 'viajes',
         loadComponent: () => import('./legal/pages/trips/trips').then(m => m.Trips),
     },

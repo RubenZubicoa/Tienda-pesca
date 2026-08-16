@@ -176,6 +176,24 @@
   color: var(--a11y-text-muted, #d4cfc4);
 }
 
+.trips__place-link {
+  color: var(--a11y-link, #f5dc82);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.trips__place-link:hover {
+  color: #f0d16a;
+  border-bottom-color: rgba(240, 209, 106, 0.55);
+}
+
+.trips__place-link:focus-visible {
+  outline: 3px solid var(--a11y-focus-color);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 @media (min-width: 720px) {
   .trips__viewport {
     aspect-ratio: 21 / 9;

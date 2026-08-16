@@ -32,6 +32,26 @@
       </p>
     </div>
 
+    <section class="trips__destinations" aria-labelledby="trips-destinations-title">
+      <h2 class="terms__title" id="trips-destinations-title">DESTINOS</h2>
+      <div class="trips__groups">
+        @for (group of destinationGroups; track group.title) {
+          <article class="trips__group terms__card">
+            <h3 class="terms__subtitle">{{ group.title }}</h3>
+            <ul class="trips__places">
+              @for (place of group.places; track place.slug) {
+                <li>
+                  <a class="trips__place-link" [routerLink]="['/viajes/destino', place.slug]">
+                    {{ place.name }}
+                  </a>
+                </li>
+              }
+            </ul>
+          </article>
+        }
+      </div>
+    </section>
+
     <section
       class="trips__carousel"
       aria-roledescription="carrusel"
@@ -81,22 +101,6 @@
       <p class="trips__status" aria-live="polite">
         {{ activeIndex() + 1 }} / {{ gallery.length }}
       </p>
-    </section>
-
-    <section class="trips__destinations" aria-labelledby="trips-destinations-title">
-      <h2 class="terms__title" id="trips-destinations-title">DESTINOS</h2>
-      <div class="trips__groups">
-        @for (group of destinationGroups; track group.title) {
-          <article class="trips__group terms__card">
-            <h3 class="terms__subtitle">{{ group.title }}</h3>
-            <ul class="trips__places">
-              @for (place of group.places; track place) {
-                <li>{{ place }}</li>
-              }
-            </ul>
-          </article>
-        }
-      </div>
     </section>
   </div>
 </section>

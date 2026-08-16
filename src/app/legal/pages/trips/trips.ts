@@ -2,11 +2,7 @@ import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { interval } from 'rxjs';
-
-type TripDestinationGroup = {
-  title: string;
-  places: string[];
-};
+import { tripDestinationGroups } from '../../data/trip-destinations';
 
 type TripPhoto = {
   src: string;
@@ -57,36 +53,7 @@ export class Trips implements OnInit {
     },
   ];
 
-  protected readonly destinationGroups: TripDestinationGroup[] = [
-    {
-      title: 'Agua dulce',
-      places: ['Patagonia', 'Alaska', 'Columbia Británica', 'Islandia', 'Mongolia', 'Siberia'],
-    },
-    {
-      title: 'Agua salada',
-      places: ['Christmas Island', 'Seychelles', 'Costa Rica', 'Panamá', 'Florida', 'Cuba'],
-    },
-    {
-      title: 'Aguas cálidas',
-      places: ['Bolivia', 'Brasil'],
-    },
-    {
-      title: 'España',
-      places: [
-        'León',
-        'Valencia',
-        'Salamanca',
-        'Madrid',
-        'Cataluña',
-        'Castilla La Mancha',
-        'Asturias',
-        'País Vasco',
-        'Galicia',
-        'La Rioja',
-        'Soria',
-      ],
-    },
-  ];
+  protected readonly destinationGroups = tripDestinationGroups;
 
   protected readonly activeIndex = signal(0);
   protected readonly paused = signal(false);
