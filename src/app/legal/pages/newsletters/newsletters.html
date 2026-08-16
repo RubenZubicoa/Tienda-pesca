@@ -34,12 +34,17 @@
       <ul class="newsletters__list">
         @for (issue of issues; track issue.fileUrl) {
           <li class="newsletters__item terms__card">
-            <div class="newsletters__item-text">
-              <h3 class="newsletters__item-title">{{ issue.title }}</h3>
-              <p class="newsletters__item-desc">{{ issue.description }}</p>
-            </div>
+            <h3 class="newsletters__item-title">{{ issue.title }}</h3>
+            <figure class="newsletters__thumb">
+              <img
+                class="newsletters__thumb-img"
+                [src]="issue.thumbnailUrl"
+                [alt]="issue.thumbnailAlt"
+                loading="lazy"
+              />
+            </figure>
             <a
-              class="btn btn--primary btn--sm"
+              class="btn btn--primary btn--sm newsletters__download"
               [href]="issue.fileUrl"
               [download]="issue.fileName"
               target="_blank"
