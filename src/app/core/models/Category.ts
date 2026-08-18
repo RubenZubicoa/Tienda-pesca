@@ -2,6 +2,7 @@ export type CategoryDB = {
     _id: string;
     label: string;
     description?: string;
+    image?: string;
     children?: Category[];
     createdAt?: number;
     updatedAt?: number;
@@ -12,6 +13,7 @@ export interface Category {
     uuid: string;
     label: string;
     description?: string;
+    image?: string;
     children?: Category[];
 }
 
@@ -32,6 +34,7 @@ export function mapCategoryDBToCategory(categoryDB: CategoryDB): Category {
         uuid: categoryDB._id,
         label: categoryDB.label,
         description: categoryDB.description,
+        image: categoryDB.image,
         children: categoryDB.children
     }
 }

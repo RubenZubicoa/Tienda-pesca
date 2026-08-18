@@ -113,6 +113,7 @@
   font-size: 13px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  text-align: left;
   padding: 12px 12px;
   min-height: var(--a11y-min-target);
   border-radius: 14px;
@@ -132,7 +133,7 @@
 }
 
 .sidenav__linkText {
-  text-align: justify;
+  text-align: left;
 }
 
 .sidenav__chevron {
@@ -195,6 +196,7 @@
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  text-align: left;
   padding: 11px 12px;
   min-height: var(--a11y-min-target);
   border-radius: 14px;

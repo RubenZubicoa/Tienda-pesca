@@ -66,6 +66,12 @@
   </div>
 </section>
 
+@if (c.image) {
+  <figure class="category-image">
+    <img class="category-image__img" [src]="c.image" [alt]="c.label" />
+  </figure>
+}
+
 <app-product-list
   [products]="products()"
   [columns]="4"
