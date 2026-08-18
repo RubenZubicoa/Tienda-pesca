@@ -1,85 +1,109 @@
 @let c = category();
 
-<section class="product-filters" aria-label="Filtros de productos">
-  <div class="product-filters__header">
-    <h2 class="product-filters__title">Filtros</h2>
-    <button class="btn btn--ghost btn--sm" type="button" (click)="clearFilters()">
-      Limpiar
-    </button>
-  </div>
+@if (hasSubcategories()) {
+  <section class="category-hub panel" [attr.aria-label]="c.label">
+    <h1 class="panel__title">{{ c.label }}</h1>
+    @if (c.description) {
+      <p class="panel__description">{{ c.description }}</p>
+    }
+    @if (c.image) {
+      <figure class="category-image">
+        <img class="category-image__img" [src]="c.image" [alt]="c.label" />
+      </figure>
+    }
+    <div class="category-hub__actions">
+      @for (child of c.children; track child.uuid) {
+        <a
+          class="btn btn--primary category-hub__btn"
+          [routerLink]="['/categories', subcategoryParentUuid(), 'subcategories', child.uuid]"
+        >
+          {{ child.label }}
+        </a>
+      }
+    </div>
+  </section>
+} @else {
+  <section class="product-filters" aria-label="Filtros de productos">
+    <div class="product-filters__header">
+      <h2 class="product-filters__title">Filtros</h2>
+      <button class="btn btn--ghost btn--sm" type="button" (click)="clearFilters()">
+        Limpiar
+      </button>
+    </div>
 
-  <div class="product-filters__grid">
-    <label class="field" for="filter-name">
-      <span class="field__label">Nombre</span>
-      <input
-        id="filter-name"
-        class="field__input"
-        type="search"
-        placeholder="Buscar por nombre…"
-        [value]="nameFilter()"
-        (input)="onNameFilter($event)"
-      />
-    </label>
+    <div class="product-filters__grid">
+      <label class="field" for="filter-name">
+        <span class="field__label">Nombre</span>
+        <input
+          id="filter-name"
+          class="field__input"
+          type="search"
+          placeholder="Buscar por nombre…"
+          [value]="nameFilter()"
+          (input)="onNameFilter($event)"
+        />
+      </label>
 
-    <label class="field" for="filter-offer">
-      <span class="field__label">En oferta</span>
-      <select
-        id="filter-offer"
-        class="field__control"
-        [value]="offerFilter()"
-        (change)="onOfferFilter($event)"
-      >
-        <option value="all">Todos</option>
-        <option value="yes">Sí</option>
-        <option value="no">No</option>
-      </select>
-    </label>
+      <label class="field" for="filter-offer">
+        <span class="field__label">En oferta</span>
+        <select
+          id="filter-offer"
+          class="field__control"
+          [value]="offerFilter()"
+          (change)="onOfferFilter($event)"
+        >
+          <option value="all">Todos</option>
+          <option value="yes">Sí</option>
+          <option value="no">No</option>
+        </select>
+      </label>
 
-    <label class="field" for="filter-featured">
-      <span class="field__label">Destacado</span>
-      <select
-        id="filter-featured"
-        class="field__control"
-        [value]="featuredFilter()"
-        (change)="onFeaturedFilter($event)"
-      >
-        <option value="all">Todos</option>
-        <option value="yes">Sí</option>
-        <option value="no">No</option>
-      </select>
-    </label>
+      <label class="field" for="filter-featured">
+        <span class="field__label">Destacado</span>
+        <select
+          id="filter-featured"
+          class="field__control"
+          [value]="featuredFilter()"
+          (change)="onFeaturedFilter($event)"
+        >
+          <option value="all">Todos</option>
+          <option value="yes">Sí</option>
+          <option value="no">No</option>
+        </select>
+      </label>
 
-    <label class="field" for="filter-brand">
-      <span class="field__label">Marca</span>
-      <select
-        id="filter-brand"
-        class="field__control"
-        [value]="brandFilter()"
-        (change)="onBrandFilter($event)"
-      >
-        <option value="">Todas</option>
-        @for (brand of brands(); track brand.uuid) {
-          <option [value]="brand.uuid">{{ brand.name }}</option>
-        }
-      </select>
-    </label>
-  </div>
-</section>
+      <label class="field" for="filter-brand">
+        <span class="field__label">Marca</span>
+        <select
+          id="filter-brand"
+          class="field__control"
+          [value]="brandFilter()"
+          (change)="onBrandFilter($event)"
+        >
+          <option value="">Todas</option>
+          @for (brand of brands(); track brand.uuid) {
+            <option [value]="brand.uuid">{{ brand.name }}</option>
+          }
+        </select>
+      </label>
+    </div>
+  </section>
 
-@if (c.image) {
-  <figure class="category-image">
-    <img class="category-image__img" [src]="c.image" [alt]="c.label" />
-  </figure>
+  @if (c.image) {
+    <figure class="category-image">
+      <img class="category-image__img" [src]="c.image" [alt]="c.label" />
+    </figure>
+  }
+
+  <app-product-list
+    [products]="products()"
+    [columns]="4"
+    [title]="c.label"
+    [description]="c.description"
+    [paginated]="true"
+    [page]="page()"
+    [pageSize]="pageSize()"
+    [totalItems]="totalItems()"
+    (pageChange)="onPageChange($event)"
+  ></app-product-list>
 }
-
-<app-product-list
-  [products]="products()"
-  [columns]="4"
-  [title]="c.label"
-  [description]="c.description"
-  [paginated]="true"
-  [page]="page()"
-  [pageSize]="pageSize()"
-  [totalItems]="totalItems()"
-  (pageChange)="onPageChange($event)"
-></app-product-list>

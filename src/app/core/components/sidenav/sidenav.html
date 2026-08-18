@@ -8,16 +8,21 @@
       @for (item of items(); track item.uuid) {
         <li class="sidenav__item">
           @if (item.children?.length) {
-            <button
-              class="sidenav__link sidenav__link--parent"
-              type="button"
-              (click)="toggle(item.label)"
-              [attr.aria-expanded]="isExpanded(item.label)"
-              [attr.aria-controls]="groupId(item.label)"
-            >
-              <span class="sidenav__linkText">{{ item.label }}</span>
-              <span class="sidenav__chevron" aria-hidden="true"></span>
-            </button>
+            <div class="sidenav__parent">
+              <a class="sidenav__link sidenav__link--parent" (click)="openParent(item)">
+                <span class="sidenav__linkText">{{ item.label }}</span>
+              </a>
+              <button
+                class="sidenav__toggle"
+                type="button"
+                (click)="toggle(item.label)"
+                [attr.aria-expanded]="isExpanded(item.label)"
+                [attr.aria-controls]="groupId(item.label)"
+                [attr.aria-label]="'Mostrar u ocultar subcategorías de ' + item.label"
+              >
+                <span class="sidenav__chevron" aria-hidden="true"></span>
+              </button>
+            </div>
           } @else {
             <a class="sidenav__link" (click)="navigateToCategory(item)">{{ item.label }}</a>
           }
@@ -29,7 +34,7 @@
               [id]="groupId(item.label)"
               [attr.data-collapsed]="!isExpanded(item.label)"
             >
-              @for (child of item.children; track child.label) {
+              @for (child of item.children; track child.uuid) {
                 <li class="sidenav__subitem">
                   <a class="sidenav__sublink" (click)="navigateToSubCategory(item, child)">{{ child.label }}</a>
                 </li>

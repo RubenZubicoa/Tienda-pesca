@@ -1,5 +1,6 @@
 import { Component, computed, DestroyRef, inject, input, OnChanges, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
 import { ReplaySubject, switchMap } from 'rxjs';
 import { ProductList } from '../../../shared/components/product-list/product-list';
 import { isProductInOffer, Product } from '../../../core/models/Product';
@@ -13,12 +14,13 @@ type TriFilter = 'all' | 'yes' | 'no';
 
 @Component({
   selector: 'app-categories',
-  imports: [ProductList],
+  imports: [ProductList, RouterLink],
   templateUrl: './categories.html',
   styleUrl: './categories.scss',
 })
 export class Categories implements OnChanges {
   public category = input.required<Category>();
+  public parentCategoryUuid = input<string>();
 
   private readonly allProducts = signal<Product[]>([]);
   protected readonly brands = signal<Brand[]>([]);
@@ -34,6 +36,14 @@ export class Categories implements OnChanges {
   private readonly brandService = inject(BrandService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly categoryId$ = new ReplaySubject<string>(1);
+
+  protected readonly hasSubcategories = computed(
+    () => (this.category().children?.length ?? 0) > 0,
+  );
+
+  protected readonly subcategoryParentUuid = computed(
+    () => this.parentCategoryUuid() || this.category().uuid,
+  );
 
   protected readonly filteredProducts = computed(() => {
     const name = this.nameFilter().trim().toLowerCase();
@@ -94,7 +104,9 @@ export class Categories implements OnChanges {
   ngOnChanges(): void {
     this.resetFilters();
     this.allProducts.set([]);
-    this.categoryId$.next(this.category().uuid);
+    if (!this.hasSubcategories()) {
+      this.categoryId$.next(this.category().uuid);
+    }
   }
 
   protected onNameFilter(event: Event): void {

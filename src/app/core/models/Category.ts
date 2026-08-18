@@ -3,7 +3,7 @@ export type CategoryDB = {
     label: string;
     description?: string;
     image?: string;
-    children?: Category[];
+    children?: CategoryDB[];
     createdAt?: number;
     updatedAt?: number;
     isDeleted?: boolean;
@@ -29,12 +29,14 @@ export interface CategoryUpdate {
     children?: Category[];
 }
 
-export function mapCategoryDBToCategory(categoryDB: CategoryDB): Category {
+export function mapCategoryDBToCategory(categoryDB: CategoryDB | Category): Category {
+    const raw = categoryDB as CategoryDB & Category;
+
     return {
-        uuid: categoryDB._id,
-        label: categoryDB.label,
-        description: categoryDB.description,
-        image: categoryDB.image,
-        children: categoryDB.children
+        uuid: raw.uuid || raw._id,
+        label: raw.label,
+        description: raw.description,
+        image: raw.image,
+        children: raw.children?.map((child) => mapCategoryDBToCategory(child as CategoryDB | Category)),
     }
 }

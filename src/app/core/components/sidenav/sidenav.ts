@@ -48,6 +48,11 @@ export class Sidenav implements OnInit {
     this.navigate.emit();
   }
 
+  protected openParent(category: Category) {
+    this.expanded.add(category.label);
+    this.navigateToCategory(category);
+  }
+
   navigateToSubCategory(parentCategory: Category, subCategory: Category) {
     this.router.navigate(['/categories', parentCategory.uuid, 'subcategories', subCategory.uuid]);
     this.navigate.emit();

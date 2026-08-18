@@ -4,7 +4,22 @@ import { inject } from '@angular/core';
 import { Category } from '../../core/models/Category';
 import { map, of } from 'rxjs';
 
-export const subCategoriesResolver: ResolveFn<Category | undefined> = (route, state) => {
+function findCategory(category: Category, uuid: string): Category | undefined {
+  if (category.uuid === uuid) {
+    return category;
+  }
+
+  for (const child of category.children ?? []) {
+    const match = findCategory(child, uuid);
+    if (match) {
+      return match;
+    }
+  }
+
+  return undefined;
+}
+
+export const subCategoriesResolver: ResolveFn<Category | undefined> = (route) => {
   const categoryService = inject(CategoryService);
   const parentCategoryUuid = route.params['parentCategoryUuid'];
   const subCategoryUuid = route.params['subCategoryUuid'];
@@ -12,6 +27,6 @@ export const subCategoriesResolver: ResolveFn<Category | undefined> = (route, st
     return of(undefined);
   }
   return categoryService.getCategory(parentCategoryUuid).pipe(
-    map(category => category.children?.find(child => child.uuid === subCategoryUuid))
+    map((category) => findCategory(category, subCategoryUuid)),
   );
 };
