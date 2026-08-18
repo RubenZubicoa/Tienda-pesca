@@ -175,15 +175,15 @@
   position: relative;
   border-radius: 22px;
   overflow: hidden;
-  min-height: 270px;
+  min-height: 380px;
   box-shadow: var(--shadow);
   border: 1px solid rgba(209, 176, 74, 0.22);
   background:
-    linear-gradient(120deg, rgba(10, 10, 10, 0.82), rgba(10, 10, 10, 0.22)),
-    radial-gradient(45% 70% at 25% 60%, rgba(0, 0, 0, 0.55), transparent 60%),
-    url('/fondo.jpg');
+    linear-gradient(120deg, rgba(10, 10, 10, 0.62), rgba(10, 10, 10, 0.18)),
+    radial-gradient(45% 70% at 25% 60%, rgba(0, 0, 0, 0.4), transparent 60%),
+    url('/fondo.png');
   background-position: center;
-  background-size: cover;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
 }
 
