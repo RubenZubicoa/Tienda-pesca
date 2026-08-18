@@ -3,6 +3,17 @@
   gap: 18px;
 }
 
+.category-heading {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 0;
+}
+
+.category-heading .panel__title,
+.category-heading .panel__description {
+  margin: 0;
+}
+
 .product-filters {
   background: rgba(12, 11, 9, 0.72);
   border: 1px solid rgba(209, 176, 74, 0.22);

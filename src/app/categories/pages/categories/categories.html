@@ -23,6 +23,19 @@
     </div>
   </section>
 } @else {
+  <header class="panel category-heading">
+    <h1 class="panel__title">{{ c.label }}</h1>
+    @if (c.description) {
+      <p class="panel__description">{{ c.description }}</p>
+    }
+  </header>
+
+  @if (c.image) {
+    <figure class="category-image">
+      <img class="category-image__img" [src]="c.image" [alt]="c.label" />
+    </figure>
+  }
+
   <section class="product-filters" aria-label="Filtros de productos">
     <div class="product-filters__header">
       <h2 class="product-filters__title">Filtros</h2>
@@ -89,17 +102,11 @@
     </div>
   </section>
 
-  @if (c.image) {
-    <figure class="category-image">
-      <img class="category-image__img" [src]="c.image" [alt]="c.label" />
-    </figure>
-  }
-
   <app-product-list
     [products]="products()"
     [columns]="4"
     [title]="c.label"
-    [description]="c.description"
+    [showHeader]="false"
     [paginated]="true"
     [page]="page()"
     [pageSize]="pageSize()"

@@ -1,7 +1,9 @@
-<section class="panel" id="ofertas" aria-labelledby="ofertas-title">
-  <h2 class="panel__title" id="ofertas-title">{{ title() }}</h2>
-  @if (description()) {
-    <p class="panel__description">{{ description() }}</p>
+<section class="panel" id="ofertas" [attr.aria-label]="showHeader() ? null : title()" [attr.aria-labelledby]="showHeader() ? 'ofertas-title' : null">
+  @if (showHeader()) {
+    <h2 class="panel__title" id="ofertas-title">{{ title() }}</h2>
+    @if (description()) {
+      <p class="panel__description">{{ description() }}</p>
+    }
   }
   <div class="product-grid product-grid--{{ columns() }}">
     @for (p of productCardData(); track p.id + $index) {

@@ -13,6 +13,7 @@ import { CurrentUserService } from '../../../auth/services/current-user-service'
 export class ProductList {
   public title = input<string>('PRODUCTOS DESTACADOS');
   public description = input<string>();
+  public showHeader = input(true);
   public columns = input<number>(3);
   public products = input<Product[]>([]);
   public paginated = input(false);
