@@ -548,6 +548,24 @@
   align-items: start;
 }
 
+.reserve-panel {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.reserve-panel:hover {
+  border-color: rgba(209, 176, 74, 0.45);
+  box-shadow: var(--a11y-focus-shadow);
+}
+
+.reserve-panel:focus-visible {
+  outline: 3px solid var(--a11y-focus-color);
+  outline-offset: 2px;
+}
+
 .reserve__img {
   height: 86px;
   border-radius: 14px;

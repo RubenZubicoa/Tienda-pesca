@@ -7,8 +7,4 @@ import { RouterLink } from '@angular/router';
   templateUrl: './private-reserve.html',
   styleUrl: './private-reserve.scss',
 })
-export class PrivateReserve {
-  protected readonly reserveHref =
-    'mailto:tienda@thelakefish.com?subject=' +
-    encodeURIComponent('Reserva The Lake Private Reserve');
-}
+export class PrivateReserve {}

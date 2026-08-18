@@ -13,23 +13,21 @@
 
       <aside class="side-col">
 
-        <section class="panel" id="private-reserve" aria-labelledby="reserve-title">
+        <a class="panel reserve-panel" routerLink="/private-reserve" aria-labelledby="reserve-title">
           <h2 class="panel__title panel__title--small" id="reserve-title">THE LAKE - PRIVATE RESERVE</h2>
           <div class="reserve">
-            <a class="reserve__img" routerLink="/private-reserve" aria-label="Ir a Private Reserve">
-              <img class="product-card__img" src="lago.jpg" alt="The Lake Private Reserve" />
-            </a>
+            <span class="reserve__img">
+              <img class="product-card__img" src="lago.jpg" alt="" />
+            </span>
             <div class="reserve__text">
               <p>
                 Acceso exclusivo a aguas de calidad con condiciones ideales en pesca. Reserva tu
                 equipo y vive una experiencia premium.
               </p>
-              <a class="reserve__link" routerLink="/private-reserve" aria-label="Saber más sobre Private Reserve">
-                Reserva el equipo lake - Private reserve →
-              </a>
+              <span class="reserve__link">Reserva el equipo lake - Private reserve →</span>
             </div>
           </div>
-        </section>
+        </a>
 
         <app-product-list [products]="seasonOffers()" [columns]="2" title="OFERTAS DE LA TEMPORADA"></app-product-list>
        
