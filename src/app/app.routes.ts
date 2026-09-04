@@ -43,6 +43,12 @@ export const routes: Routes = [
         loadComponent: () => import('./legal/pages/trips/trips').then(m => m.Trips),
     },
     {
+        path: 'destinations',
+        loadComponent: () =>
+          import('./legal/pages/destinations/destinations').then(m => m.Destinations),
+    },
+
+    {
         path: 'boletines',
         loadComponent: () => import('./legal/pages/newsletters/newsletters').then(m => m.Newsletters),
     },
