@@ -1,58 +1,68 @@
 <section class="panel terms-page destinations-page" aria-label="Destinations">
   <header class="terms-page__header">
-    <h1 class="panel__title">DESTINATIONS</h1>
     <a class="btn btn--ghost btn--sm terms-page__back" routerLink="/">VOLVER A LA TIENDA</a>
   </header>
 
   <div class="destinations">
-    <div class="destinations__intro terms__card">
-      <p class="terms__lead">
+    <header class="destinations-hero">
+      <p class="destinations-hero__eyebrow">Destinos</p>
+      <h1 class="destinations-hero__title">DESTINATIONS</h1>
+      <p class="destinations-hero__lead">
         Viajar es, sin duda alguna, una de las mejores aventuras que puedes correr.
       </p>
-      <p class="terms__lead">
+      <p class="destinations-hero__intro">
         En Terra Infinitus, somos conscientes de ello y por eso hemos elaborado un extenso y completo
         surtido de destinos repartidos por todo el Planeta.
       </p>
-      <p class="terms__lead">
+      <p class="destinations-hero__selection">
         Cada destino ha sido minuciosamente seleccionado para asegurar que cumple con todos los
-        requisitos de calidad, productividad, atención, seguridad y pleno divertimiento.
+        requisitos de calidad, productividad, atención, seguridad y pleno divertimiento. Dividimos
+        los destinos en tres grandes grupos:
       </p>
-      <p class="terms__lead">Dividimos los destinos en tres grandes grupos:</p>
-    </div>
+    </header>
 
-    <section class="destinations__groups" aria-labelledby="destinations-groups-title">
-      <h2 class="terms__title" id="destinations-groups-title">GRUPOS DE DESTINOS</h2>
-      <div class="destinations__grid">
-        @for (category of categories; track category.title) {
-          <article class="destinations__group terms__card">
-            <h3 class="terms__subtitle">{{ category.title }}</h3>
-            <p class="terms__lead">{{ category.description }}</p>
-            <ul class="destinations__places">
-              @for (place of category.places; track place.slug) {
-                <li>
-                  <a class="destinations__place-link" [routerLink]="['/viajes/destino', place.slug]">
-                    {{ place.name }}
-                  </a>
-                </li>
-              }
-            </ul>
-          </article>
-        }
-      </div>
+    <section class="destinations-groups" aria-label="Grupos de destinos">
+      <p class="destinations-groups__label">Nuestros destinos</p>
+
+      @for (category of categories; track category.id; let i = $index) {
+        <article
+          class="destinations-panel"
+          [class.destinations-panel--reverse]="i % 2 === 1"
+          [id]="category.id"
+        >
+          <div class="destinations-panel__media">
+            <img
+              class="destinations-panel__image"
+              [src]="category.image"
+              [alt]="category.imageAlt"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="destinations-panel__veil" aria-hidden="true"></div>
+          </div>
+          <div class="destinations-panel__content">
+            <p class="destinations-panel__eyebrow">{{ category.eyebrow }}</p>
+            <h2 class="destinations-panel__title">{{ category.title }}</h2>
+            <p class="destinations-panel__text">{{ category.description }}</p>
+            <a class="destinations-panel__cta" routerLink="/viajes">{{ category.cta }}</a>
+          </div>
+        </article>
+      }
     </section>
 
-    <div class="destinations__closing terms__card">
-      <p class="terms__lead">
+    <section class="destinations-closing" aria-label="Cierre">
+      <p class="destinations-closing__quote">
+        Te esperamos para acompañarte en tu próxima aventura.
+      </p>
+      <p class="destinations-closing__text">
         Viaja con nosotros y disfruta de nuestros guías, servicios VIP disponibles y alojamientos
         premium, además de un total asesoramiento en toda la logística de tu viaje, desde equipos,
         hasta vuelos, conexiones, traslados y trámites.
       </p>
-      <p class="terms__lead">Te esperamos para acompañarte en tu próxima aventura.</p>
-      <p class="terms__lead">
-        Consulta también nuestra sección de
-        <a class="terms__inline-link" routerLink="/viajes">viajes</a>
-        para ver todos los destinos disponibles.
+      <p class="destinations-closing__invite">
+        Consulta nuestra sección de viajes o contacta con nosotros para planificar tu experiencia.
       </p>
-    </div>
+      <a class="destinations-closing__cta" routerLink="/viajes">Ver todos los viajes</a>
+    </section>
   </div>
 </section>

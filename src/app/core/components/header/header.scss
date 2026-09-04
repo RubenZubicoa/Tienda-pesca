@@ -97,9 +97,14 @@
     transition: 160ms ease;
   }
   
-  .nav__link:hover::after {
+  .nav__link:hover::after,
+  .nav__link--active::after {
     opacity: 1;
     transform: scaleX(1);
+  }
+
+  .nav__link--active {
+    color: #ffffff;
   }
   
   .topbar__actions {

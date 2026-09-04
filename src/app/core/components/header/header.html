@@ -2,7 +2,7 @@
     <div class="topbar__inner">
       <nav class="nav" aria-label="Principal">
         @for (item of navItems; track item.label) {
-          <a class="nav__link" [routerLink]="item.route">{{ item.label }}</a>
+          <a class="nav__link" [routerLink]="item.route" routerLinkActive="nav__link--active" [routerLinkActiveOptions]="{ exact: item.route === '/' }">{{ item.label }}</a>
         }
       </nav>
 
