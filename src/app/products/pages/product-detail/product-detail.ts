@@ -1,13 +1,21 @@
 import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { catchError, map, of, switchMap } from 'rxjs';
+import { Category } from '../../../core/models/Category';
 import { getProductDisplayPrice, isProductInOffer, Product } from '../../../core/models/Product';
+import { CategoryService } from '../../../core/services/category';
 import { ProductService } from '../../../core/services/product';
 import { CartService } from '../../../core/services/cart';
 
 type DescriptionBlock =
   | { type: 'p'; text: string }
   | { type: 'ul'; title?: string; items: string[] };
+
+type Breadcrumb = {
+  label: string;
+  link?: string | any[];
+};
 
 @Component({
   selector: 'app-product-detail',
@@ -18,10 +26,12 @@ type DescriptionBlock =
 export class ProductDetail {
   private readonly route = inject(ActivatedRoute);
   private readonly productService = inject(ProductService);
+  private readonly categoryService = inject(CategoryService);
   private readonly cart = inject(CartService);
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly product = signal<Product | null>(null);
+  protected readonly breadcrumbs = signal<Breadcrumb[]>([]);
   protected readonly loading = signal<boolean>(true);
   protected readonly selectedImageIndex = signal(0);
 
@@ -53,16 +63,31 @@ export class ProductDetail {
 
       this.loading.set(true);
       this.selectedImageIndex.set(0);
-      this.productService.getProduct(uuid).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-        next: (p) => {
-          this.product.set(p);
-          this.loading.set(false);
-        },
-        error: () => {
-          this.product.set(null);
-          this.loading.set(false);
-        },
-      });
+      this.breadcrumbs.set([]);
+
+      this.productService
+        .getProduct(uuid)
+        .pipe(
+          switchMap((product) =>
+            this.categoryService.getCategories().pipe(
+              catchError(() => of([] as Category[])),
+              map((categories) => ({ product, categories })),
+            ),
+          ),
+          takeUntilDestroyed(this.destroyRef),
+        )
+        .subscribe({
+          next: ({ product, categories }) => {
+            this.product.set(product);
+            this.breadcrumbs.set(this.buildBreadcrumbs(product, categories));
+            this.loading.set(false);
+          },
+          error: () => {
+            this.product.set(null);
+            this.breadcrumbs.set([{ label: 'Inicio', link: '/' }]);
+            this.loading.set(false);
+          },
+        });
     });
 
     effect(() => {
@@ -146,6 +171,49 @@ export class ProductDetail {
       },
       this.qty(),
     );
+  }
+
+  private buildBreadcrumbs(product: Product, categories: Category[]): Breadcrumb[] {
+    const crumbs: Breadcrumb[] = [{ label: 'Inicio', link: '/' }];
+    const path = this.findCategoryPath(categories, product.categoryId);
+
+    if (path?.parent) {
+      crumbs.push({
+        label: path.parent.label,
+        link: ['/categories', path.parent.uuid],
+      });
+      crumbs.push({
+        label: path.category.label,
+        link: ['/categories', path.parent.uuid, 'subcategories', path.category.uuid],
+      });
+    } else if (path?.category) {
+      crumbs.push({
+        label: path.category.label,
+        link: ['/categories', path.category.uuid],
+      });
+    }
+
+    crumbs.push({ label: product.name });
+    return crumbs;
+  }
+
+  private findCategoryPath(
+    categories: Category[],
+    categoryId: string,
+  ): { parent?: Category; category: Category } | null {
+    for (const parent of categories) {
+      if (parent.uuid === categoryId) {
+        return { category: parent };
+      }
+
+      for (const child of parent.children ?? []) {
+        if (child.uuid === categoryId) {
+          return { parent, category: child };
+        }
+      }
+    }
+
+    return null;
   }
 
   private parseDescription(description?: string): DescriptionBlock[] {

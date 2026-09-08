@@ -16,11 +16,15 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 18px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(209, 176, 74, 0.22);
+  background: rgba(12, 11, 9, 0.82);
   font-size: 13px;
 }
 
 .breadcrumbs__link {
-  color: var(--a11y-link);
+  color: #f5dc82;
   text-decoration: underline;
   text-underline-offset: 3px;
   min-height: var(--a11y-min-target);
@@ -38,12 +42,12 @@
   border-radius: 4px;
 }
 
-.breadcrumbs__sep,
-.breadcrumbs__current {
-  color: var(--a11y-text-muted);
+.breadcrumbs__sep {
+  color: rgba(255, 255, 255, 0.45);
 }
 
 .breadcrumbs__current {
+  color: rgba(255, 255, 255, 0.92);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

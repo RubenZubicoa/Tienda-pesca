@@ -1,7 +1,7 @@
 import { Component, computed, DestroyRef, inject, input, OnChanges, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { ReplaySubject, switchMap } from 'rxjs';
+import { catchError, of, ReplaySubject, switchMap } from 'rxjs';
 import { ProductList } from '../../../shared/components/product-list/product-list';
 import { isProductInOffer, Product } from '../../../core/models/Product';
 import { Category } from '../../../core/models/Category';
@@ -9,8 +9,14 @@ import { Brand } from '../../../core/models/Brand';
 import { DEFAULT_MAX_PAGE_SIZE, PaginationRequest } from '../../../core/models/Pagination';
 import { ProductService } from '../../../core/services/product';
 import { BrandService } from '../../../core/services/brand';
+import { CategoryService } from '../../../core/services/category';
 
 type TriFilter = 'all' | 'yes' | 'no';
+
+type Breadcrumb = {
+  label: string;
+  link?: string | any[];
+};
 
 @Component({
   selector: 'app-categories',
@@ -24,6 +30,7 @@ export class Categories implements OnChanges {
 
   private readonly allProducts = signal<Product[]>([]);
   protected readonly brands = signal<Brand[]>([]);
+  protected readonly parentCategory = signal<Category | null>(null);
   protected readonly page = signal(1);
   protected readonly pageSize = signal(DEFAULT_MAX_PAGE_SIZE);
 
@@ -34,8 +41,10 @@ export class Categories implements OnChanges {
 
   private readonly productService = inject(ProductService);
   private readonly brandService = inject(BrandService);
+  private readonly categoryService = inject(CategoryService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly categoryId$ = new ReplaySubject<string>(1);
+  private readonly parentCategoryId$ = new ReplaySubject<string | null>(1);
 
   protected readonly hasSubcategories = computed(
     () => (this.category().children?.length ?? 0) > 0,
@@ -44,6 +53,25 @@ export class Categories implements OnChanges {
   protected readonly subcategoryParentUuid = computed(
     () => this.parentCategoryUuid() || this.category().uuid,
   );
+
+  protected readonly breadcrumbs = computed((): Breadcrumb[] => {
+    const current = this.category();
+    const parentUuid = this.parentCategoryUuid();
+    const parent = this.parentCategory();
+    const crumbs: Breadcrumb[] = [{ label: 'Inicio', link: '/' }];
+
+    if (parentUuid) {
+      crumbs.push({
+        label: parent?.label ?? 'Categoría',
+        link: ['/categories', parentUuid],
+      });
+      crumbs.push({ label: current.label });
+      return crumbs;
+    }
+
+    crumbs.push({ label: current.label });
+    return crumbs;
+  });
 
   protected readonly filteredProducts = computed(() => {
     const name = this.nameFilter().trim().toLowerCase();
@@ -99,11 +127,24 @@ export class Categories implements OnChanges {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((response) => this.allProducts.set(response.data));
+
+    this.parentCategoryId$
+      .pipe(
+        switchMap((parentUuid) => {
+          if (!parentUuid) {
+            return of(null);
+          }
+          return this.categoryService.getCategory(parentUuid).pipe(catchError(() => of(null)));
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((parent) => this.parentCategory.set(parent));
   }
 
   ngOnChanges(): void {
     this.resetFilters();
     this.allProducts.set([]);
+    this.parentCategoryId$.next(this.parentCategoryUuid() || null);
     if (!this.hasSubcategories()) {
       this.categoryId$.next(this.category().uuid);
     }

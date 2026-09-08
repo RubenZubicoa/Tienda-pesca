@@ -8,9 +8,16 @@
   @let p = product()!;
 
   <nav class="breadcrumbs" aria-label="Migas de pan">
-    <a class="breadcrumbs__link" routerLink="/">Inicio</a>
-    <span class="breadcrumbs__sep" aria-hidden="true">/</span>
-    <span class="breadcrumbs__current">{{ p.name }}</span>
+    @for (crumb of breadcrumbs(); track $index; let last = $last) {
+      @if (!last && crumb.link) {
+        <a class="breadcrumbs__link" [routerLink]="crumb.link">{{ crumb.label }}</a>
+        <span class="breadcrumbs__sep" aria-hidden="true">/</span>
+      } @else {
+        <span class="breadcrumbs__current" [attr.aria-current]="last ? 'page' : null">
+          {{ crumb.label }}
+        </span>
+      }
+    }
   </nav>
 
   <div class="detail">
