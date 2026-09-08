@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 type GalleryPhoto = {
   src: string;
@@ -13,7 +12,6 @@ type GalleryVideo = {
 
 @Component({
   selector: 'app-gallery',
-  imports: [RouterLink],
   templateUrl: './gallery.html',
   styleUrl: './gallery.scss',
 })

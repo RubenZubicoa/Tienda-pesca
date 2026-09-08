@@ -1,1 +1,71 @@
-@use '../../styles/terms-page';
+@use '../../styles/story-page';
+
+.shipping-tables {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+}
+
+.shipping-table {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(209, 176, 74, 0.18);
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.shipping-table__title {
+  margin: 0 0 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--story-gold-2);
+}
+
+.shipping-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.shipping-table th,
+.shipping-table td {
+  padding: 10px 8px;
+  text-align: left;
+  border-bottom: 1px solid rgba(209, 176, 74, 0.14);
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.shipping-table th {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(226, 221, 211, 0.9);
+}
+
+.shipping-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.shipping-table td:last-child {
+  font-weight: 700;
+  color: rgba(240, 209, 106, 0.95);
+  white-space: nowrap;
+}
+
+.shipping-payments {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 10px;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: rgba(232, 226, 214, 0.92);
+  max-width: 320px;
+}
+
+@media (min-width: 900px) {
+  .shipping-tables {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

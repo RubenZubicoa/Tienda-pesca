@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 type NewsletterIssue = {
   title: string;
@@ -12,7 +11,6 @@ type NewsletterIssue = {
 
 @Component({
   selector: 'app-newsletters',
-  imports: [RouterLink],
   templateUrl: './newsletters.html',
   styleUrl: './newsletters.scss',
 })

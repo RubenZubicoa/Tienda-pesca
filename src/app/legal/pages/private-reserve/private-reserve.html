@@ -1,45 +1,53 @@
-<section class="panel terms-page reserve-page" aria-label="The Lake Private Reserve">
-  <header class="terms-page__header">
-    <a class="btn btn--ghost btn--sm terms-page__back" routerLink="/">VOLVER A LA TIENDA</a>
+<section class="story-page reserve-page" aria-label="The Lake Private Reserve">
+  <header class="story-hero">
+    <div class="story-hero__copy">
+      <p class="story-hero__eyebrow">Acceso exclusivo</p>
+      <h1 class="story-hero__title">
+        The Lake <span class="story-hero__title-accent">Private Reserve</span>
+      </h1>
+      <p class="story-hero__lead">Un lugar único en Europa.</p>
+      <p class="story-hero__text">
+        Dos láminas de agua de 35.000 m², acceso muy limitado y solo pesca con mosca.
+      </p>
+      <a class="story-cta" routerLink="/la-empresa-y-contacto">Reservar aventura</a>
+    </div>
+    <div class="story-hero__visual" aria-hidden="true">
+      <img class="story-hero__photo" src="private-reserve.png" alt="" loading="eager" />
+      <div class="story-hero__glow"></div>
+    </div>
   </header>
 
-  <article class="reserve-doc">
-    <header class="reserve-doc__header">
-      <h1 class="reserve-doc__title">THE LAKE PRIVATE RESERVE</h1>
+  <section class="story-panel reserve-panel" aria-label="Detalles de la reserva">
+    <div class="reserve-panel__top">
+      <div>
+        <p class="story-panel__label">La experiencia</p>
+        <h2 class="story-panel__title">Calidad, cantidad y especies</h2>
+      </div>
       <img
-        class="reserve-doc__logo"
+        class="reserve-panel__logo"
         src="logo-the-lake.png"
         alt="The Lake Private Fishing Reserve"
+        loading="lazy"
       />
-    </header>
-
-    <div class="reserve-doc__body">
-      <p>
-        Disfruta de un lugar privado con dos láminas de agua de 35.000 metros cuadrados y una calidad,
-        cantidad y especies de peces como en ninguna otra parte.
-      </p>
-      <p>
-        Un lugar único en Europa, con acceso muy limitado, para garantizar la calidad de tu jornada de
-        pesca.
-      </p>
-      <p>
-        Paquetes completos de alojamiento y pesca, cursos, clínicas de pesca y una climatología
-        impresionante incluso en invierno.
-      </p>
-      <p>Tienda de materiales y servicios de restauración.</p>
-      <p>Solo pesca con mosca.</p>
-      <p>
-        <span class="reserve-doc__link">Reserva aquí tu aventura.</span>
-      </p>
     </div>
 
-    <figure class="reserve-doc__photo">
-      <img
-        class="reserve-doc__img"
-        src="private-reserve.png"
-        alt="Trucha arcoíris en aguas claras junto a una caña de mosca"
-        loading="eager"
-      />
-    </figure>
-  </article>
+    <ul class="reserve-highlights">
+      <li class="reserve-highlights__item">
+        <span class="reserve-highlights__index">01</span>
+        <p>Calidad, cantidad y especies de peces como en ninguna otra parte.</p>
+      </li>
+      <li class="reserve-highlights__item">
+        <span class="reserve-highlights__index">02</span>
+        <p>Acceso muy limitado para garantizar la calidad de tu jornada.</p>
+      </li>
+      <li class="reserve-highlights__item">
+        <span class="reserve-highlights__index">03</span>
+        <p>Paquetes de alojamiento y pesca, cursos y clínicas, incluso en invierno.</p>
+      </li>
+      <li class="reserve-highlights__item">
+        <span class="reserve-highlights__index">04</span>
+        <p>Tienda de materiales y servicios de restauración. Solo pesca con mosca.</p>
+      </li>
+    </ul>
+  </section>
 </section>

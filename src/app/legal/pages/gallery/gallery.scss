@@ -1,19 +1,4 @@
-@use '../../styles/terms-page';
-
-.gallery {
-  display: grid;
-  gap: 22px;
-}
-
-.gallery__intro {
-  display: grid;
-  gap: 14px;
-}
-
-.gallery__section {
-  display: grid;
-  gap: 14px;
-}
+@use '../../styles/story-page';
 
 .gallery__photos {
   display: grid;
@@ -22,20 +7,25 @@
 }
 
 .gallery__photo {
+  position: relative;
   margin: 0;
   padding: 0;
-  border: 1px solid rgba(209, 176, 74, 0.18);
+  border: 1px solid rgba(209, 176, 74, 0.22);
   border-radius: 14px;
   overflow: hidden;
-  background: rgba(12, 11, 9, 0.65);
+  background: rgba(0, 0, 0, 0.35);
   aspect-ratio: 4 / 3;
   cursor: pointer;
-  transition: 160ms ease;
+  transition: transform 220ms ease, border-color 220ms ease;
 }
 
 .gallery__photo:hover {
-  border-color: rgba(209, 176, 74, 0.55);
-  box-shadow: 0 0 0 3px rgba(240, 209, 106, 0.12);
+  transform: translateY(-3px) rotate(-0.4deg);
+  border-color: rgba(240, 209, 106, 0.55);
+}
+
+.gallery__photo:hover .gallery__photo-img {
+  transform: scale(1.06);
 }
 
 .gallery__photo:focus-visible {
@@ -49,6 +39,15 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gallery__photo-veil {
+  position: absolute;
+  inset: auto 0 0;
+  height: 42%;
+  background: linear-gradient(180deg, transparent, rgba(8, 7, 5, 0.55));
+  pointer-events: none;
 }
 
 .gallery__videos {
@@ -58,16 +57,17 @@
 
 .gallery__video {
   display: grid;
-  gap: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(209, 176, 74, 0.18);
+  overflow: hidden;
+  background: #000;
 }
 
 .gallery__player {
   display: block;
   width: 100%;
   max-height: 480px;
-  border-radius: 12px;
   background: #000;
-  border: 1px solid rgba(209, 176, 74, 0.16);
 }
 
 .gallery__lightbox {
@@ -118,5 +118,17 @@
 
   .gallery__videos {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery__photo,
+  .gallery__photo-img {
+    transition: none;
+  }
+
+  .gallery__photo:hover,
+  .gallery__photo:hover .gallery__photo-img {
+    transform: none;
   }
 }

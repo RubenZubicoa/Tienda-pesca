@@ -1,1 +1,27 @@
-@use '../../styles/terms-page';
+@use '../../styles/story-page';
+
+.terms-sale-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 14px;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(232, 226, 214, 0.92);
+}
+
+.terms-sale-link {
+  color: #f5dc82;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.terms-sale-link:hover {
+  color: #fff3b8;
+}
+
+.terms-sale-link:focus-visible {
+  outline: 3px solid var(--a11y-focus-color, #f0d16a);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
