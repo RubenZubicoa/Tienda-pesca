@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { tripDestinationGroups, TripDestination } from '../../data/trip-destinations';
 
 type DestinationCategory = {
   id: string;
@@ -8,10 +9,9 @@ type DestinationCategory = {
   eyebrow: string;
   title: string;
   description: string;
-  species: string[];
   image: string;
   imageAlt: string;
-  cta: string;
+  places: TripDestination[];
 };
 
 @Component({
@@ -29,11 +29,10 @@ export class Destinations {
       eyebrow: 'Ríos y lagos',
       title: 'Agua dulce',
       description:
-        'Destinos de río y lago, abarcando todo un gran cúmulo de especies, tanto residentes como migratorias.',
-      species: ['Trucha', 'Salmón', 'Steelhead', 'Lucio', 'Bass', 'Siluro'],
+        'Destinos de río y lago, abarcando especies residentes y migratorias: trucha, salmón, reos, steelhead, lucio, bass, carpas, barbos, siluros y más.',
       image: 'viajes/viajes-01.png',
       imageAlt: 'Gran trucha arcoíris junto a una caña de mosca',
-      cta: 'Explorar agua dulce',
+      places: tripDestinationGroups.find((g) => g.title === 'Agua dulce')?.places ?? [],
     },
     {
       id: 'saltwater',
@@ -42,11 +41,10 @@ export class Destinations {
       eyebrow: 'Océano y flats',
       title: 'Agua salada',
       description:
-        'Pesca desde embarcación o recorriendo bajíos y flats: un desafío que pone a prueba todas tus habilidades.',
-      species: ['Flats', 'Embarcación', 'Semi-salada'],
+        'Pesca desde embarcación o recorriendo bajíos y flats: un desafío que pone a prueba todas tus habilidades ante un sinfín de especies.',
       image: 'viajes/viajes-08.png',
       imageAlt: 'Gran pez en aguas cristalinas junto a una caña',
-      cta: 'Explorar agua salada',
+      places: tripDestinationGroups.find((g) => g.title === 'Agua salada')?.places ?? [],
     },
     {
       id: 'warmwater',
@@ -55,11 +53,13 @@ export class Destinations {
       eyebrow: 'Amazonas y trópicos',
       title: 'Aguas cálidas',
       description:
-        'Aventuras en El Amazonas y aguas tropicales, con destinos exclusivos seleccionados por emoción y seguridad.',
-      species: ['Amazonas', 'Trópicos', 'Exclusivo'],
+        'Aventuras en El Amazonas y aguas tropicales, con destinos exclusivos seleccionados por emoción, calidad y seguridad.',
       image: 'viajes/viajes-05.png',
       imageAlt: 'Payara o pez vampiro con grandes colmillos',
-      cta: 'Explorar aguas cálidas',
+      places: tripDestinationGroups.find((g) => g.title === 'Aguas cálidas')?.places ?? [],
     },
   ];
+
+  protected readonly spainPlaces =
+    tripDestinationGroups.find((g) => g.title === 'España')?.places ?? [];
 }

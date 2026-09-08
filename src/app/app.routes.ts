@@ -34,18 +34,23 @@ export const routes: Routes = [
         loadComponent: () => import('./legal/pages/about-us/about-us').then(m => m.AboutUs),
     },
     {
-        path: 'viajes/destino/:slug',
+        path: 'destinations/destino/:slug',
         loadComponent: () =>
           import('./legal/pages/trip-destination/trip-destination').then(m => m.TripDestinationPage),
-    },
-    {
-        path: 'viajes',
-        loadComponent: () => import('./legal/pages/trips/trips').then(m => m.Trips),
     },
     {
         path: 'destinations',
         loadComponent: () =>
           import('./legal/pages/destinations/destinations').then(m => m.Destinations),
+    },
+    {
+        path: 'viajes/destino/:slug',
+        redirectTo: '/destinations/destino/:slug',
+    },
+    {
+        path: 'viajes',
+        redirectTo: '/destinations',
+        pathMatch: 'full',
     },
 
     {

@@ -14,13 +14,13 @@
           </span>
         </h1>
         <p class="destinations-hero__lead">
-          Viajar es, sin duda alguna, una de las mejores aventuras que puedes correr.
+          Si hay algo maravilloso en la pesca con mosca, es la aventura de viajar.
         </p>
         <p class="destinations-hero__text">
-          Hemos seleccionado destinos por todo el planeta: calidad, productividad, atención,
-          seguridad y pleno divertimiento en tres grandes grupos.
+          Hemos conocido lugares recónditos del planeta —entornos, especies, soledad y exclusividad—
+          y queremos compartirlos contigo para que realices el viaje de tus sueños.
         </p>
-        <a class="destinations-hero__cta" routerLink="/viajes">Ver todos los viajes</a>
+        <a class="destinations-hero__cta" routerLink="/la-empresa-y-contacto">Contactar</a>
       </div>
 
       <div class="destinations-hero__visual" aria-hidden="true">
@@ -49,7 +49,22 @@
       </div>
     </header>
 
-    <section class="destinations-groups" aria-labelledby="destinations-groups-label">
+    <section class="destinations-story" aria-label="Nuestra experiencia">
+      <p class="destinations-story__text">
+        Tanto en agua dulce como en agua salada, en cualquier rincón del mundo y con cualquier
+        especie, disponemos de los mejores lugares de la mano de los mejores guías.
+      </p>
+      <p class="destinations-story__text">
+        Vamos más allá de organizar el viaje: asesoramos equipos, ofrecemos cursos preparatorios y
+        acompañamiento —incluso guías privados— para atender cualquier necesidad.
+      </p>
+      <p class="destinations-story__text">
+        Desde una jornada en España hasta grupos en el Amazonas, Alaska, Patagonia o el Caribe:
+        experiencia y garantías para hacer realidad tu sueño.
+      </p>
+    </section>
+
+    <section class="destinations-groups" id="destinos" aria-labelledby="destinations-groups-label">
       <div class="destinations-groups__header">
         <p class="destinations-groups__label" id="destinations-groups-label">Tres rutas</p>
         <h2 class="destinations-groups__title">Elige tu corriente</h2>
@@ -80,16 +95,44 @@
               <p class="destination-band__eyebrow">{{ category.eyebrow }}</p>
               <h3 class="destination-band__title">{{ category.title }}</h3>
               <p class="destination-band__text">{{ category.description }}</p>
-              <ul class="destination-band__tags" aria-label="Características">
-                @for (tag of category.species; track tag) {
-                  <li class="destination-band__tag">{{ tag }}</li>
+              <ul class="destination-band__places" aria-label="Destinos de {{ category.title }}">
+                @for (place of category.places; track place.slug) {
+                  <li>
+                    <a
+                      class="destination-band__place"
+                      [routerLink]="['/destinations/destino', place.slug]"
+                    >
+                      {{ place.name }}
+                    </a>
+                  </li>
                 }
               </ul>
-              <a class="destination-band__cta" routerLink="/viajes">{{ category.cta }}</a>
             </div>
           </article>
         }
       </div>
+    </section>
+
+    <section class="destinations-spain" id="espana" aria-labelledby="spain-title">
+      <div class="destinations-spain__header">
+        <p class="destinations-spain__label">Cerca de casa</p>
+        <h2 class="destinations-spain__title" id="spain-title">España</h2>
+        <p class="destinations-spain__text">
+          Jornadas de pesca con guías especializados en algunos de los mejores escenarios del país.
+        </p>
+      </div>
+      <ul class="destinations-spain__places">
+        @for (place of spainPlaces; track place.slug) {
+          <li>
+            <a
+              class="destinations-spain__place"
+              [routerLink]="['/destinations/destino', place.slug]"
+            >
+              {{ place.name }}
+            </a>
+          </li>
+        }
+      </ul>
     </section>
 
     <section class="destinations-closing" aria-label="Servicios de viaje">
@@ -102,7 +145,9 @@
           Guías expertos, servicios VIP, alojamientos premium y logística completa: equipos, vuelos,
           conexiones, traslados y trámites.
         </p>
-        <a class="destinations-closing__cta" routerLink="/viajes">Planificar mi viaje</a>
+        <a class="destinations-closing__cta" routerLink="/la-empresa-y-contacto">
+          Contactar
+        </a>
       </div>
     </section>
   </div>
