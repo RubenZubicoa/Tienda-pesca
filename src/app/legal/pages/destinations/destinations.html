@@ -1,68 +1,109 @@
-<section class="panel terms-page destinations-page" aria-label="Destinations">
-  <header class="terms-page__header">
-    <a class="btn btn--ghost btn--sm terms-page__back" routerLink="/">VOLVER A LA TIENDA</a>
-  </header>
+<section class="destinations-page" aria-label="Destinations">
+  <div class="destinations-page__toolbar">
+    <a class="btn btn--ghost btn--sm" routerLink="/">VOLVER A LA TIENDA</a>
+  </div>
 
   <div class="destinations">
     <header class="destinations-hero">
-      <p class="destinations-hero__eyebrow">Destinos</p>
-      <h1 class="destinations-hero__title">DESTINATIONS</h1>
-      <p class="destinations-hero__lead">
-        Viajar es, sin duda alguna, una de las mejores aventuras que puedes correr.
-      </p>
-      <p class="destinations-hero__intro">
-        En Terra Infinitus, somos conscientes de ello y por eso hemos elaborado un extenso y completo
-        surtido de destinos repartidos por todo el Planeta.
-      </p>
-      <p class="destinations-hero__selection">
-        Cada destino ha sido minuciosamente seleccionado para asegurar que cumple con todos los
-        requisitos de calidad, productividad, atención, seguridad y pleno divertimiento. Dividimos
-        los destinos en tres grandes grupos:
-      </p>
+      <div class="destinations-hero__copy">
+        <p class="destinations-hero__eyebrow">Fly Water Travel · Terra Infinitus</p>
+        <h1 class="destinations-hero__title">
+          <span class="destinations-hero__title-line">El mundo</span>
+          <span class="destinations-hero__title-line destinations-hero__title-line--accent">
+            te espera
+          </span>
+        </h1>
+        <p class="destinations-hero__lead">
+          Viajar es, sin duda alguna, una de las mejores aventuras que puedes correr.
+        </p>
+        <p class="destinations-hero__text">
+          Hemos seleccionado destinos por todo el planeta: calidad, productividad, atención,
+          seguridad y pleno divertimiento en tres grandes grupos.
+        </p>
+        <a class="destinations-hero__cta" routerLink="/viajes">Ver todos los viajes</a>
+      </div>
+
+      <div class="destinations-hero__visual" aria-hidden="true">
+        <img
+          class="destinations-hero__photo"
+          src="viajes/viajes-02.png"
+          alt=""
+          loading="eager"
+        />
+        <div class="destinations-hero__glow"></div>
+        <svg class="destinations-hero__wave" viewBox="0 0 600 120" preserveAspectRatio="none">
+          <path
+            d="M0 70 C80 20, 140 110, 220 60 S360 10, 440 55 S540 100, 600 45"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            d="M0 90 C100 50, 160 120, 250 80 S390 40, 470 75 S550 110, 600 70"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.2"
+            opacity="0.45"
+          />
+        </svg>
+      </div>
     </header>
 
-    <section class="destinations-groups" aria-label="Grupos de destinos">
-      <p class="destinations-groups__label">Nuestros destinos</p>
+    <section class="destinations-groups" aria-labelledby="destinations-groups-label">
+      <div class="destinations-groups__header">
+        <p class="destinations-groups__label" id="destinations-groups-label">Tres rutas</p>
+        <h2 class="destinations-groups__title">Elige tu corriente</h2>
+      </div>
 
-      @for (category of categories; track category.id; let i = $index) {
-        <article
-          class="destinations-panel"
-          [class.destinations-panel--reverse]="i % 2 === 1"
-          [id]="category.id"
-        >
-          <div class="destinations-panel__media">
-            <img
-              class="destinations-panel__image"
-              [src]="category.image"
-              [alt]="category.imageAlt"
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="destinations-panel__veil" aria-hidden="true"></div>
-          </div>
-          <div class="destinations-panel__content">
-            <p class="destinations-panel__eyebrow">{{ category.eyebrow }}</p>
-            <h2 class="destinations-panel__title">{{ category.title }}</h2>
-            <p class="destinations-panel__text">{{ category.description }}</p>
-            <a class="destinations-panel__cta" routerLink="/viajes">{{ category.cta }}</a>
-          </div>
-        </article>
-      }
+      <div class="destinations-rail">
+        @for (category of categories; track category.id; let i = $index) {
+          <article
+            class="destination-band"
+            [class.destination-band--fresh]="category.accent === 'fresh'"
+            [class.destination-band--salt]="category.accent === 'salt'"
+            [class.destination-band--warm]="category.accent === 'warm'"
+            [class.destination-band--flip]="i % 2 === 1"
+            [id]="category.id"
+          >
+            <div class="destination-band__media">
+              <img
+                class="destination-band__image"
+                [src]="category.image"
+                [alt]="category.imageAlt"
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="destination-band__index" aria-hidden="true">{{ category.index }}</span>
+            </div>
+
+            <div class="destination-band__body">
+              <p class="destination-band__eyebrow">{{ category.eyebrow }}</p>
+              <h3 class="destination-band__title">{{ category.title }}</h3>
+              <p class="destination-band__text">{{ category.description }}</p>
+              <ul class="destination-band__tags" aria-label="Características">
+                @for (tag of category.species; track tag) {
+                  <li class="destination-band__tag">{{ tag }}</li>
+                }
+              </ul>
+              <a class="destination-band__cta" routerLink="/viajes">{{ category.cta }}</a>
+            </div>
+          </article>
+        }
+      </div>
     </section>
 
-    <section class="destinations-closing" aria-label="Cierre">
-      <p class="destinations-closing__quote">
-        Te esperamos para acompañarte en tu próxima aventura.
-      </p>
-      <p class="destinations-closing__text">
-        Viaja con nosotros y disfruta de nuestros guías, servicios VIP disponibles y alojamientos
-        premium, además de un total asesoramiento en toda la logística de tu viaje, desde equipos,
-        hasta vuelos, conexiones, traslados y trámites.
-      </p>
-      <p class="destinations-closing__invite">
-        Consulta nuestra sección de viajes o contacta con nosotros para planificar tu experiencia.
-      </p>
-      <a class="destinations-closing__cta" routerLink="/viajes">Ver todos los viajes</a>
+    <section class="destinations-closing" aria-label="Servicios de viaje">
+      <div class="destinations-closing__inner">
+        <p class="destinations-closing__kicker">Tu próxima aventura</p>
+        <h2 class="destinations-closing__quote">
+          Te esperamos para acompañarte en el viaje.
+        </h2>
+        <p class="destinations-closing__text">
+          Guías expertos, servicios VIP, alojamientos premium y logística completa: equipos, vuelos,
+          conexiones, traslados y trámites.
+        </p>
+        <a class="destinations-closing__cta" routerLink="/viajes">Planificar mi viaje</a>
+      </div>
     </section>
   </div>
 </section>
