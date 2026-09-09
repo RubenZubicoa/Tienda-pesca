@@ -196,7 +196,7 @@
   position: relative;
   display: grid;
   grid-template-columns: 1.2fr 0.9fr;
-  min-height: clamp(18rem, 36vw, 24rem);
+  height: clamp(20rem, 38vw, 26rem);
   overflow: hidden;
   border-radius: 16px;
   border: 1px solid color-mix(in srgb, var(--band-accent) 35%, transparent);
@@ -230,7 +230,8 @@
 
 .destination-band__media {
   position: relative;
-  min-height: 14rem;
+  min-height: 0;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -272,8 +273,11 @@
   position: relative;
   display: grid;
   align-content: center;
+  align-self: stretch;
   gap: 0.75rem;
+  min-height: 0;
   padding: clamp(1.25rem, 3vw, 2rem);
+  overflow: auto;
   background:
     linear-gradient(
       155deg,
@@ -586,13 +590,15 @@
   .destination-band,
   .destination-band--flip {
     grid-template-columns: 1fr;
-    min-height: 0;
+    grid-template-rows: auto 1fr;
+    height: clamp(28rem, 88vw, 34rem);
   }
 
   .destination-band__media,
   .destination-band--flip .destination-band__media {
     order: 1;
-    min-height: 12rem;
+    height: auto;
+    min-height: 0;
     aspect-ratio: 16 / 10;
   }
 
