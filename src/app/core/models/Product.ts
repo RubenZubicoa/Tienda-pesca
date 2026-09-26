@@ -2,12 +2,16 @@ import { Brand, BrandDB } from "./Brand";
 import { Category, CategoryDB } from "./Category";
 
 
-type ProductOption = {
+export type ProductOptionChoice = {
+    id: string;
     label: string;
-    options: {
-        id: string;
-        label: string;
-    }[];
+    /** Imagen opcional asociada a esta opción (color, talla, etc.). */
+    imageUrl?: string;
+};
+
+export type ProductOption = {
+    label: string;
+    options: ProductOptionChoice[];
 };
 
 export type ProductDB = {
@@ -19,6 +23,8 @@ export type ProductDB = {
     stock: number;
     categoryId: CategoryDB['_id'];
     images: string[];
+    /** Vídeo explicativo opcional del producto. */
+    videoUrl?: string;
     options?: ProductOption;
     isFeatured?:boolean;
     isInOffer?: boolean;
@@ -38,6 +44,8 @@ export interface Product {
     stock: number;
     categoryId: Category['uuid'];
     images: string[];
+    /** Vídeo explicativo opcional del producto. */
+    videoUrl?: string;
     options?: ProductOption;
     isFeatured?: boolean;
     isInOffer?: boolean;
@@ -53,6 +61,7 @@ export interface ProductCreate {
     stock: number;
     categoryId: Category['uuid'];
     images: string[];
+    videoUrl?: string;
     options?: ProductOption[];
 }
 
@@ -64,6 +73,7 @@ export interface ProductUpdate {
     stock?: number;
     categoryId?: string;
     images?: string[];
+    videoUrl?: string;
     options?: ProductOption;
 }
 
@@ -81,6 +91,7 @@ export function mapProductDBToProduct(productDB: ProductDB): Product {
         stock: productDB.stock,
         categoryId: productDB.categoryId,
         images: productDB.images,
+        videoUrl: productDB.videoUrl?.trim() || undefined,
         options: productDB.options,
         isFeatured: productDB.isFeatured,
         isInOffer: productDB.isInOffer,

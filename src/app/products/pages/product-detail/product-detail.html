@@ -23,17 +23,43 @@
   <div class="detail">
     <div class="detail__gallery" aria-label="Galería y descripción">
       <figure class="detail__main">
-        <img class="detail__main-img" [src]="selectedImageUrl()" [alt]="p.name" loading="eager" />
+        @if (showingVideo()) {
+          <video
+            class="detail__main-video"
+            [src]="productVideoUrl()!"
+            controls
+            playsinline
+            preload="metadata"
+          >
+            Tu navegador no soporta la reproducción de vídeo.
+          </video>
+        } @else {
+          <img class="detail__main-img" [src]="selectedImageUrl()" [alt]="p.name" loading="eager" />
+        }
       </figure>
 
-      @if (galleryImages().length > 1) {
+      @if (showThumbs()) {
       <div class="detail__thumbs-wrap">
         <div class="detail__thumbs" #thumbsTrack aria-label="Miniaturas del producto">
           @for (img of galleryImages(); track img; let i = $index) {
-          <button type="button" class="detail__thumb" [class.detail__thumb--active]="selectedImageIndex() === i"
+          <button type="button" class="detail__thumb"
+            [class.detail__thumb--active]="!showingVideo() && !optionImageUrl() && selectedImageIndex() === i"
             (click)="selectImage(i)" [attr.aria-label]="'Ver imagen ' + (i + 1)"
-            [attr.aria-current]="selectedImageIndex() === i ? 'true' : null">
+            [attr.aria-current]="!showingVideo() && !optionImageUrl() && selectedImageIndex() === i ? 'true' : null">
             <img [src]="img" [alt]="p.name + ' miniatura ' + (i + 1)" loading="lazy" />
+          </button>
+          }
+          @if (productVideoUrl()) {
+          <button
+            type="button"
+            class="detail__thumb detail__thumb--video"
+            [class.detail__thumb--active]="showingVideo()"
+            (click)="selectVideo()"
+            aria-label="Ver vídeo del producto"
+            [attr.aria-current]="showingVideo() ? 'true' : null"
+          >
+            <img [src]="galleryImages()[0]" [alt]="" loading="lazy" />
+            <span class="detail__thumb-play" aria-hidden="true">▶</span>
           </button>
           }
         </div>
@@ -81,7 +107,7 @@
         <select class="field__control" [value]="selectedOptionId()" (change)="onColorChange($any($event.target).value)">
           <option value="">Seleccionar</option>
           @for (opt of productOptions.options; track opt.id) {
-          <option [value]="opt.label">{{ opt.label }}</option>
+          <option [value]="opt.id">{{ opt.label }}</option>
           }
         </select>
         @if (colorError()) {

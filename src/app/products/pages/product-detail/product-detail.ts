@@ -34,8 +34,11 @@ export class ProductDetail {
   protected readonly breadcrumbs = signal<Breadcrumb[]>([]);
   protected readonly loading = signal<boolean>(true);
   protected readonly selectedImageIndex = signal(0);
+  /** Vista principal centrada en el vídeo explicativo (si existe). */
+  protected readonly showVideo = signal(false);
+  /** Preview de la opción seleccionada; sustituye la imagen principal sin alterar la galería. */
+  protected readonly optionImageUrl = signal<string | null>(null);
 
-  // Placeholder: lo alimentarás más adelante con las opciones del producto.
   protected readonly options = computed(() => this.product()?.options ?? null);
   protected readonly selectedOptionId = signal('');
   protected readonly colorError = signal('');
@@ -45,6 +48,19 @@ export class ProductDetail {
     const images = this.product()?.images?.filter(Boolean) ?? [];
     return images.length > 0 ? images : ['placeholder.png'];
   });
+
+  protected readonly productVideoUrl = computed(() => {
+    const url = this.product()?.videoUrl?.trim();
+    return url || null;
+  });
+
+  protected readonly showingVideo = computed(
+    () => this.showVideo() && !!this.productVideoUrl(),
+  );
+
+  protected readonly showThumbs = computed(
+    () => this.galleryImages().length > 1 || !!this.productVideoUrl(),
+  );
 
   protected readonly descriptionBlocks = computed(() => this.parseDescription(this.product()?.description));
   protected readonly inOffer = computed(() => {
@@ -62,7 +78,7 @@ export class ProductDetail {
       if (!uuid) return;
 
       this.loading.set(true);
-      this.selectedImageIndex.set(0);
+      this.resetMediaState();
       this.breadcrumbs.set([]);
 
       this.productService
@@ -103,12 +119,23 @@ export class ProductDetail {
   }
 
   protected selectedImageUrl(): string {
+    const optionImg = this.optionImageUrl();
+    if (optionImg) return optionImg;
+
     const images = this.galleryImages();
     return images[this.selectedImageIndex()] ?? images[0];
   }
 
   protected selectImage(index: number) {
+    this.showVideo.set(false);
+    this.optionImageUrl.set(null);
     this.selectedImageIndex.set(index);
+  }
+
+  protected selectVideo() {
+    if (!this.productVideoUrl()) return;
+    this.optionImageUrl.set(null);
+    this.showVideo.set(true);
   }
 
   protected scrollThumbs(track: HTMLElement) {
@@ -131,6 +158,18 @@ export class ProductDetail {
   protected onColorChange(value: string) {
     this.selectedOptionId.set(value);
     this.colorError.set('');
+
+    const imageUrl = this.options()
+      ?.options.find((opt) => opt.id === value)
+      ?.imageUrl?.trim();
+
+    if (imageUrl) {
+      this.showVideo.set(false);
+      this.optionImageUrl.set(imageUrl);
+      return;
+    }
+
+    this.optionImageUrl.set(null);
   }
 
   protected fmtEUR(value: number) {
@@ -150,15 +189,25 @@ export class ProductDetail {
 
     const productOptions = this.options();
     const optionId = this.selectedOptionId();
-    const selectedOption =
+    const selectedChoice =
       productOptions && optionId
+        ? productOptions.options.find((opt) => opt.id === optionId)
+        : undefined;
+
+    const selectedOption =
+      productOptions && optionId && selectedChoice
         ? {
             groupLabel: productOptions.label,
-            id: optionId,
-            label:
-              productOptions.options.find((opt) => opt.id === optionId)?.id ?? optionId,
+            id: selectedChoice.id,
+            label: selectedChoice.label,
           }
         : undefined;
+
+    const cartImage =
+      selectedChoice?.imageUrl?.trim() ||
+      this.optionImageUrl() ||
+      this.galleryImages()[this.selectedImageIndex()] ||
+      this.galleryImages()[0];
 
     this.cart.add(
       {
@@ -166,11 +215,19 @@ export class ProductDetail {
         productId: p.uuid,
         name: p.name,
         price: getProductDisplayPrice(p),
-        imageUrl: this.selectedImageUrl(),
+        imageUrl: cartImage,
         selectedOption,
       },
       this.qty(),
     );
+  }
+
+  private resetMediaState() {
+    this.selectedImageIndex.set(0);
+    this.showVideo.set(false);
+    this.optionImageUrl.set(null);
+    this.selectedOptionId.set('');
+    this.colorError.set('');
   }
 
   private buildBreadcrumbs(product: Product, categories: Category[]): Breadcrumb[] {
