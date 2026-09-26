@@ -92,13 +92,27 @@ export function mapProductDBToProduct(productDB: ProductDB): Product {
         categoryId: productDB.categoryId,
         images: productDB.images,
         videoUrl: productDB.videoUrl?.trim() || undefined,
-        options: productDB.options,
+        options: mapProductOptions(productDB.options),
         isFeatured: productDB.isFeatured,
         isInOffer: productDB.isInOffer,
         offerPrice: typeof productDB.offerPrice === 'number' ? productDB.offerPrice : undefined,
         professionalPrice:
             typeof productDB.professionalPrice === 'number' ? productDB.professionalPrice : undefined,
     }
+}
+
+function mapProductOptions(options?: ProductOption | null): ProductOption | undefined {
+    if (!options?.options?.length) return undefined;
+
+    return {
+        label: options.label,
+        options: options.options.map((opt, index) => {
+            const label = String(opt.label ?? '').trim() || `Opción ${index + 1}`;
+            const id = String(opt.id ?? '').trim() || label;
+            const imageUrl = opt.imageUrl?.trim() || undefined;
+            return { id, label, imageUrl };
+        }),
+    };
 }
 
 export function isProductInOffer(product: Product): boolean {

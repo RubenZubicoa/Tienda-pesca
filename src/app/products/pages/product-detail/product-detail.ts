@@ -1,4 +1,5 @@
 import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, map, of, switchMap } from 'rxjs';
@@ -19,11 +20,14 @@ type Breadcrumb = {
 
 @Component({
   selector: 'app-product-detail',
-  imports: [RouterLink],
+  imports: [RouterLink, FormsModule],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.scss',
 })
 export class ProductDetail {
+  /** Placeholder temporal: ejemplo de uso por opción (demo cliente). */
+  private static readonly OPTION_USAGE_PLACEHOLDER = 'images/option-placeholder.jpg';
+
   private readonly route = inject(ActivatedRoute);
   private readonly productService = inject(ProductService);
   private readonly categoryService = inject(CategoryService);
@@ -36,8 +40,8 @@ export class ProductDetail {
   protected readonly selectedImageIndex = signal(0);
   /** Vista principal centrada en el vídeo explicativo (si existe). */
   protected readonly showVideo = signal(false);
-  /** Preview de la opción seleccionada; sustituye la imagen principal sin alterar la galería. */
-  protected readonly optionImageUrl = signal<string | null>(null);
+  /** Ejemplo de uso al seleccionar una opción (no sustituye la galería del producto). */
+  protected readonly optionUsageImageUrl = signal<string | null>(null);
 
   protected readonly options = computed(() => this.product()?.options ?? null);
   protected readonly selectedOptionId = signal('');
@@ -96,6 +100,7 @@ export class ProductDetail {
           next: ({ product, categories }) => {
             this.product.set(product);
             this.breadcrumbs.set(this.buildBreadcrumbs(product, categories));
+            this.applyDefaultOption(product);
             this.loading.set(false);
           },
           error: () => {
@@ -119,22 +124,17 @@ export class ProductDetail {
   }
 
   protected selectedImageUrl(): string {
-    const optionImg = this.optionImageUrl();
-    if (optionImg) return optionImg;
-
     const images = this.galleryImages();
     return images[this.selectedImageIndex()] ?? images[0];
   }
 
   protected selectImage(index: number) {
     this.showVideo.set(false);
-    this.optionImageUrl.set(null);
     this.selectedImageIndex.set(index);
   }
 
   protected selectVideo() {
     if (!this.productVideoUrl()) return;
-    this.optionImageUrl.set(null);
     this.showVideo.set(true);
   }
 
@@ -158,18 +158,14 @@ export class ProductDetail {
   protected onColorChange(value: string) {
     this.selectedOptionId.set(value);
     this.colorError.set('');
+    this.optionUsageImageUrl.set(value ? ProductDetail.OPTION_USAGE_PLACEHOLDER : null);
+  }
 
-    const imageUrl = this.options()
-      ?.options.find((opt) => opt.id === value)
-      ?.imageUrl?.trim();
-
-    if (imageUrl) {
-      this.showVideo.set(false);
-      this.optionImageUrl.set(imageUrl);
-      return;
+  private applyDefaultOption(product: Product) {
+    const firstOptionId = product.options?.options?.[0]?.id;
+    if (firstOptionId) {
+      this.onColorChange(firstOptionId);
     }
-
-    this.optionImageUrl.set(null);
   }
 
   protected fmtEUR(value: number) {
@@ -204,10 +200,7 @@ export class ProductDetail {
         : undefined;
 
     const cartImage =
-      selectedChoice?.imageUrl?.trim() ||
-      this.optionImageUrl() ||
-      this.galleryImages()[this.selectedImageIndex()] ||
-      this.galleryImages()[0];
+      this.galleryImages()[this.selectedImageIndex()] || this.galleryImages()[0];
 
     this.cart.add(
       {
@@ -225,7 +218,7 @@ export class ProductDetail {
   private resetMediaState() {
     this.selectedImageIndex.set(0);
     this.showVideo.set(false);
-    this.optionImageUrl.set(null);
+    this.optionUsageImageUrl.set(null);
     this.selectedOptionId.set('');
     this.colorError.set('');
   }

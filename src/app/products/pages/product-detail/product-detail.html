@@ -43,9 +43,9 @@
         <div class="detail__thumbs" #thumbsTrack aria-label="Miniaturas del producto">
           @for (img of galleryImages(); track img; let i = $index) {
           <button type="button" class="detail__thumb"
-            [class.detail__thumb--active]="!showingVideo() && !optionImageUrl() && selectedImageIndex() === i"
+            [class.detail__thumb--active]="!showingVideo() && selectedImageIndex() === i"
             (click)="selectImage(i)" [attr.aria-label]="'Ver imagen ' + (i + 1)"
-            [attr.aria-current]="!showingVideo() && !optionImageUrl() && selectedImageIndex() === i ? 'true' : null">
+            [attr.aria-current]="!showingVideo() && selectedImageIndex() === i ? 'true' : null">
             <img [src]="img" [alt]="p.name + ' miniatura ' + (i + 1)" loading="lazy" />
           </button>
           }
@@ -104,16 +104,32 @@
       <label class="field">
         <span class="field__label">{{ productOptions.label }} <span class="field__required"
             aria-hidden="true">*</span></span>
-        <select class="field__control" [value]="selectedOptionId()" (change)="onColorChange($any($event.target).value)">
-          <option value="">Seleccionar</option>
+        <select
+          class="field__control"
+          [ngModel]="selectedOptionId()"
+          (ngModelChange)="onColorChange($event)"
+        >
+          <option [ngValue]="''">Seleccionar</option>
           @for (opt of productOptions.options; track opt.id) {
-          <option [value]="opt.id">{{ opt.label }}</option>
+          <option [ngValue]="opt.id">{{ opt.label }}</option>
           }
         </select>
         @if (colorError()) {
         <span class="field__error">{{ colorError() }}</span>
         }
       </label>
+
+      @if (optionUsageImageUrl(); as usageImg) {
+      <figure class="detail__usage" aria-label="Ejemplo de uso">
+        <img
+          class="detail__usage-img"
+          [src]="usageImg"
+          alt="Ejemplo de cómo se puede utilizar el producto"
+          loading="lazy"
+        />
+        <figcaption class="detail__usage-caption">Ejemplo de uso</figcaption>
+      </figure>
+      }
       }
 
       <div class="field">
