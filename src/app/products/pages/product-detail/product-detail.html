@@ -23,19 +23,7 @@
   <div class="detail">
     <div class="detail__gallery" aria-label="Galería y descripción">
       <figure class="detail__main">
-        @if (showingVideo()) {
-          <video
-            class="detail__main-video"
-            [src]="productVideoUrl()!"
-            controls
-            playsinline
-            preload="metadata"
-          >
-            Tu navegador no soporta la reproducción de vídeo.
-          </video>
-        } @else {
-          <img class="detail__main-img" [src]="selectedImageUrl()" [alt]="p.name" loading="eager" />
-        }
+        <img class="detail__main-img" [src]="selectedImageUrl()" [alt]="p.name" loading="eager" />
       </figure>
 
       @if (showThumbs()) {
@@ -43,23 +31,10 @@
         <div class="detail__thumbs" #thumbsTrack aria-label="Miniaturas del producto">
           @for (img of galleryImages(); track img; let i = $index) {
           <button type="button" class="detail__thumb"
-            [class.detail__thumb--active]="!showingVideo() && selectedImageIndex() === i"
+            [class.detail__thumb--active]="selectedImageIndex() === i"
             (click)="selectImage(i)" [attr.aria-label]="'Ver imagen ' + (i + 1)"
-            [attr.aria-current]="!showingVideo() && selectedImageIndex() === i ? 'true' : null">
+            [attr.aria-current]="selectedImageIndex() === i ? 'true' : null">
             <img [src]="img" [alt]="p.name + ' miniatura ' + (i + 1)" loading="lazy" />
-          </button>
-          }
-          @if (productVideoUrl()) {
-          <button
-            type="button"
-            class="detail__thumb detail__thumb--video"
-            [class.detail__thumb--active]="showingVideo()"
-            (click)="selectVideo()"
-            aria-label="Ver vídeo del producto"
-            [attr.aria-current]="showingVideo() ? 'true' : null"
-          >
-            <img [src]="galleryImages()[0]" [alt]="" loading="lazy" />
-            <span class="detail__thumb-play" aria-hidden="true">▶</span>
           </button>
           }
         </div>
@@ -68,6 +43,39 @@
           ›
         </button>
       </div>
+      }
+
+      @if (showFlyExamples()) {
+      <section class="detail__flies" aria-labelledby="flies-title">
+        <div class="detail__section-head">
+          <h2 class="detail__section-title" id="flies-title">{{ options()!.label }}</h2>
+          <p class="detail__section-text">Selecciona el que más te guste</p>
+        </div>
+        <ul class="detail__flies-grid">
+          @for (fly of flyExamples(); track fly.id) {
+          <li>
+            <button
+              type="button"
+              class="detail__fly"
+              [class.detail__fly--active]="selectedOptionId() === fly.id"
+              (click)="selectFlyColor(fly.id)"
+              [attr.aria-label]="'Ver ejemplo de uso: ' + fly.label"
+              [attr.aria-pressed]="selectedOptionId() === fly.id"
+            >
+              <img
+                class="detail__fly-img"
+                [src]="fly.imageUrl"
+                [alt]="'Ejemplo de uso ' + fly.label"
+                loading="lazy"
+                width="200"
+                height="200"
+              />
+              <span class="detail__fly-label">{{ fly.label }}</span>
+            </button>
+          </li>
+          }
+        </ul>
+      </section>
       }
 
       <div class="detail__description" aria-label="Descripción del producto">
@@ -118,18 +126,6 @@
         <span class="field__error">{{ colorError() }}</span>
         }
       </label>
-
-      @if (optionUsageImageUrl(); as usageImg) {
-      <figure class="detail__usage" aria-label="Ejemplo de uso">
-        <img
-          class="detail__usage-img"
-          [src]="usageImg"
-          alt="Ejemplo de cómo se puede utilizar el producto"
-          loading="lazy"
-        />
-        <figcaption class="detail__usage-caption">Ejemplo de uso</figcaption>
-      </figure>
-      }
       }
 
       <div class="field">
@@ -168,6 +164,34 @@
           <span aria-hidden="true">X</span>
         </a>
       </div>
+
+      <section class="detail__videos detail__videos--side" aria-labelledby="videos-title">
+        <h2 class="detail__section-title" id="videos-title">Vídeos</h2>
+        <div class="detail__videos-stack">
+          @for (video of displayVideos(); track $index; let i = $index) {
+          <div
+            class="detail__video-frame"
+            [class.detail__video-frame--building]="video.underConstruction"
+          >
+            @if (video.underConstruction) {
+            <span class="detail__video-badge" title="En construcción">En construcción</span>
+            <div class="detail__video-placeholder" role="img" aria-label="Vídeo en construcción"></div>
+            } @else {
+            <video
+              class="detail__video"
+              [src]="video.url!"
+              controls
+              playsinline
+              preload="metadata"
+              [attr.aria-label]="'Vídeo del producto ' + (i + 1)"
+            >
+              Tu navegador no soporta la reproducción de vídeo.
+            </video>
+            }
+          </div>
+          }
+        </div>
+      </section>
     </aside>
   </div>
   }

@@ -1,5 +1,9 @@
 <header class="topbar">
     <div class="topbar__inner">
+      <a class="topbar__brand" routerLink="/" aria-label="The Lake - Inicio">
+        <img class="topbar__logo" src="logo-the-lake.png" alt="The Lake" />
+      </a>
+
       <nav class="nav" aria-label="Principal">
         @for (item of navItems; track item.label) {
           <a class="nav__link" [routerLink]="item.route" routerLinkActive="nav__link--active" [routerLinkActiveOptions]="{ exact: item.route === '/' }">{{ item.label }}</a>

@@ -18,6 +18,12 @@ type Breadcrumb = {
   link?: string | any[];
 };
 
+type FlyExample = {
+  id: string;
+  label: string;
+  imageUrl: string;
+};
+
 @Component({
   selector: 'app-product-detail',
   imports: [RouterLink, FormsModule],
@@ -25,8 +31,8 @@ type Breadcrumb = {
   styleUrl: './product-detail.scss',
 })
 export class ProductDetail {
-  /** Placeholder temporal: ejemplo de uso por opción (demo cliente). */
-  private static readonly OPTION_USAGE_PLACEHOLDER = 'images/option-placeholder.jpg';
+  /** Placeholder temporal de mosca montada por color (demo cliente). */
+  private static readonly FLY_PLACEHOLDER = 'images/option-placeholder.jpg';
 
   private readonly route = inject(ActivatedRoute);
   private readonly productService = inject(ProductService);
@@ -38,10 +44,6 @@ export class ProductDetail {
   protected readonly breadcrumbs = signal<Breadcrumb[]>([]);
   protected readonly loading = signal<boolean>(true);
   protected readonly selectedImageIndex = signal(0);
-  /** Vista principal centrada en el vídeo explicativo (si existe). */
-  protected readonly showVideo = signal(false);
-  /** Ejemplo de uso al seleccionar una opción (no sustituye la galería del producto). */
-  protected readonly optionUsageImageUrl = signal<string | null>(null);
 
   protected readonly options = computed(() => this.product()?.options ?? null);
   protected readonly selectedOptionId = signal('');
@@ -53,18 +55,43 @@ export class ProductDetail {
     return images.length > 0 ? images : ['placeholder.png'];
   });
 
-  protected readonly productVideoUrl = computed(() => {
-    const url = this.product()?.videoUrl?.trim();
-    return url || null;
+  protected readonly showThumbs = computed(() => this.galleryImages().length > 1);
+
+  /** Moscas montadas: todas las del producto, o solo la del color elegido. */
+  protected readonly flyExamples = computed((): FlyExample[] => {
+    const opts = this.options()?.options ?? [];
+    if (opts.length === 0) return [];
+
+    const selected = this.selectedOptionId();
+    const all = opts.map((opt) => ({
+      id: opt.id,
+      label: opt.label,
+      imageUrl: opt.imageUrl?.trim() || ProductDetail.FLY_PLACEHOLDER,
+    }));
+
+    if (!selected) return all;
+    return all.filter((fly) => fly.id === selected);
   });
 
-  protected readonly showingVideo = computed(
-    () => this.showVideo() && !!this.productVideoUrl(),
-  );
+  protected readonly showFlyExamples = computed(() => this.flyExamples().length > 0);
 
-  protected readonly showThumbs = computed(
-    () => this.galleryImages().length > 1 || !!this.productVideoUrl(),
-  );
+  /** Vídeos reales del back (máx. 2). */
+  protected readonly productVideos = computed(() => {
+    const fromApi = this.product()?.videoUrls?.filter(Boolean) ?? [];
+    return fromApi.slice(0, 2);
+  });
+
+  /** Sin videoUrls: mostramos huecos de demo marcados como en construcción. */
+  protected readonly displayVideos = computed(() => {
+    const real = this.productVideos();
+    if (real.length > 0) {
+      return real.map((url) => ({ url, underConstruction: false as const }));
+    }
+    return [
+      { url: null, underConstruction: true as const },
+      { url: null, underConstruction: true as const },
+    ];
+  });
 
   protected readonly descriptionBlocks = computed(() => this.parseDescription(this.product()?.description));
   protected readonly inOffer = computed(() => {
@@ -100,7 +127,6 @@ export class ProductDetail {
           next: ({ product, categories }) => {
             this.product.set(product);
             this.breadcrumbs.set(this.buildBreadcrumbs(product, categories));
-            this.applyDefaultOption(product);
             this.loading.set(false);
           },
           error: () => {
@@ -129,13 +155,7 @@ export class ProductDetail {
   }
 
   protected selectImage(index: number) {
-    this.showVideo.set(false);
     this.selectedImageIndex.set(index);
-  }
-
-  protected selectVideo() {
-    if (!this.productVideoUrl()) return;
-    this.showVideo.set(true);
   }
 
   protected scrollThumbs(track: HTMLElement) {
@@ -158,14 +178,10 @@ export class ProductDetail {
   protected onColorChange(value: string) {
     this.selectedOptionId.set(value);
     this.colorError.set('');
-    this.optionUsageImageUrl.set(value ? ProductDetail.OPTION_USAGE_PLACEHOLDER : null);
   }
 
-  private applyDefaultOption(product: Product) {
-    const firstOptionId = product.options?.options?.[0]?.id;
-    if (firstOptionId) {
-      this.onColorChange(firstOptionId);
-    }
+  protected selectFlyColor(optionId: string) {
+    this.onColorChange(this.selectedOptionId() === optionId ? '' : optionId);
   }
 
   protected fmtEUR(value: number) {
@@ -217,8 +233,6 @@ export class ProductDetail {
 
   private resetMediaState() {
     this.selectedImageIndex.set(0);
-    this.showVideo.set(false);
-    this.optionUsageImageUrl.set(null);
     this.selectedOptionId.set('');
     this.colorError.set('');
   }

@@ -23,8 +23,8 @@ export type ProductDB = {
     stock: number;
     categoryId: CategoryDB['_id'];
     images: string[];
-    /** Vídeo explicativo opcional del producto. */
-    videoUrl?: string;
+    /** Hasta 2 vídeos explicativos del producto. */
+    videoUrls?: string[];
     options?: ProductOption;
     isFeatured?:boolean;
     isInOffer?: boolean;
@@ -44,8 +44,8 @@ export interface Product {
     stock: number;
     categoryId: Category['uuid'];
     images: string[];
-    /** Vídeo explicativo opcional del producto. */
-    videoUrl?: string;
+    /** Hasta 2 vídeos explicativos del producto. */
+    videoUrls?: string[];
     options?: ProductOption;
     isFeatured?: boolean;
     isInOffer?: boolean;
@@ -61,7 +61,7 @@ export interface ProductCreate {
     stock: number;
     categoryId: Category['uuid'];
     images: string[];
-    videoUrl?: string;
+    videoUrls?: string[];
     options?: ProductOption[];
 }
 
@@ -73,7 +73,7 @@ export interface ProductUpdate {
     stock?: number;
     categoryId?: string;
     images?: string[];
-    videoUrl?: string;
+    videoUrls?: string[];
     options?: ProductOption;
 }
 
@@ -91,7 +91,7 @@ export function mapProductDBToProduct(productDB: ProductDB): Product {
         stock: productDB.stock,
         categoryId: productDB.categoryId,
         images: productDB.images,
-        videoUrl: productDB.videoUrl?.trim() || undefined,
+        videoUrls: mapProductVideos(productDB),
         options: mapProductOptions(productDB.options),
         isFeatured: productDB.isFeatured,
         isInOffer: productDB.isInOffer,
@@ -101,15 +101,26 @@ export function mapProductDBToProduct(productDB: ProductDB): Product {
     }
 }
 
+function mapProductVideos(productDB: ProductDB): string[] | undefined {
+    const urls = (productDB.videoUrls ?? [])
+        .map((url) => String(url ?? '').trim())
+        .filter(Boolean)
+        .slice(0, 2);
+    return urls.length > 0 ? urls : undefined;
+}
+
 function mapProductOptions(options?: ProductOption | null): ProductOption | undefined {
     if (!options?.options?.length) return undefined;
+
+    // Demo: si el back no envía imageUrl, usamos un placeholder de mosca montada.
+    const demoFlyImage = 'images/option-placeholder.jpg';
 
     return {
         label: options.label,
         options: options.options.map((opt, index) => {
             const label = String(opt.label ?? '').trim() || `Opción ${index + 1}`;
             const id = String(opt.id ?? '').trim() || label;
-            const imageUrl = opt.imageUrl?.trim() || undefined;
+            const imageUrl = opt.imageUrl?.trim() || demoFlyImage;
             return { id, label, imageUrl };
         }),
     };
