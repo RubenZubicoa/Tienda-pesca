@@ -7,11 +7,44 @@
       </h1>
       <p class="story-hero__lead">Aprende montajes en vivo con el material exacto que usamos.</p>
       <p class="story-hero__text">
-        Si hay un directo en curso lo verás aquí. A un lado, los materiales seleccionados para esa
-        sesión: haz clic en cualquiera para ir a su ficha de producto.
+        Si hay un directo en curso lo verás aquí. Debajo del vídeo, los materiales agrupados por
+        cada mosca de la sesión: haz clic en cualquiera para ir a su ficha de producto.
       </p>
     </div>
   </header>
+
+  <ng-template #materialsPanel let-flies="flies" let-heading="heading" let-aria="aria">
+    <aside class="live-streams__materials" [attr.aria-label]="aria">
+      <h3 class="live-streams__materials-title">{{ heading }}</h3>
+      <div class="live-streams__fly-groups">
+        @for (fly of flies; track fly.id) {
+          <section class="live-streams__fly-group" [attr.aria-labelledby]="'fly-' + fly.id">
+            <h4 class="live-streams__fly-name" [id]="'fly-' + fly.id">{{ fly.name }}</h4>
+            <ul class="live-streams__materials-list">
+              @for (material of fly.materials; track material.productId + material.name) {
+                <li>
+                  <a
+                    class="live-streams__material"
+                    [routerLink]="['/products', material.productId]"
+                  >
+                    <img
+                      class="live-streams__material-img"
+                      [src]="material.imageUrl || 'placeholder.png'"
+                      [alt]="material.name"
+                      loading="lazy"
+                    />
+                    <span class="live-streams__material-meta">
+                      <span class="live-streams__material-name">{{ material.name }}</span>
+                    </span>
+                  </a>
+                </li>
+              }
+            </ul>
+          </section>
+        }
+      </div>
+    </aside>
+  </ng-template>
 
   @if (liveStream(); as live) {
     <section class="story-panel" aria-labelledby="live-now-title">
@@ -39,29 +72,16 @@
             Tu navegador no admite la reproducción de este vídeo.
           </video>
         </div>
-        <aside class="live-streams__materials" aria-label="Materiales del directo">
-          <h3 class="live-streams__materials-title">Materiales en uso</h3>
-          <ul class="live-streams__materials-list">
-            @for (material of live.materials; track material.productId + material.name) {
-              <li>
-                <a
-                  class="live-streams__material"
-                  [routerLink]="['/products', material.productId]"
-                >
-                  <img
-                    class="live-streams__material-img"
-                    [src]="material.imageUrl || 'placeholder.png'"
-                    [alt]="material.name"
-                    loading="lazy"
-                  />
-                  <span class="live-streams__material-meta">
-                    <span class="live-streams__material-name">{{ material.name }}</span>
-                  </span>
-                </a>
-              </li>
+        <ng-container
+          *ngTemplateOutlet="
+            materialsPanel;
+            context: {
+              flies: live.flies,
+              heading: 'Materiales en uso',
+              aria: 'Materiales del directo por mosca',
             }
-          </ul>
-        </aside>
+          "
+        />
       </div>
     </section>
   }
@@ -70,7 +90,7 @@
     <p class="story-panel__label">Archivo</p>
     <h2 class="story-panel__title" id="archive-title">Directos anteriores</h2>
     <p class="story-panel__text">
-      Repasa sesiones pasadas y consulta los materiales que se utilizaron en cada montaje.
+      Repasa sesiones pasadas y consulta los materiales de cada mosca montada.
     </p>
 
     @if (archiveStreams().length === 0) {
@@ -113,29 +133,16 @@
               }
             }
           </div>
-          <aside class="live-streams__materials" aria-label="Materiales del directo grabado">
-            <h3 class="live-streams__materials-title">Materiales utilizados</h3>
-            <ul class="live-streams__materials-list">
-              @for (material of archive.materials; track material.productId + material.name) {
-                <li>
-                  <a
-                    class="live-streams__material"
-                    [routerLink]="['/products', material.productId]"
-                  >
-                    <img
-                      class="live-streams__material-img"
-                      [src]="material.imageUrl || 'placeholder.png'"
-                      [alt]="material.name"
-                      loading="lazy"
-                    />
-                    <span class="live-streams__material-meta">
-                      <span class="live-streams__material-name">{{ material.name }}</span>
-                    </span>
-                  </a>
-                </li>
+          <ng-container
+            *ngTemplateOutlet="
+              materialsPanel;
+              context: {
+                flies: archive.flies,
+                heading: 'Materiales utilizados',
+                aria: 'Materiales del directo grabado por mosca',
               }
-            </ul>
-          </aside>
+            "
+          />
         </div>
       }
     }
