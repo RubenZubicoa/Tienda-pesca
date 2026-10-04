@@ -27,6 +27,7 @@ export class Header {
     { label: 'Destinations', route: '/destinations' },
     { label: 'Boletines', route: '/boletines' },
     { label: 'Galeria de fotos', route: '/galeria' },
+    { label: 'Directos', route: '/directos' },
   ] as const;
 
   protected logout() {

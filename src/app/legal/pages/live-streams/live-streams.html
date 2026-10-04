@@ -1,0 +1,143 @@
+<section class="story-page live-streams-page" aria-label="Directos de montaje de moscas">
+  <header class="story-hero story-hero--solo">
+    <div class="story-hero__copy">
+      <p class="story-hero__eyebrow">Montaje en tiempo real</p>
+      <h1 class="story-hero__title">
+        Directos de <span class="story-hero__title-accent">moscas</span>
+      </h1>
+      <p class="story-hero__lead">Aprende montajes en vivo con el material exacto que usamos.</p>
+      <p class="story-hero__text">
+        Si hay un directo en curso lo verás aquí. A un lado, los materiales seleccionados para esa
+        sesión: haz clic en cualquiera para ir a su ficha de producto.
+      </p>
+    </div>
+  </header>
+
+  @if (liveStream(); as live) {
+    <section class="story-panel" aria-labelledby="live-now-title">
+      <div class="live-streams__section-head">
+        <div>
+          <p class="story-panel__label">Ahora mismo</p>
+          <h2 class="story-panel__title" id="live-now-title">{{ live.title }}</h2>
+        </div>
+        <span class="live-streams__badge" aria-label="Emisión en directo">EN DIRECTO</span>
+      </div>
+      @if (live.description) {
+        <p class="story-panel__text">{{ live.description }}</p>
+      }
+      <div class="live-streams__stage">
+        <div class="live-streams__player-wrap">
+          <video
+            class="live-streams__player"
+            controls
+            playsinline
+            autoplay
+            muted
+            [attr.aria-label]="live.title"
+          >
+            <source [src]="live.videoUrl" type="video/mp4" />
+            Tu navegador no admite la reproducción de este vídeo.
+          </video>
+        </div>
+        <aside class="live-streams__materials" aria-label="Materiales del directo">
+          <h3 class="live-streams__materials-title">Materiales en uso</h3>
+          <ul class="live-streams__materials-list">
+            @for (material of live.materials; track material.productId + material.name) {
+              <li>
+                <a
+                  class="live-streams__material"
+                  [routerLink]="['/products', material.productId]"
+                >
+                  <img
+                    class="live-streams__material-img"
+                    [src]="material.imageUrl || 'placeholder.png'"
+                    [alt]="material.name"
+                    loading="lazy"
+                  />
+                  <span class="live-streams__material-meta">
+                    <span class="live-streams__material-name">{{ material.name }}</span>
+                  </span>
+                </a>
+              </li>
+            }
+          </ul>
+        </aside>
+      </div>
+    </section>
+  }
+
+  <section class="story-panel" aria-labelledby="archive-title">
+    <p class="story-panel__label">Archivo</p>
+    <h2 class="story-panel__title" id="archive-title">Directos anteriores</h2>
+    <p class="story-panel__text">
+      Repasa sesiones pasadas y consulta los materiales que se utilizaron en cada montaje.
+    </p>
+
+    @if (archiveStreams().length === 0) {
+      <p class="live-streams__empty">Aún no hay directos grabados.</p>
+    } @else {
+      <div class="live-streams__archive-tabs" role="tablist" aria-label="Elegir directo anterior">
+        @for (stream of archiveStreams(); track stream.id) {
+          <button
+            class="live-streams__tab"
+            type="button"
+            role="tab"
+            [class.live-streams__tab--active]="selectedArchive()?.id === stream.id"
+            [attr.aria-selected]="selectedArchive()?.id === stream.id"
+            (click)="selectArchive(stream.id)"
+          >
+            <span class="live-streams__tab-title">{{ stream.title }}</span>
+            @if (stream.recordedAt) {
+              <span class="live-streams__tab-date">{{ formatDate(stream.recordedAt) }}</span>
+            }
+          </button>
+        }
+      </div>
+
+      @if (selectedArchive(); as archive) {
+        <div class="live-streams__stage">
+          <div class="live-streams__player-wrap">
+            @for (item of [archive]; track item.id) {
+              <video
+                class="live-streams__player"
+                controls
+                playsinline
+                preload="metadata"
+                [src]="item.videoUrl"
+                [attr.aria-label]="item.title"
+              >
+                Tu navegador no admite la reproducción de este vídeo.
+              </video>
+              @if (item.description) {
+                <p class="live-streams__caption">{{ item.description }}</p>
+              }
+            }
+          </div>
+          <aside class="live-streams__materials" aria-label="Materiales del directo grabado">
+            <h3 class="live-streams__materials-title">Materiales utilizados</h3>
+            <ul class="live-streams__materials-list">
+              @for (material of archive.materials; track material.productId + material.name) {
+                <li>
+                  <a
+                    class="live-streams__material"
+                    [routerLink]="['/products', material.productId]"
+                  >
+                    <img
+                      class="live-streams__material-img"
+                      [src]="material.imageUrl || 'placeholder.png'"
+                      [alt]="material.name"
+                      loading="lazy"
+                    />
+                    <span class="live-streams__material-meta">
+                      <span class="live-streams__material-name">{{ material.name }}</span>
+                    </span>
+                  </a>
+                </li>
+              }
+            </ul>
+          </aside>
+        </div>
+      }
+    }
+  </section>
+</section>
