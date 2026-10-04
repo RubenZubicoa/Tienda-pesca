@@ -90,60 +90,133 @@
     <p class="story-panel__label">Archivo</p>
     <h2 class="story-panel__title" id="archive-title">Directos anteriores</h2>
     <p class="story-panel__text">
-      Repasa sesiones pasadas y consulta los materiales de cada mosca montada.
+      Busca por título o filtra por año. El archivo crece con el tiempo; aquí solo se muestra una
+      página de resultados.
     </p>
 
     @if (archiveStreams().length === 0) {
       <p class="live-streams__empty">Aún no hay directos grabados.</p>
     } @else {
-      <div class="live-streams__archive-tabs" role="tablist" aria-label="Elegir directo anterior">
-        @for (stream of archiveStreams(); track stream.id) {
-          <button
-            class="live-streams__tab"
-            type="button"
-            role="tab"
-            [class.live-streams__tab--active]="selectedArchive()?.id === stream.id"
-            [attr.aria-selected]="selectedArchive()?.id === stream.id"
-            (click)="selectArchive(stream.id)"
-          >
-            <span class="live-streams__tab-title">{{ stream.title }}</span>
-            @if (stream.recordedAt) {
-              <span class="live-streams__tab-date">{{ formatDate(stream.recordedAt) }}</span>
-            }
-          </button>
+      <div class="live-streams__archive-toolbar">
+        <label class="live-streams__field">
+          <span class="live-streams__field-label">Buscar</span>
+          <input
+            class="live-streams__input"
+            type="search"
+            placeholder="Nombre o descripción…"
+            [value]="archiveQuery()"
+            (input)="onArchiveQuery($event)"
+          />
+        </label>
+
+        @if (archiveYears().length > 1) {
+          <label class="live-streams__field live-streams__field--year">
+            <span class="live-streams__field-label">Año</span>
+            <select
+              class="live-streams__select"
+              [value]="archiveYear()"
+              (change)="onArchiveYear($event)"
+            >
+              <option value="all">Todos</option>
+              @for (year of archiveYears(); track year) {
+                <option [value]="year">{{ year }}</option>
+              }
+            </select>
+          </label>
         }
       </div>
 
-      @if (selectedArchive(); as archive) {
-        <div class="live-streams__stage">
-          <div class="live-streams__player-wrap">
-            @for (item of [archive]; track item.id) {
-              <video
-                class="live-streams__player"
-                controls
-                playsinline
-                preload="metadata"
-                [src]="item.videoUrl"
-                [attr.aria-label]="item.title"
+      <p class="live-streams__archive-meta">
+        {{ filteredArchive().length }}
+        {{ filteredArchive().length === 1 ? 'directo' : 'directos' }}
+        @if (archiveTotalPages() > 1) {
+          · página {{ archiveCurrentPage() }} de {{ archiveTotalPages() }}
+        }
+      </p>
+
+      @if (filteredArchive().length === 0) {
+        <p class="live-streams__empty">No hay directos que coincidan con la búsqueda.</p>
+      } @else {
+        <ul class="live-streams__archive-list" role="listbox" aria-label="Directos del archivo">
+          @for (stream of pagedArchive(); track stream.id) {
+            <li>
+              <button
+                class="live-streams__archive-item"
+                type="button"
+                role="option"
+                [class.live-streams__archive-item--active]="selectedArchive()?.id === stream.id"
+                [attr.aria-selected]="selectedArchive()?.id === stream.id"
+                (click)="selectArchive(stream.id)"
               >
-                Tu navegador no admite la reproducción de este vídeo.
-              </video>
-              @if (item.description) {
-                <p class="live-streams__caption">{{ item.description }}</p>
-              }
-            }
+                <span class="live-streams__archive-item-main">
+                  <span class="live-streams__archive-item-title">{{ stream.title }}</span>
+                  @if (stream.recordedAt) {
+                    <span class="live-streams__archive-item-date">{{
+                      formatDate(stream.recordedAt)
+                    }}</span>
+                  }
+                </span>
+                <span class="live-streams__archive-item-flies">
+                  {{ stream.flies.length }}
+                  {{ stream.flies.length === 1 ? 'mosca' : 'moscas' }}
+                </span>
+              </button>
+            </li>
+          }
+        </ul>
+
+        @if (archiveTotalPages() > 1) {
+          <div class="live-streams__pager">
+            <button
+              class="live-streams__pager-btn"
+              type="button"
+              [disabled]="archiveCurrentPage() <= 1"
+              (click)="goToArchivePage(archiveCurrentPage() - 1)"
+            >
+              Anterior
+            </button>
+            <button
+              class="live-streams__pager-btn"
+              type="button"
+              [disabled]="archiveCurrentPage() >= archiveTotalPages()"
+              (click)="goToArchivePage(archiveCurrentPage() + 1)"
+            >
+              Siguiente
+            </button>
           </div>
-          <ng-container
-            *ngTemplateOutlet="
-              materialsPanel;
-              context: {
-                flies: archive.flies,
-                heading: 'Materiales utilizados',
-                aria: 'Materiales del directo grabado por mosca',
+        }
+
+        @if (selectedArchive(); as archive) {
+          <div class="live-streams__stage">
+            <div class="live-streams__player-wrap">
+              @for (item of [archive]; track item.id) {
+                <video
+                  class="live-streams__player"
+                  controls
+                  playsinline
+                  preload="metadata"
+                  [src]="item.videoUrl"
+                  [attr.aria-label]="item.title"
+                >
+                  Tu navegador no admite la reproducción de este vídeo.
+                </video>
+                @if (item.description) {
+                  <p class="live-streams__caption">{{ item.description }}</p>
+                }
               }
-            "
-          />
-        </div>
+            </div>
+            <ng-container
+              *ngTemplateOutlet="
+                materialsPanel;
+                context: {
+                  flies: archive.flies,
+                  heading: 'Materiales utilizados',
+                  aria: 'Materiales del directo grabado por mosca',
+                }
+              "
+            />
+          </div>
+        }
       }
     }
   </section>

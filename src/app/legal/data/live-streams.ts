@@ -42,7 +42,7 @@ export const liveStreamTemplates: LiveStreamTemplate[] = [
     ],
   },
   {
-    id: 'archive-nymphs',
+    id: 'archive-nymphs-2026-08',
     title: 'Sesión de ninfas',
     description: 'Dos clásicos de fondeo: proporciones, peso y variantes.',
     videoUrl: VIDEO_B,
@@ -54,7 +54,7 @@ export const liveStreamTemplates: LiveStreamTemplate[] = [
     ],
   },
   {
-    id: 'archive-streamer',
+    id: 'archive-streamer-2026-07',
     title: 'Streamer de conejo',
     description: 'Montaje de streamer con tiras de conejo y flash para aguas teñidas.',
     videoUrl: VIDEO_A,
@@ -63,7 +63,7 @@ export const liveStreamTemplates: LiveStreamTemplate[] = [
     flies: [{ id: 'archive-streamer-rabbit', name: 'Streamer de conejo' }],
   },
   {
-    id: 'archive-dries',
+    id: 'archive-dries-2026-06',
     title: 'Sesión de secas',
     description: 'Adams clásica y una CDC para superficie.',
     videoUrl: VIDEO_B,
@@ -72,6 +72,78 @@ export const liveStreamTemplates: LiveStreamTemplate[] = [
     flies: [
       { id: 'archive-adams', name: 'Seca Adams' },
       { id: 'archive-cdc-dry', name: 'Seca CDC' },
+    ],
+  },
+  {
+    id: 'archive-emergers-2026-04',
+    title: 'Emergentes de primavera',
+    description: 'CDC y RS2 para eclosiones de baetis.',
+    videoUrl: VIDEO_A,
+    isLive: false,
+    recordedAt: '2026-04-22T18:00:00.000Z',
+    flies: [
+      { id: 'archive-baetis-cdc', name: 'Emergente Baetis CDC' },
+      { id: 'archive-rs2', name: 'RS2' },
+    ],
+  },
+  {
+    id: 'archive-midges-2026-02',
+    title: 'Midges de invierno',
+    description: 'Patrones pequeños para aguas frías y claras.',
+    videoUrl: VIDEO_B,
+    isLive: false,
+    recordedAt: '2026-02-10T18:30:00.000Z',
+    flies: [
+      { id: 'archive-zebra-midge', name: 'Zebra Midge' },
+      { id: 'archive-wd40', name: 'WD-40' },
+    ],
+  },
+  {
+    id: 'archive-streamers-2025-11',
+    title: 'Streamers de otoño',
+    description: 'Perfiles grandes para truchas activas en aguas teñidas.',
+    videoUrl: VIDEO_A,
+    isLive: false,
+    recordedAt: '2025-11-18T19:00:00.000Z',
+    flies: [
+      { id: 'archive-woolly', name: 'Woolly Bugger' },
+      { id: 'archive-sculpin', name: 'Sculpin' },
+    ],
+  },
+  {
+    id: 'archive-terrestrials-2025-09',
+    title: 'Terrestres de final de verano',
+    description: 'Hormiga, escarabajo y saltamontes para orillas.',
+    videoUrl: VIDEO_B,
+    isLive: false,
+    recordedAt: '2025-09-03T17:00:00.000Z',
+    flies: [
+      { id: 'archive-ant', name: 'Hormiga de espuma' },
+      { id: 'archive-beetle', name: 'Escarabajo' },
+    ],
+  },
+  {
+    id: 'archive-caddis-2025-06',
+    title: 'Sesión de caddis',
+    description: 'Pupas y adultas para eclosiones de tarde.',
+    videoUrl: VIDEO_A,
+    isLive: false,
+    recordedAt: '2025-06-20T18:00:00.000Z',
+    flies: [
+      { id: 'archive-elk-hair', name: 'Elk Hair Caddis' },
+      { id: 'archive-soft-hackle', name: 'Soft Hackle' },
+    ],
+  },
+  {
+    id: 'archive-basics-2025-03',
+    title: 'Fundamentos de montaje',
+    description: 'Proporciones básicas con dos patrones de inicio.',
+    videoUrl: VIDEO_B,
+    isLive: false,
+    recordedAt: '2025-03-12T19:00:00.000Z',
+    flies: [
+      { id: 'archive-basic-nymph', name: 'Ninfa básica' },
+      { id: 'archive-basic-dry', name: 'Seca básica' },
     ],
   },
 ];

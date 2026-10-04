@@ -12,6 +12,8 @@ import {
   StreamMaterial,
 } from '../../data/live-streams';
 
+const ARCHIVE_PAGE_SIZE = 5;
+
 @Component({
   selector: 'app-live-streams',
   imports: [NgTemplateOutlet, RouterLink],
@@ -24,23 +26,78 @@ export class LiveStreams implements OnInit {
 
   protected readonly streams = signal<LiveStream[]>([]);
   protected readonly selectedArchiveId = signal<string | null>(null);
+  protected readonly archiveQuery = signal('');
+  protected readonly archiveYear = signal<'all' | number>('all');
+  protected readonly archivePage = signal(1);
+  protected readonly archivePageSize = ARCHIVE_PAGE_SIZE;
 
   protected readonly liveStream = computed(
     () => this.streams().find((stream) => stream.isLive) ?? null,
   );
 
   protected readonly archiveStreams = computed(() =>
-    this.streams().filter((stream) => !stream.isLive),
+    this.streams()
+      .filter((stream) => !stream.isLive)
+      .slice()
+      .sort((a, b) => {
+        const aTime = a.recordedAt ? Date.parse(a.recordedAt) : 0;
+        const bTime = b.recordedAt ? Date.parse(b.recordedAt) : 0;
+        return bTime - aTime;
+      }),
   );
 
+  protected readonly archiveYears = computed(() => {
+    const years = new Set<number>();
+    for (const stream of this.archiveStreams()) {
+      if (!stream.recordedAt) {
+        continue;
+      }
+      years.add(new Date(stream.recordedAt).getFullYear());
+    }
+    return [...years].sort((a, b) => b - a);
+  });
+
+  protected readonly filteredArchive = computed(() => {
+    const query = this.archiveQuery().trim().toLowerCase();
+    const year = this.archiveYear();
+
+    return this.archiveStreams().filter((stream) => {
+      if (year !== 'all') {
+        if (!stream.recordedAt || new Date(stream.recordedAt).getFullYear() !== year) {
+          return false;
+        }
+      }
+
+      if (!query) {
+        return true;
+      }
+
+      const haystack = `${stream.title} ${stream.description ?? ''}`.toLowerCase();
+      return haystack.includes(query);
+    });
+  });
+
+  protected readonly archiveTotalPages = computed(() =>
+    Math.max(1, Math.ceil(this.filteredArchive().length / this.archivePageSize)),
+  );
+
+  protected readonly archiveCurrentPage = computed(() =>
+    Math.min(this.archivePage(), this.archiveTotalPages()),
+  );
+
+  protected readonly pagedArchive = computed(() => {
+    const start = (this.archiveCurrentPage() - 1) * this.archivePageSize;
+    return this.filteredArchive().slice(start, start + this.archivePageSize);
+  });
+
   protected readonly selectedArchive = computed(() => {
-    const archive = this.archiveStreams();
-    if (archive.length === 0) {
+    const filtered = this.filteredArchive();
+    if (filtered.length === 0) {
       return null;
     }
 
     const selectedId = this.selectedArchiveId();
-    return archive.find((stream) => stream.id === selectedId) ?? archive[0];
+    return filtered.find((stream) => stream.id === selectedId) ?? filtered[0];
   });
 
   ngOnInit(): void {
@@ -60,6 +117,25 @@ export class LiveStreams implements OnInit {
     this.selectedArchiveId.set(streamId);
   }
 
+  protected onArchiveQuery(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.archiveQuery.set(value);
+    this.archivePage.set(1);
+    this.ensureSelectionInFiltered();
+  }
+
+  protected onArchiveYear(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value;
+    this.archiveYear.set(value === 'all' ? 'all' : Number(value));
+    this.archivePage.set(1);
+    this.ensureSelectionInFiltered();
+  }
+
+  protected goToArchivePage(page: number): void {
+    const next = Math.min(Math.max(1, page), this.archiveTotalPages());
+    this.archivePage.set(next);
+  }
+
   protected formatDate(iso?: string): string {
     if (!iso) {
       return '';
@@ -72,12 +148,31 @@ export class LiveStreams implements OnInit {
     }).format(new Date(iso));
   }
 
+  private ensureSelectionInFiltered(): void {
+    const filtered = this.filteredArchive();
+    if (filtered.length === 0) {
+      return;
+    }
+
+    const selectedId = this.selectedArchiveId();
+    if (!selectedId || !filtered.some((stream) => stream.id === selectedId)) {
+      this.selectedArchiveId.set(filtered[0].id);
+    }
+  }
+
   private buildStreams(products: Product[]): LiveStream[] {
     const materials = this.toMaterials(products);
     const chunks = this.chunkMaterials(materials, 3, countTemplateFlies());
     const streams = assignMaterialsToStreams(chunks);
 
-    const firstArchive = streams.find((stream) => !stream.isLive);
+    const firstArchive = streams
+      .filter((stream) => !stream.isLive)
+      .sort((a, b) => {
+        const aTime = a.recordedAt ? Date.parse(a.recordedAt) : 0;
+        const bTime = b.recordedAt ? Date.parse(b.recordedAt) : 0;
+        return bTime - aTime;
+      })[0];
+
     if (firstArchive && !this.selectedArchiveId()) {
       this.selectedArchiveId.set(firstArchive.id);
     }
@@ -90,7 +185,7 @@ export class LiveStreams implements OnInit {
       return fallbackMaterials;
     }
 
-    return products.slice(0, 18).map((product) => ({
+    return products.slice(0, 24).map((product) => ({
       productId: product.uuid,
       name: product.name,
       imageUrl: product.images?.[0] || 'placeholder.png',
