@@ -1,9 +1,10 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { map } from 'rxjs';
 import { Register } from '../register/register';
 import { Login as LoginService } from '../../services/login';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class Login {
   protected readonly showRegister = signal(false);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
   private readonly loginService = inject(LoginService);
   private readonly destroyRef = inject(DestroyRef);
@@ -21,6 +23,17 @@ export class Login {
   protected readonly errorMessage = signal('');
   protected readonly successMessage = signal('');
   protected readonly isSubmitting = signal(false);
+
+  private readonly authReason = toSignal(
+    this.route.queryParamMap.pipe(map((params) => params.get('reason') ?? '')),
+    { initialValue: this.route.snapshot.queryParamMap.get('reason') ?? '' },
+  );
+
+  protected readonly requiresAuthMessage = computed(() =>
+    this.authReason() === 'checkout'
+      ? 'Para finalizar la compra debes iniciar sesión o registrarte.'
+      : '',
+  );
 
   protected readonly form = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -35,14 +48,19 @@ export class Login {
     }
 
     const { email, password } = this.form.getRawValue();
+    this.isSubmitting.set(true);
+    this.errorMessage.set('');
 
     this.loginService.login(email, password).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
-        this.router.navigateByUrl('/');
+        this.isSubmitting.set(false);
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
+        this.router.navigateByUrl(returnUrl);
       },
       error: (error) => {
-        this.errorMessage.set(error.error.message);
-      }
+        this.isSubmitting.set(false);
+        this.errorMessage.set(error.error?.message ?? 'No se pudo iniciar sesión.');
+      },
     });
   }
 
@@ -54,5 +72,6 @@ export class Login {
 
   protected closeRegister() {
     this.showRegister.set(false);
+    this.successMessage.set('Cuenta creada. Inicia sesión para continuar.');
   }
 }

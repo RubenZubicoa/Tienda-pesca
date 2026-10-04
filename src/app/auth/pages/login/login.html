@@ -5,7 +5,11 @@
     <header class="login-page__header">
       <h2 class="panel__title">INICIAR SESIÓN</h2>
       <p class="panel__description login-page__intro">
-        Accede a tu cuenta para gestionar pedidos y reservas.
+        @if (requiresAuthMessage()) {
+          {{ requiresAuthMessage() }}
+        } @else {
+          Accede a tu cuenta para gestionar pedidos y reservas.
+        }
       </p>
     </header>
 
