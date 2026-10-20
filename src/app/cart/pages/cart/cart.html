@@ -51,7 +51,9 @@
           </p>
           <p class="summary-card__hint">Impuestos y envío se calculan en el checkout.</p>
 
-          <a class="btn btn--primary" routerLink="/checkout">FINALIZAR COMPRA</a>
+          <button class="btn btn--primary" type="button" (click)="goToCheckout()">
+            FINALIZAR COMPRA
+          </button>
           <button class="btn btn--ghost btn--sm" type="button" (click)="cart.clear()">VACIAR CARRITO</button>
         </div>
       </aside>

@@ -1,5 +1,6 @@
 import { HttpContext, HttpContextToken, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { throwError } from 'rxjs';
 import { TokenService } from '../../auth/services/token-service';
 
 /** Marca peticiones que exigen estar autenticado (fallan si no hay JWT). */
@@ -10,23 +11,20 @@ export function checkToken() {
 }
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
-  const tokenService = inject(TokenService);
-  const token = tokenService.getToken();
-  const requiresAuth = req.context.get(CHECK_TOKEN);
-
-  if (requiresAuth && !token) {
-    throw new Error('Ha ocurrido un error, por favor vuelva a iniciar sesión');
+  if (!req.context.get(CHECK_TOKEN)) {
+    return next(req);
   }
 
+  const tokenService = inject(TokenService);
+  const token = tokenService.getToken() ?? tokenService.token();
+
   if (!token) {
-    return next(req);
+    return throwError(() => new Error('Ha ocurrido un error, por favor vuelva a iniciar sesión'));
   }
 
   return next(
     req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: req.headers.set('authorization', `Bearer ${token}`),
     }),
   );
 };

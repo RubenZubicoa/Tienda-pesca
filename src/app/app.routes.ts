@@ -18,6 +18,7 @@ export const routes: Routes = [
     },
     {
         path: 'checkout',
+        canActivate: [authGuard],
         loadComponent: () => import('./checkout/pages/checkout/checkout').then(m => m.Checkout),
     },
     {
@@ -60,6 +61,11 @@ export const routes: Routes = [
     {
         path: 'galeria',
         loadComponent: () => import('./legal/pages/gallery/gallery').then(m => m.Gallery),
+    },
+    {
+        path: 'directos',
+        loadComponent: () =>
+          import('./legal/pages/live-streams/live-streams').then(m => m.LiveStreams),
     },
     {
         path: 'private-reserve',
