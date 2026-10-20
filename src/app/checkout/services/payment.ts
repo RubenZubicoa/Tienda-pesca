@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { PaymentIntentResponse } from '../models/payment-intent-response';
 import { checkToken } from '../../core/interceptors/token.interceptor';
-import { TokenService } from '../../auth/services/token-service';
 
 @Injectable({
   providedIn: 'root',
