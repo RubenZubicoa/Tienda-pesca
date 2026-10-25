@@ -6,6 +6,18 @@
   grid-template-columns: 1fr;
 }
 
+.shipping-tables__status {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(232, 226, 214, 0.85);
+  text-align: left;
+  hyphens: manual;
+}
+
+.shipping-tables__status--error {
+  color: #f0a0a0;
+}
+
 .shipping-table {
   padding: 12px;
   border-radius: 12px;

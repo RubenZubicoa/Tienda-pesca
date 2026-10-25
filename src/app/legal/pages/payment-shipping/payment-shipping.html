@@ -24,73 +24,39 @@
       las siguientes fórmulas y valores de envío:
     </p>
 
-    <div class="shipping-tables">
-      <div class="shipping-table">
-        <h3 class="shipping-table__title">Península</h3>
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">Servicio</th>
-              <th scope="col">Precio</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Correos (tamaño paquete normal)</td>
-              <td>10 €</td>
-            </tr>
-            <tr>
-              <td>MRW (tamaño paquete normal)</td>
-              <td>20 €</td>
-            </tr>
-          </tbody>
-        </table>
+    @if (loading()) {
+      <p class="shipping-tables__status">Cargando tarifas de envío…</p>
+    } @else if (loadError()) {
+      <p class="shipping-tables__status shipping-tables__status--error">
+        No se han podido cargar las tarifas de envío. Inténtalo más tarde.
+      </p>
+    } @else if (shippingZones().length === 0) {
+      <p class="shipping-tables__status">No hay tarifas de envío disponibles.</p>
+    } @else {
+      <div class="shipping-tables">
+        @for (zone of shippingZones(); track zone.uuid) {
+          <div class="shipping-table">
+            <h3 class="shipping-table__title">{{ zone.zone }}</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Servicio</th>
+                  <th scope="col">Precio</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of zone.costs; track item.company) {
+                  <tr>
+                    <td>{{ item.company }} (tamaño paquete normal)</td>
+                    <td>{{ fmtEUR(item.cost) }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
       </div>
-
-      <div class="shipping-table">
-        <h3 class="shipping-table__title">Resto de España</h3>
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">Servicio</th>
-              <th scope="col">Precio</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Correos (tamaño paquete normal)</td>
-              <td>10 €</td>
-            </tr>
-            <tr>
-              <td>MRW (tamaño paquete normal)</td>
-              <td>20 €</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="shipping-table">
-        <h3 class="shipping-table__title">Resto del mundo</h3>
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">Servicio</th>
-              <th scope="col">Precio</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Correos (tamaño paquete normal)</td>
-              <td>50 €</td>
-            </tr>
-            <tr>
-              <td>MRW (tamaño paquete normal)</td>
-              <td>100 €</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    }
   </section>
 
   <section class="story-panel" aria-labelledby="terms-payment-title">
