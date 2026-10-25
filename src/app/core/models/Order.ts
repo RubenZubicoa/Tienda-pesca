@@ -1,5 +1,3 @@
-import { ProductWithQuantity } from "./Product";
-
 export type OrderStatus = 'pending' | 'shipped' | 'delivered' | 'cancelled';
 
 export interface OrderItem {
@@ -19,7 +17,7 @@ export type OrderDB = {
   products: {uuid: string; productName: string; qty: number; price: number}[];
   status: OrderStatus;
   createdAt: string;
-  total: number;
+  shippingCost: number;
   updatedAt?: number;
   isDeleted?: boolean;
 }
@@ -35,7 +33,7 @@ export interface Order {
   products: {uuid: string; productName: string; qty: number; price: number}[];
   status: OrderStatus;
   createdAt: string;
-  total: number;
+  shippingCost: number;
 }
 
 export type AddOrder = Omit<Order, 'uuid' | 'createdAt' | 'updatedAt' | 'status'> & {
@@ -55,6 +53,15 @@ export function mapOrderDBToOrder(orderDB: OrderDB): Order {
     products: orderDB.products,
     status: orderDB.status,
     createdAt: orderDB.createdAt,
-    total: orderDB.total,
+    shippingCost: typeof orderDB.shippingCost === 'number' ? orderDB.shippingCost : 0,
   }
+}
+
+export function getOrderSubtotal(order: Pick<Order, 'products'>): number {
+  return (order.products ?? []).reduce((sum, item) => sum + item.price * item.qty, 0);
+}
+
+export function getOrderTotal(order: Pick<Order, 'products' | 'shippingCost'>): number {
+  const shippingCost = typeof order.shippingCost === 'number' ? order.shippingCost : 0;
+  return getOrderSubtotal(order) + shippingCost;
 }

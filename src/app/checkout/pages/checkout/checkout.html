@@ -56,6 +56,49 @@
         </div>
       </div>
 
+      <h3 class="checkout__subtitle">Gastos de envío</h3>
+
+      @if (shippingLoading()) {
+        <p class="checkout__hint">Cargando opciones de envío…</p>
+      } @else if (shippingError()) {
+        <p class="checkout__error" role="alert">
+          No se han podido cargar las opciones de envío. Recarga la página e inténtalo de nuevo.
+        </p>
+      } @else if (shippingZones().length === 0) {
+        <p class="checkout__hint">No hay opciones de envío disponibles.</p>
+      } @else {
+        <div class="shipping-options" role="radiogroup" aria-label="Opciones de envío">
+          @for (zone of shippingZones(); track zone.uuid) {
+            <div class="shipping-zone">
+              <p class="shipping-zone__title">{{ zone.zone }}</p>
+              <div class="shipping-zone__options">
+                @for (item of zone.costs; track item.company) {
+                  @let optionId = zone.uuid + '::' + item.company;
+                  <label
+                    class="shipping-option"
+                    [class.shipping-option--active]="selectedShippingId() === optionId"
+                  >
+                    <input
+                      class="shipping-option__input"
+                      type="radio"
+                      name="shippingOption"
+                      [value]="optionId"
+                      [checked]="selectedShippingId() === optionId"
+                      (change)="selectShippingOption(optionId)"
+                    />
+                    <span class="shipping-option__content">
+                      <span class="shipping-option__label">{{ item.company }}</span>
+                      <span class="shipping-option__hint">Tamaño paquete normal</span>
+                    </span>
+                    <strong class="shipping-option__price">{{ fmtEUR(item.cost) }}</strong>
+                  </label>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+
       <h3 class="checkout__subtitle">Pago</h3>
 
       <div class="payment-methods" role="radiogroup" aria-label="Forma de pago">
@@ -155,8 +198,15 @@
           <strong>{{ fmtEUR(subtotal()) }}</strong>
         </p>
         <p class="summary-card__row">
-          <span>Envío</span>
-          <strong>{{ fmtEUR(shipping()) }}</strong>
+          <span>
+            Envío
+            @if (selectedShipping(); as shippingOption) {
+              <small class="summary-card__shipping-meta">
+                {{ shippingOption.company }} · {{ shippingOption.zone }}
+              </small>
+            }
+          </span>
+          <strong>{{ selectedShipping() ? fmtEUR(shipping()) : '—' }}</strong>
         </p>
         <p class="summary-card__row summary-card__row--total">
           <span>Total</span>

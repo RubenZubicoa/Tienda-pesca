@@ -39,8 +39,16 @@
               </ul>
 
               <footer class="order-card__footer">
-                <span>Total</span>
-                <strong>{{ fmtEUR(order.total) }}</strong>
+                <div class="order-card__totals">
+                  <p class="order-card__total-row">
+                    <span>Envío</span>
+                    <span>{{ fmtEUR(order.shippingCost) }}</span>
+                  </p>
+                  <p class="order-card__total-row order-card__total-row--total">
+                    <span>Total</span>
+                    <strong>{{ fmtEUR(orderTotal(order)) }}</strong>
+                  </p>
+                </div>
               </footer>
             </article>
           }

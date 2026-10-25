@@ -1,6 +1,7 @@
-import { Component, computed, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { CurrentUserService } from '../../../auth/services/current-user-service';
 import { CartService } from '../../../core/services/cart';
 import {
   injectStripe,
@@ -13,10 +14,20 @@ import { StipeService } from '../../../shared/services/stipe-service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AddOrder } from '../../../core/models/Order';
 import { OrderService } from '../../../core/services/order-service';
+import { ShippingCost } from '../../../core/models/ShippingCost';
+import { ShippingCostService } from '../../../core/services/shipping-cost';
 import {
   CHECKOUT_PAYMENT_METHODS,
   CheckoutPaymentMethod,
 } from '../../models/payment-method';
+
+type ShippingOption = {
+  id: string;
+  zoneId: string;
+  zone: string;
+  company: string;
+  cost: number;
+};
 
 @Component({
   selector: 'app-checkout',
@@ -33,12 +44,36 @@ export class Checkout implements OnInit {
   private readonly stipeService = inject(StipeService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly orderService = inject(OrderService);
+  private readonly shippingCostService = inject(ShippingCostService);
+  private readonly currentUser = inject(CurrentUserService);
   protected readonly stripe = injectStripe();
 
   protected readonly paymentMethods = CHECKOUT_PAYMENT_METHODS;
   protected readonly selectedPaymentMethod = signal<CheckoutPaymentMethod>('card');
 
-  protected readonly shipping = computed(() => (this.cart.subtotal() > 50 ? 0 : 4.99));
+  protected readonly shippingZones = signal<ShippingCost[]>([]);
+  protected readonly shippingLoading = signal(true);
+  protected readonly shippingError = signal(false);
+  protected readonly selectedShippingId = signal('');
+
+  protected readonly shippingOptions = computed((): ShippingOption[] =>
+    this.shippingZones().flatMap((zone) =>
+      zone.costs.map((item) => ({
+        id: `${zone.uuid}::${item.company}`,
+        zoneId: zone.uuid,
+        zone: zone.zone,
+        company: item.company,
+        cost: item.cost,
+      })),
+    ),
+  );
+
+  protected readonly selectedShipping = computed(() => {
+    const id = this.selectedShippingId();
+    return this.shippingOptions().find((option) => option.id === id) ?? null;
+  });
+
+  protected readonly shipping = computed(() => this.selectedShipping()?.cost ?? 0);
   protected readonly subtotal = computed(() => this.cart.subtotal());
   protected readonly total = computed(() => this.subtotal() + this.shipping());
   protected readonly totalInCents = computed(() => Math.round(this.total() * 100));
@@ -98,8 +133,24 @@ export class Checkout implements OnInit {
 
   protected readonly elementsOptions = signal<StripeElementsOptions | null>(null);
 
+  constructor() {
+    effect(() => {
+      const user = this.currentUser.user();
+      if (!user) return;
+
+      this.form.patchValue({
+        dni: user.dni?.trim() || '',
+        name: user.name?.trim() || '',
+        lastName: user.lastName?.trim() || '',
+        email: user.email?.trim() || '',
+        phone: user.phone?.trim() || '',
+        address: user.address?.trim() || '',
+      });
+    });
+  }
+
   ngOnInit(): void {
-    this.loadStripeElements();
+    this.loadShippingOptions();
   }
 
   protected selectPaymentMethod(method: CheckoutPaymentMethod) {
@@ -107,16 +158,30 @@ export class Checkout implements OnInit {
     this.paymentError.set('');
 
     if (method === 'card') {
-      this.loadStripeElements();
+      this.reloadStripeElements();
       return;
     }
 
     this.elementsOptions.set(null);
   }
 
+  protected selectShippingOption(optionId: string) {
+    this.selectedShippingId.set(optionId);
+    this.paymentError.set('');
+
+    if (this.selectedPaymentMethod() === 'card') {
+      this.reloadStripeElements();
+    }
+  }
+
   protected submit() {
     if (this.form.invalid || this.isPaying()) {
       this.paymentError.set('Por favor, completa todos los campos obligatorios.');
+      return;
+    }
+
+    if (!this.selectedShipping()) {
+      this.paymentError.set('Selecciona una opción de envío antes de continuar.');
       return;
     }
 
@@ -154,6 +219,31 @@ export class Checkout implements OnInit {
     return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(value);
   }
 
+  private loadShippingOptions() {
+    this.shippingLoading.set(true);
+    this.shippingError.set(false);
+
+    this.shippingCostService
+      .getShippingCosts()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (zones) => {
+          this.shippingZones.set(zones);
+          this.shippingLoading.set(false);
+
+          const firstOption = this.shippingOptions()[0];
+          if (firstOption) {
+            this.selectShippingOption(firstOption.id);
+          }
+        },
+        error: () => {
+          this.shippingZones.set([]);
+          this.shippingLoading.set(false);
+          this.shippingError.set(true);
+        },
+      });
+  }
+
   private buildOrder(method: CheckoutPaymentMethod): AddOrder {
     const formData = this.form.getRawValue();
 
@@ -173,12 +263,21 @@ export class Checkout implements OnInit {
         qty: item.qty,
         price: item.price,
       })),
-      total: this.total(),
+      shippingCost: this.shipping(),
     };
+  }
+
+  private reloadStripeElements() {
+    this.elementsOptions.set(null);
+    this.loadStripeElements();
   }
 
   private loadStripeElements() {
     if (this.selectedPaymentMethod() !== 'card' || this.elementsOptions()) {
+      return;
+    }
+
+    if (!this.selectedShipping()) {
       return;
     }
 

@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CurrentUserService } from '../../../auth/services/current-user-service';
-import { Order, OrderStatus } from '../../../core/models/Order';
+import { getOrderTotal, Order, OrderStatus } from '../../../core/models/Order';
 import { OrderService } from '../../../core/services/order-service';
 import { User } from '../../../core/services/user';
 import { UpdateUser } from '../../../core/models/User';
@@ -73,6 +73,10 @@ export class Account {
 
   protected statusLabel(status: OrderStatus): string {
     return this.statusLabels[status];
+  }
+
+  protected orderTotal(order: Order): number {
+    return getOrderTotal(order);
   }
 
   protected fmtEUR(value: number) {
