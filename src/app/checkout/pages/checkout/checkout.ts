@@ -29,6 +29,8 @@ type ShippingOption = {
   cost: number;
 };
 
+type CheckoutStep = 1 | 2 | 3;
+
 @Component({
   selector: 'app-checkout',
   imports: [ReactiveFormsModule, RouterLink, StripePaymentElementComponent, StripeElementsDirective, NgxStripeModule],
@@ -47,6 +49,13 @@ export class Checkout implements OnInit {
   private readonly shippingCostService = inject(ShippingCostService);
   private readonly currentUser = inject(CurrentUserService);
   protected readonly stripe = injectStripe();
+
+  protected readonly steps = [
+    { id: 1 as const, label: 'Tus datos' },
+    { id: 2 as const, label: 'Envío' },
+    { id: 3 as const, label: 'Pago' },
+  ];
+  protected readonly currentStep = signal<CheckoutStep>(1);
 
   protected readonly paymentMethods = CHECKOUT_PAYMENT_METHODS;
   protected readonly selectedPaymentMethod = signal<CheckoutPaymentMethod>('card');
@@ -111,6 +120,17 @@ export class Checkout implements OnInit {
     return 'CONFIRMAR PEDIDO';
   });
 
+  protected readonly stepTitle = computed(() => {
+    switch (this.currentStep()) {
+      case 1:
+        return 'Datos personales';
+      case 2:
+        return 'Gastos de envío';
+      case 3:
+        return 'Forma de pago';
+    }
+  });
+
   protected readonly form = this.fb.group({
     dni: ['', [Validators.required]],
     name: ['', [Validators.required, Validators.minLength(3)]],
@@ -153,11 +173,41 @@ export class Checkout implements OnInit {
     this.loadShippingOptions();
   }
 
+  protected goToStep(step: CheckoutStep) {
+    if (step < this.currentStep()) {
+      this.paymentError.set('');
+      this.currentStep.set(step);
+      return;
+    }
+
+    if (step === 2 && !this.validateStep1()) return;
+    if (step === 3 && (!this.validateStep1() || !this.validateStep2())) return;
+
+    this.paymentError.set('');
+    this.currentStep.set(step);
+
+    if (step === 3 && this.selectedPaymentMethod() === 'card') {
+      this.reloadStripeElements();
+    }
+  }
+
+  protected nextStep() {
+    const step = this.currentStep();
+    if (step === 1) this.goToStep(2);
+    else if (step === 2) this.goToStep(3);
+  }
+
+  protected prevStep() {
+    const step = this.currentStep();
+    if (step === 2) this.goToStep(1);
+    else if (step === 3) this.goToStep(2);
+  }
+
   protected selectPaymentMethod(method: CheckoutPaymentMethod) {
     this.selectedPaymentMethod.set(method);
     this.paymentError.set('');
 
-    if (method === 'card') {
+    if (method === 'card' && this.currentStep() === 3) {
       this.reloadStripeElements();
       return;
     }
@@ -169,19 +219,15 @@ export class Checkout implements OnInit {
     this.selectedShippingId.set(optionId);
     this.paymentError.set('');
 
-    if (this.selectedPaymentMethod() === 'card') {
+    if (this.currentStep() === 3 && this.selectedPaymentMethod() === 'card') {
       this.reloadStripeElements();
     }
   }
 
   protected submit() {
-    if (this.form.invalid || this.isPaying()) {
-      this.paymentError.set('Por favor, completa todos los campos obligatorios.');
-      return;
-    }
+    if (this.currentStep() !== 3 || this.isPaying()) return;
 
-    if (!this.selectedShipping()) {
-      this.paymentError.set('Selecciona una opción de envío antes de continuar.');
+    if (!this.validateStep1() || !this.validateStep2()) {
       return;
     }
 
@@ -219,6 +265,25 @@ export class Checkout implements OnInit {
     return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(value);
   }
 
+  private validateStep1(): boolean {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.paymentError.set('Completa todos tus datos antes de continuar.');
+      this.currentStep.set(1);
+      return false;
+    }
+    return true;
+  }
+
+  private validateStep2(): boolean {
+    if (!this.selectedShipping()) {
+      this.paymentError.set('Selecciona una opción de envío antes de continuar.');
+      this.currentStep.set(2);
+      return false;
+    }
+    return true;
+  }
+
   private loadShippingOptions() {
     this.shippingLoading.set(true);
     this.shippingError.set(false);
@@ -232,8 +297,8 @@ export class Checkout implements OnInit {
           this.shippingLoading.set(false);
 
           const firstOption = this.shippingOptions()[0];
-          if (firstOption) {
-            this.selectShippingOption(firstOption.id);
+          if (firstOption && !this.selectedShippingId()) {
+            this.selectedShippingId.set(firstOption.id);
           }
         },
         error: () => {
@@ -277,7 +342,7 @@ export class Checkout implements OnInit {
       return;
     }
 
-    if (!this.selectedShipping()) {
+    if (this.currentStep() !== 3 || !this.selectedShipping()) {
       return;
     }
 

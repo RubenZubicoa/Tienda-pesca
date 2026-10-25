@@ -8,227 +8,266 @@
       <a class="btn btn--primary btn--sm" routerLink="/">VOLVER A LA TIENDA</a>
     </div>
   } @else if (cart.items().length === 0) {
-  <p class="panel__description">No tienes productos en el carrito.</p>
-  <a class="btn btn--primary btn--sm" routerLink="/">VOLVER A LA TIENDA</a>
+    <p class="panel__description">No tienes productos en el carrito.</p>
+    <a class="btn btn--primary btn--sm" routerLink="/">VOLVER A LA TIENDA</a>
   } @else {
-  <div class="checkout">
-    <form class="checkout__form" [formGroup]="form" (ngSubmit)="submit()" aria-label="Datos de envío y pago">
-      <h3 class="checkout__subtitle">Datos de envío</h3>
+    <div class="checkout">
+      <form class="checkout__form" [formGroup]="form" (ngSubmit)="submit()" aria-label="Finalizar compra">
+        <ol class="checkout-steps" aria-label="Pasos del checkout">
+          @for (step of steps; track step.id) {
+            <li
+              class="checkout-steps__item"
+              [class.checkout-steps__item--active]="currentStep() === step.id"
+              [class.checkout-steps__item--done]="currentStep() > step.id"
+            >
+              <button
+                class="checkout-steps__btn"
+                type="button"
+                (click)="goToStep(step.id)"
+                [attr.aria-current]="currentStep() === step.id ? 'step' : null"
+              >
+                <span class="checkout-steps__index">{{ step.id }}</span>
+                <span class="checkout-steps__label">{{ step.label }}</span>
+              </button>
+            </li>
+          }
+        </ol>
 
-      <div class="field">
-        <label class="field__label">DNI</label>
-        <input class="field__input" type="text" formControlName="dni" />
-      </div>
-
-      <div class="field">
-        <label class="field__label">Nombre</label>
-        <input class="field__input" type="text" formControlName="name" />
-      </div>
-
-      <div class="field">
-        <label class="field__label">Apellidos</label>
-        <input class="field__input" type="text" formControlName="lastName" />
-      </div>
-
-      <div class="field">
-        <label class="field__label">Teléfono</label>
-        <input class="field__input" type="text" formControlName="phone" />
-      </div>
-
-      <div class="field">
-        <label class="field__label">Email</label>
-        <input class="field__input" type="email" formControlName="email" />
-      </div>
-
-      <div class="field">
-        <label class="field__label">Dirección</label>
-        <input class="field__input" type="text" formControlName="address" />
-      </div>
-
-      <div class="fieldRow">
-        <div class="field">
-          <label class="field__label">Ciudad</label>
-          <input class="field__input" type="text" formControlName="city" />
+        <div class="checkout__step-head">
+          <p class="checkout__step-kicker">Paso {{ currentStep() }} de 3</p>
+          <h3 class="checkout__subtitle">{{ stepTitle() }}</h3>
         </div>
-        <div class="field">
-          <label class="field__label">Código postal</label>
-          <input class="field__input" type="text" formControlName="zip" />
-        </div>
-      </div>
 
-      <h3 class="checkout__subtitle">Gastos de envío</h3>
+        @if (currentStep() === 1) {
+          <div class="checkout__step" aria-label="Datos del usuario">
+            <div class="field">
+              <label class="field__label">DNI</label>
+              <input class="field__input" type="text" formControlName="dni" />
+            </div>
 
-      @if (shippingLoading()) {
-        <p class="checkout__hint">Cargando opciones de envío…</p>
-      } @else if (shippingError()) {
-        <p class="checkout__error" role="alert">
-          No se han podido cargar las opciones de envío. Recarga la página e inténtalo de nuevo.
-        </p>
-      } @else if (shippingZones().length === 0) {
-        <p class="checkout__hint">No hay opciones de envío disponibles.</p>
-      } @else {
-        <div class="shipping-options" role="radiogroup" aria-label="Opciones de envío">
-          @for (zone of shippingZones(); track zone.uuid) {
-            <div class="shipping-zone">
-              <p class="shipping-zone__title">{{ zone.zone }}</p>
-              <div class="shipping-zone__options">
-                @for (item of zone.costs; track item.company) {
-                  @let optionId = zone.uuid + '::' + item.company;
-                  <label
-                    class="shipping-option"
-                    [class.shipping-option--active]="selectedShippingId() === optionId"
-                  >
-                    <input
-                      class="shipping-option__input"
-                      type="radio"
-                      name="shippingOption"
-                      [value]="optionId"
-                      [checked]="selectedShippingId() === optionId"
-                      (change)="selectShippingOption(optionId)"
-                    />
-                    <span class="shipping-option__content">
-                      <span class="shipping-option__label">{{ item.company }}</span>
-                      <span class="shipping-option__hint">Tamaño paquete normal</span>
-                    </span>
-                    <strong class="shipping-option__price">{{ fmtEUR(item.cost) }}</strong>
-                  </label>
-                }
+            <div class="field">
+              <label class="field__label">Nombre</label>
+              <input class="field__input" type="text" formControlName="name" />
+            </div>
+
+            <div class="field">
+              <label class="field__label">Apellidos</label>
+              <input class="field__input" type="text" formControlName="lastName" />
+            </div>
+
+            <div class="field">
+              <label class="field__label">Teléfono</label>
+              <input class="field__input" type="text" formControlName="phone" />
+            </div>
+
+            <div class="field">
+              <label class="field__label">Email</label>
+              <input class="field__input" type="email" formControlName="email" />
+            </div>
+
+            <div class="field">
+              <label class="field__label">Dirección</label>
+              <input class="field__input" type="text" formControlName="address" />
+            </div>
+
+            <div class="fieldRow">
+              <div class="field">
+                <label class="field__label">Ciudad</label>
+                <input class="field__input" type="text" formControlName="city" />
+              </div>
+              <div class="field">
+                <label class="field__label">Código postal</label>
+                <input class="field__input" type="text" formControlName="zip" />
               </div>
             </div>
-          }
-        </div>
-      }
-
-      <h3 class="checkout__subtitle">Pago</h3>
-
-      <div class="payment-methods" role="radiogroup" aria-label="Forma de pago">
-        @for (method of paymentMethods; track method.id) {
-          <label class="payment-method" [class.payment-method--active]="selectedPaymentMethod() === method.id">
-            <input
-              class="payment-method__input"
-              type="radio"
-              name="paymentMethod"
-              [value]="method.id"
-              [checked]="selectedPaymentMethod() === method.id"
-              (change)="selectPaymentMethod(method.id)"
-            />
-            <span class="payment-method__content">
-              <span class="payment-method__label">{{ method.label }}</span>
-              <span class="payment-method__hint">{{ method.description }}</span>
-            </span>
-          </label>
-        }
-      </div>
-
-      @if (selectedPaymentMethod() === 'card') {
-        @if (elementsOptions(); as options) {
-          <div class="payment-panel">
-            <ngx-stripe-elements [stripe]="stripe" [elementsOptions]="options">
-              <ngx-stripe-payment [options]="paymentElementOptions" />
-            </ngx-stripe-elements>
           </div>
-        } @else {
-          <p class="payment-panel__loading">Cargando formulario de pago…</p>
         }
-      }
 
-      @if (selectedPaymentMethod() === 'transfer') {
-        <div class="payment-panel payment-panel--info">
-          <p class="payment-panel__text">
-            Tras confirmar el pedido recibirás por correo los datos bancarios para realizar la transferencia.
-          </p>
-          <p class="payment-panel__text">
-            Importe a abonar: <strong>{{ fmtEUR(total()) }}</strong>
-          </p>
-          <p class="payment-panel__text payment-panel__text--muted">
-            Indica tu nombre y número de pedido en el concepto de la transferencia.
-          </p>
-        </div>
-      }
-
-      @if (selectedPaymentMethod() === 'bizum') {
-        <div class="payment-panel payment-panel--info">
-          <p class="payment-panel__text">
-            Realiza el Bizum al teléfono <a class="payment-panel__link" href="tel:+34669234618">+34 669 234 618</a>.
-          </p>
-          <p class="payment-panel__text">
-            Importe a abonar: <strong>{{ fmtEUR(total()) }}</strong>
-          </p>
-          <p class="payment-panel__text payment-panel__text--muted">
-            Indica tu nombre en el concepto del Bizum. Confirmaremos el pedido al recibir el pago.
-          </p>
-        </div>
-      }
-
-      @if (selectedPaymentMethod() === 'paypal') {
-        <div class="payment-panel payment-panel--info">
-          <p class="payment-panel__text">
-            Envía el pago a <a class="payment-panel__link" href="mailto:tienda@thelakefish.com">tienda@thelakefish.com</a>
-            desde tu cuenta PayPal.
-          </p>
-          <p class="payment-panel__text">
-            Importe a abonar: <strong>{{ fmtEUR(total()) }}</strong>
-          </p>
-          <p class="payment-panel__text payment-panel__text--muted">
-            Indica tu nombre y número de pedido en las notas del pago.
-          </p>
-        </div>
-      }
-
-      @if (paymentError()) {
-        <p class="checkout__error" role="alert">{{ paymentError() }}</p>
-      }
-
-      <div class="checkout__actions">
-        <a class="btn btn--ghost btn--sm" routerLink="/cart">VOLVER AL CARRITO</a>
-        <button class="btn btn--primary" type="submit">
-          {{ submitLabel() }}
-        </button>
-      </div>
-    </form>
-
-    <aside class="checkout__summary" aria-label="Resumen del pedido">
-      <div class="summary-card">
-        <p class="summary-card__row">
-          <span>Artículos</span>
-          <strong>{{ cart.count() }}</strong>
-        </p>
-        <p class="summary-card__row">
-          <span>Subtotal</span>
-          <strong>{{ fmtEUR(subtotal()) }}</strong>
-        </p>
-        <p class="summary-card__row">
-          <span>
-            Envío
-            @if (selectedShipping(); as shippingOption) {
-              <small class="summary-card__shipping-meta">
-                {{ shippingOption.company }} · {{ shippingOption.zone }}
-              </small>
+        @if (currentStep() === 2) {
+          <div class="checkout__step" aria-label="Selección de envío">
+            @if (shippingLoading()) {
+              <p class="checkout__hint">Cargando opciones de envío…</p>
+            } @else if (shippingError()) {
+              <p class="checkout__error" role="alert">
+                No se han podido cargar las opciones de envío. Recarga la página e inténtalo de nuevo.
+              </p>
+            } @else if (shippingZones().length === 0) {
+              <p class="checkout__hint">No hay opciones de envío disponibles.</p>
+            } @else {
+              <div class="shipping-options" role="radiogroup" aria-label="Opciones de envío">
+                @for (zone of shippingZones(); track zone.uuid) {
+                  <div class="shipping-zone">
+                    <p class="shipping-zone__title">{{ zone.zone }}</p>
+                    <div class="shipping-zone__options">
+                      @for (item of zone.costs; track item.company) {
+                        @let optionId = zone.uuid + '::' + item.company;
+                        <label
+                          class="shipping-option"
+                          [class.shipping-option--active]="selectedShippingId() === optionId"
+                        >
+                          <input
+                            class="shipping-option__input"
+                            type="radio"
+                            name="shippingOption"
+                            [value]="optionId"
+                            [checked]="selectedShippingId() === optionId"
+                            (change)="selectShippingOption(optionId)"
+                          />
+                          <span class="shipping-option__content">
+                            <span class="shipping-option__label">{{ item.company }}</span>
+                            <span class="shipping-option__hint">Tamaño paquete normal</span>
+                          </span>
+                          <strong class="shipping-option__price">{{ fmtEUR(item.cost) }}</strong>
+                        </label>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
             }
-          </span>
-          <strong>{{ selectedShipping() ? fmtEUR(shipping()) : '—' }}</strong>
-        </p>
-        <p class="summary-card__row summary-card__row--total">
-          <span>Total</span>
-          <strong>{{ fmtEUR(total()) }}</strong>
-        </p>
-
-        <div class="summary-card__items" aria-label="Productos">
-          @for (item of cart.items(); track item.id) {
-          <div class="mini">
-            <img class="mini__img" [src]="item.imageUrl" [alt]="item.name" loading="lazy" />
-            <div class="mini__meta">
-              <p class="mini__name">{{ item.name }}</p>
-              @if (item.selectedOption; as option) {
-                <p class="mini__option">{{ option.groupLabel }}: {{ option.label }}</p>
-              }
-              <p class="mini__hint">{{ item.qty }} × {{ fmtEUR(item.price) }}</p>
-            </div>
           </div>
+        }
+
+        @if (currentStep() === 3) {
+          <div class="checkout__step" aria-label="Forma de pago">
+            <div class="payment-methods" role="radiogroup" aria-label="Forma de pago">
+              @for (method of paymentMethods; track method.id) {
+                <label class="payment-method" [class.payment-method--active]="selectedPaymentMethod() === method.id">
+                  <input
+                    class="payment-method__input"
+                    type="radio"
+                    name="paymentMethod"
+                    [value]="method.id"
+                    [checked]="selectedPaymentMethod() === method.id"
+                    (change)="selectPaymentMethod(method.id)"
+                  />
+                  <span class="payment-method__content">
+                    <span class="payment-method__label">{{ method.label }}</span>
+                    <span class="payment-method__hint">{{ method.description }}</span>
+                  </span>
+                </label>
+              }
+            </div>
+
+            @if (selectedPaymentMethod() === 'card') {
+              @if (elementsOptions(); as options) {
+                <div class="payment-panel">
+                  <ngx-stripe-elements [stripe]="stripe" [elementsOptions]="options">
+                    <ngx-stripe-payment [options]="paymentElementOptions" />
+                  </ngx-stripe-elements>
+                </div>
+              } @else {
+                <p class="payment-panel__loading">Cargando formulario de pago…</p>
+              }
+            }
+
+            @if (selectedPaymentMethod() === 'transfer') {
+              <div class="payment-panel payment-panel--info">
+                <p class="payment-panel__text">
+                  Tras confirmar el pedido recibirás por correo los datos bancarios para realizar la transferencia.
+                </p>
+                <p class="payment-panel__text">
+                  Importe a abonar: <strong>{{ fmtEUR(total()) }}</strong>
+                </p>
+                <p class="payment-panel__text payment-panel__text--muted">
+                  Indica tu nombre y número de pedido en el concepto de la transferencia.
+                </p>
+              </div>
+            }
+
+            @if (selectedPaymentMethod() === 'bizum') {
+              <div class="payment-panel payment-panel--info">
+                <p class="payment-panel__text">
+                  Realiza el Bizum al teléfono
+                  <a class="payment-panel__link" href="tel:+34669234618">+34 669 234 618</a>.
+                </p>
+                <p class="payment-panel__text">
+                  Importe a abonar: <strong>{{ fmtEUR(total()) }}</strong>
+                </p>
+                <p class="payment-panel__text payment-panel__text--muted">
+                  Indica tu nombre en el concepto del Bizum. Confirmaremos el pedido al recibir el pago.
+                </p>
+              </div>
+            }
+
+            @if (selectedPaymentMethod() === 'paypal') {
+              <div class="payment-panel payment-panel--info">
+                <p class="payment-panel__text">
+                  Envía el pago a
+                  <a class="payment-panel__link" href="mailto:tienda@thelakefish.com">tienda@thelakefish.com</a>
+                  desde tu cuenta PayPal.
+                </p>
+                <p class="payment-panel__text">
+                  Importe a abonar: <strong>{{ fmtEUR(total()) }}</strong>
+                </p>
+                <p class="payment-panel__text payment-panel__text--muted">
+                  Indica tu nombre y número de pedido en las notas del pago.
+                </p>
+              </div>
+            }
+          </div>
+        }
+
+        @if (paymentError()) {
+          <p class="checkout__error" role="alert">{{ paymentError() }}</p>
+        }
+
+        <div class="checkout__actions">
+          @if (currentStep() === 1) {
+            <a class="btn btn--ghost btn--sm" routerLink="/cart">VOLVER AL CARRITO</a>
+            <button class="btn btn--primary" type="button" (click)="nextStep()">CONTINUAR</button>
+          } @else if (currentStep() === 2) {
+            <button class="btn btn--ghost btn--sm" type="button" (click)="prevStep()">ATRÁS</button>
+            <button class="btn btn--primary" type="button" (click)="nextStep()">CONTINUAR</button>
+          } @else {
+            <button class="btn btn--ghost btn--sm" type="button" (click)="prevStep()">ATRÁS</button>
+            <button class="btn btn--primary" type="submit">{{ submitLabel() }}</button>
           }
         </div>
-      </div>
-    </aside>
-  </div>
+      </form>
+
+      <aside class="checkout__summary" aria-label="Resumen del pedido">
+        <div class="summary-card">
+          <p class="summary-card__row">
+            <span>Artículos</span>
+            <strong>{{ cart.count() }}</strong>
+          </p>
+          <p class="summary-card__row">
+            <span>Subtotal</span>
+            <strong>{{ fmtEUR(subtotal()) }}</strong>
+          </p>
+          <p class="summary-card__row">
+            <span>
+              Envío
+              @if (selectedShipping(); as shippingOption) {
+                <small class="summary-card__shipping-meta">
+                  {{ shippingOption.company }} · {{ shippingOption.zone }}
+                </small>
+              }
+            </span>
+            <strong>{{ selectedShipping() ? fmtEUR(shipping()) : '—' }}</strong>
+          </p>
+          <p class="summary-card__row summary-card__row--total">
+            <span>Total</span>
+            <strong>{{ fmtEUR(total()) }}</strong>
+          </p>
+
+          <div class="summary-card__items" aria-label="Productos">
+            @for (item of cart.items(); track item.id) {
+              <div class="mini">
+                <img class="mini__img" [src]="item.imageUrl" [alt]="item.name" loading="lazy" />
+                <div class="mini__meta">
+                  <p class="mini__name">{{ item.name }}</p>
+                  @if (item.selectedOption; as option) {
+                    <p class="mini__option">{{ option.groupLabel }}: {{ option.label }}</p>
+                  }
+                  <p class="mini__hint">{{ item.qty }} × {{ fmtEUR(item.price) }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </aside>
+    </div>
   }
 </section>
